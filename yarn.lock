@@ -1345,6 +1345,11 @@ lucide-react@^0.356.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.356.0.tgz#4a8813ece512bffb7a40a6e10a0d6e2e5ac6ad62"
   integrity sha512-MDInjLrmZToccH2UxEshntujBlFwtOofGB22FN/eg39FfGVYV1TT1eMIv2j4rdaTJBpYjUuX7fEo9pwYkNFgwA==
 
+mantine-form-zod-resolver@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/mantine-form-zod-resolver/-/mantine-form-zod-resolver-1.1.0.tgz#9c73aa6cd84fc838f10d728859aecd4c0a432e55"
+  integrity sha512-hidTuYq6agSF5XbkcVVcr0mkGs9ki/x8OC9ldZMxGLVGja6bdl+x4k1hCNrigCG90DBoMDnu0bo3hprGBBlUZA==
+
 merge2@^1.3.0, merge2@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"

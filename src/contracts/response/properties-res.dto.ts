@@ -1,6 +1,6 @@
 export interface PropertyResDto {
-  amenities: string[];
   id: string;
+  amenities: string[];
   name: string;
   type: number;
   address: string;

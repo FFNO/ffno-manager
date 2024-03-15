@@ -27,6 +27,14 @@ export const dataProvider = {
     return data;
   },
 
+  getSimpleList: async ({ resource, params }: Props) => {
+    const { data } = await axiosInstance.get<string[]>(`/common/${resource}`, {
+      params,
+    });
+
+    return data;
+  },
+
   getOne: async <T>({ resource, id }: PropsWithId) => {
     const { data } = await axiosInstance.get<T>(`${resource}/${id}`);
 
@@ -50,6 +58,17 @@ export const useOne = <T>({ resource, id, enabled = true }: PropsWithId) => {
   const query = useQuery({
     queryKey: [resource, id],
     queryFn: () => dataProvider.getOne<T>({ resource, id }),
+    retry: false,
+    enabled,
+  });
+
+  return { ...query };
+};
+
+export const useSimpleList = ({ resource, params, enabled = true }: Props) => {
+  const query = useQuery({
+    queryKey: [resource, params],
+    queryFn: () => dataProvider.getSimpleList({ resource, params }),
     retry: false,
     enabled,
   });

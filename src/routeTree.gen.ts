@@ -15,10 +15,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as PropertiesIndexImport } from './routes/properties/index'
+import { Route as ContactsIndexImport } from './routes/contacts/index'
 
 // Create Virtual Routes
 
-const ContactsIndexLazyImport = createFileRoute('/contacts/')()
+const PropertiesCreateLazyImport = createFileRoute('/properties/create')()
 const PropertiesPropertyIdLazyImport = createFileRoute(
   '/properties/$propertyId',
 )()
@@ -32,18 +33,25 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ContactsIndexLazyRoute = ContactsIndexLazyImport.update({
+const PropertiesIndexRoute = PropertiesIndexImport.update({
+  path: '/properties/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/properties/index.lazy').then((d) => d.Route),
+)
+
+const ContactsIndexRoute = ContactsIndexImport.update({
   path: '/contacts/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/contacts/index.lazy').then((d) => d.Route),
 )
 
-const PropertiesIndexRoute = PropertiesIndexImport.update({
-  path: '/properties/',
+const PropertiesCreateLazyRoute = PropertiesCreateLazyImport.update({
+  path: '/properties/create',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/properties/index.lazy').then((d) => d.Route),
+  import('./routes/properties/create.lazy').then((d) => d.Route),
 )
 
 const PropertiesPropertyIdLazyRoute = PropertiesPropertyIdLazyImport.update({
@@ -85,12 +93,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesPropertyIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/properties/': {
-      preLoaderRoute: typeof PropertiesIndexImport
+    '/properties/create': {
+      preLoaderRoute: typeof PropertiesCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/contacts/': {
-      preLoaderRoute: typeof ContactsIndexLazyImport
+      preLoaderRoute: typeof ContactsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/properties/': {
+      preLoaderRoute: typeof PropertiesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -103,8 +115,9 @@ export const routeTree = rootRoute.addChildren([
   AuthSignInLazyRoute,
   ContactsContactIdLazyRoute,
   PropertiesPropertyIdLazyRoute,
+  PropertiesCreateLazyRoute,
+  ContactsIndexRoute,
   PropertiesIndexRoute,
-  ContactsIndexLazyRoute,
 ])
 
 /* prettier-ignore-end */

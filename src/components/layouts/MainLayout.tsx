@@ -45,7 +45,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   const [opened, { toggle }] = useDisclosure();
   const [member] = useLocalStorage<GetMemberResDto>({ key: "member" });
 
-  if (!(member && "id" in member)) {
+  if (!(member && member.id)) {
     return (
       <Modal
         opened
@@ -54,6 +54,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
         onClose={() => {}}
         padding={0}
       >
+        {JSON.stringify(member)}
         <Center h={"100vh"} bg={"blue"}>
           <SignInPage />
         </Center>
