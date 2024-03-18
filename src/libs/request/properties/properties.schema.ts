@@ -1,0 +1,33 @@
+import { NullableObject } from "@/libs";
+import { z } from "zod";
+
+export const createUnitSchema = z.object({
+  name: z.string(),
+  type: z.string(),
+  area: z.coerce.number(),
+  price: z.coerce.number(),
+  deposit: z.coerce.number(),
+  details: z.string().optional(),
+  beds: z.string(),
+  baths: z.string(),
+  parking: z.string(),
+  laundry: z.string(),
+  airConditioning: z.string(),
+});
+
+export const createPropertySchema = z.object({
+  type: z.string(),
+  name: z.string().min(1),
+  address: z.string().min(1),
+  province: z.string().min(1),
+  district: z.string().min(1),
+  ward: z.string().min(1),
+  amenities: z.array(z.string()),
+  units: z.array(createUnitSchema),
+});
+
+export type CreatePropertySchema = NullableObject<
+  z.infer<typeof createPropertySchema>
+>;
+
+export type CreateUnitSchema = z.infer<typeof createUnitSchema>;
