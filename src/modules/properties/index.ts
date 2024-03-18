@@ -1,2 +1,2 @@
-export * from "./PropertyCard";
-export * from "./PropertyCreatePage";
+export * from "./components";
+export * from "./pages";

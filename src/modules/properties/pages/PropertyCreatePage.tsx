@@ -1,18 +1,19 @@
-import { useSimpleList } from "@/api";
+import { useCreate, useSimpleList } from "@/api";
 import {
   CreatePropertySchema,
   createPropertyFormInitialValues,
   createPropertySchema,
   createUnitInitialValues,
-} from "@/contracts";
+} from "@/libs";
 import {
+  Autocomplete,
   Button,
   Chip,
-  Code,
   Divider,
   Fieldset,
   Grid,
   Group,
+  LoadingOverlay,
   SegmentedControl,
   Select,
   Stack,
@@ -21,11 +22,14 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { CopyIcon, XIcon } from "lucide-react";
+import { notifications } from "@mantine/notifications";
+import { Navigate } from "@tanstack/react-router";
+import { CheckIcon, CopyIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 
 export const PropertyCreatePage = () => {
   const theme = useMantineTheme();
+  const mutate = useCreate("properties");
   const form = useForm<CreatePropertySchema>({
     initialValues: createPropertyFormInitialValues,
     validate: zodResolver(createPropertySchema),
@@ -40,6 +44,10 @@ export const PropertyCreatePage = () => {
   const { data: wards } = useSimpleList({
     resource: "wards",
     params: { district: form.values.district },
+  });
+
+  const handleSubmit = form.onSubmit(async (values) => {
+    mutate.mutate(values);
   });
 
   useEffect(() => {
@@ -57,13 +65,30 @@ export const PropertyCreatePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.district]);
 
+  if (mutate.isSuccess) {
+    notifications.show({
+      id: "create-property-successfully",
+      icon: <CheckIcon />,
+      color: "green",
+      title: "Success",
+      message: "Create property successfully",
+    });
+    return (
+      <Navigate
+        to="/properties/$propertyId"
+        params={{ propertyId: mutate.data }}
+      />
+    );
+  }
+
   return (
-    <Stack p={"lg"}>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          console.log(values);
-        })}
-      >
+    <Stack p={"lg"} pos={"relative"}>
+      <LoadingOverlay
+        visible={mutate.isPending}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
+      <form onSubmit={handleSubmit}>
         <Fieldset legend="Basic information">
           <Grid>
             <Grid.Col span={6}>
@@ -119,7 +144,6 @@ export const PropertyCreatePage = () => {
             </Grid.Col>
           </Grid>
         </Fieldset>
-        <Code>{JSON.stringify(form.values, null, 2)}</Code>
 
         <Divider mt={"lg"} pb={"lg"} />
 
@@ -140,7 +164,6 @@ export const PropertyCreatePage = () => {
                         fontSize: theme.fontSizes.sm,
                       }}
                     >
-                      SSS
                       <span style={{ fontWeight: "bold" }}>
                         You cannot add more units
                       </span>
@@ -160,9 +183,7 @@ export const PropertyCreatePage = () => {
                         fontWeight: "400",
                         fontSize: theme.fontSizes.sm,
                       }}
-                    >
-                      SSS
-                    </span>
+                    ></span>
                   </Stack>
                 ),
               },
@@ -176,8 +197,8 @@ export const PropertyCreatePage = () => {
         <Fieldset legend="Units information">
           {form.values.units?.map((unit, index) => (
             <Fieldset key={index} legend={unit.name} mb={"md"}>
-              <Grid>
-                <Grid.Col span={12}>
+              <Grid columns={10}>
+                <Grid.Col span={10}>
                   <Group justify="end">
                     <Button
                       variant="subtle"
@@ -200,7 +221,7 @@ export const PropertyCreatePage = () => {
                     </Button>
                   </Group>
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={2}>
                   <TextInput
                     label="Name"
                     placeholder="Enter unit name"
@@ -208,7 +229,7 @@ export const PropertyCreatePage = () => {
                     {...form.getInputProps(`units.${index}.name`)}
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={2}>
                   <TextInput
                     label="Type"
                     placeholder="Enter unit type"
@@ -216,7 +237,7 @@ export const PropertyCreatePage = () => {
                     {...form.getInputProps(`units.${index}.type`)}
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={2}>
                   <TextInput
                     label="Area"
                     placeholder="Enter unit area"
@@ -224,7 +245,7 @@ export const PropertyCreatePage = () => {
                     {...form.getInputProps(`units.${index}.area`)}
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={2}>
                   <TextInput
                     label="Price"
                     placeholder="Enter unit price"
@@ -232,12 +253,47 @@ export const PropertyCreatePage = () => {
                     {...form.getInputProps(`units.${index}.price`)}
                   />
                 </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={2}>
                   <TextInput
                     label="Deposit"
                     placeholder="Enter unit deposit"
                     withAsterisk
                     {...form.getInputProps(`units.${index}.deposit`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={2}>
+                  <Select
+                    label="Beds"
+                    data={["NONE", "1", "2", "3", "4"]}
+                    {...form.getInputProps(`units.${index}.beds`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={2}>
+                  <Select
+                    label="Baths"
+                    data={["NONE", "SHARED", "1", "2", "3", "4"]}
+                    {...form.getInputProps(`units.${index}.baths`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={2}>
+                  <Autocomplete
+                    label="Parking"
+                    data={["FREE"]}
+                    {...form.getInputProps(`units.${index}.parking`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={2}>
+                  <Select
+                    label="Laundry"
+                    data={["SHARED", "EMBEDDED", "NONE"]}
+                    {...form.getInputProps(`units.${index}.laundry`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={2}>
+                  <Select
+                    label="Air Conditioner"
+                    data={["HOT", "COLD", "2-WAY", "NONE"]}
+                    {...form.getInputProps(`units.${index}.airConditioning`)}
                   />
                 </Grid.Col>
               </Grid>

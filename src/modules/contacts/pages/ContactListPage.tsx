@@ -1,5 +1,5 @@
 import { useList } from "@/api";
-import { GetMemberResDto } from "@/contracts";
+import { GetMemberResDto } from "@/libs";
 import { ContactCard } from "@/modules/contacts";
 import { Route } from "@/routes/contacts/index";
 import {
@@ -13,10 +13,10 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useNavigate } from "@tanstack/react-router";
-import { SearchIcon } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { PlusIcon, SearchIcon } from "lucide-react";
 
-export function ContactsPage() {
+export function ContactListPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const { data } = useList<GetMemberResDto>({
@@ -37,7 +37,7 @@ export function ContactsPage() {
       <Group justify="end">
         <Popover shadow="md">
           <Popover.Target>
-            <Button>
+            <Button variant="outline">
               Filter
               <Text px={8}>|</Text>
               {5}
@@ -65,7 +65,6 @@ export function ContactsPage() {
                   placeholder="Enter keyword"
                   {...form.getInputProps("keyword")}
                 />
-                {/* <Select /> */}
               </Stack>
               <Group justify="end" grow gap={"xs"} mt={12}>
                 <Button type="submit" size="sm">
@@ -92,7 +91,11 @@ export function ContactsPage() {
             </form>
           </Popover.Dropdown>
         </Popover>
-        <Button>{addButtonText()}</Button>
+        <Link to="/contacts/create">
+          <Button leftSection={<PlusIcon size={16} />}>
+            {addButtonText()}
+          </Button>
+        </Link>
       </Group>
       <SimpleGrid cols={4}>
         {data?.data.map((contact) => (

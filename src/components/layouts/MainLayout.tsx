@@ -15,7 +15,7 @@ import { BuildingIcon, CircleGaugeIcon, ContactIcon } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
-import { GetMemberResDto } from "@/contracts";
+import { GetMemberResDto } from "@/libs";
 
 const navLinks = [
   { label: "Dashboard", icon: CircleGaugeIcon },
@@ -25,7 +25,7 @@ const navLinks = [
     initiallyOpened: true,
     links: [
       { label: "Properties", link: "/properties" },
-      { label: "Units", link: "/" },
+      { label: "Units", link: "/properties?view=units" },
       { label: "Equipments", link: "/" },
     ],
   },

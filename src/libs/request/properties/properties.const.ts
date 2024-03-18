@@ -7,6 +7,11 @@ export const createUnitInitialValues: CreateUnitSchema = {
   price: 0,
   type: "0",
   details: "",
+  beds: "NONE",
+  baths: "NONE",
+  parking: "FREE",
+  laundry: "NONE",
+  airConditioning: "NONE",
 };
 
 export const createPropertyFormInitialValues: CreatePropertySchema = {

@@ -1,2 +1,2 @@
-export * from "./ContactCard";
-export * from "./ContactsPage";
+export * from "./components";
+export * from "./pages";

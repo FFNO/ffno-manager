@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance, queryClient } from "./utils";
 
 interface GetListResDto<T> {
@@ -40,6 +40,12 @@ export const dataProvider = {
 
     return data;
   },
+
+  create: async <T = unknown>(resource: string, payload: T) => {
+    const { data } = await axiosInstance.post<string>(resource, payload);
+
+    return data;
+  },
 };
 
 export const useList = <T>({ resource, params, enabled = true }: Props) => {
@@ -74,6 +80,15 @@ export const useSimpleList = ({ resource, params, enabled = true }: Props) => {
   });
 
   return { ...query };
+};
+
+export const useCreate = (resource: string) => {
+  const mutation = useMutation({
+    mutationKey: [resource],
+    mutationFn: (data: unknown) => dataProvider.create(resource, data),
+  });
+
+  return mutation;
 };
 
 export { queryClient };

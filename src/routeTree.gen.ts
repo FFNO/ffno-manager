@@ -23,6 +23,7 @@ const PropertiesCreateLazyImport = createFileRoute('/properties/create')()
 const PropertiesPropertyIdLazyImport = createFileRoute(
   '/properties/$propertyId',
 )()
+const ContactsCreateLazyImport = createFileRoute('/contacts/create')()
 const ContactsContactIdLazyImport = createFileRoute('/contacts/$contactId')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
 
@@ -61,6 +62,13 @@ const PropertiesPropertyIdLazyRoute = PropertiesPropertyIdLazyImport.update({
   import('./routes/properties/$propertyId.lazy').then((d) => d.Route),
 )
 
+const ContactsCreateLazyRoute = ContactsCreateLazyImport.update({
+  path: '/contacts/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/contacts/create.lazy').then((d) => d.Route),
+)
+
 const ContactsContactIdLazyRoute = ContactsContactIdLazyImport.update({
   path: '/contacts/$contactId',
   getParentRoute: () => rootRoute,
@@ -89,6 +97,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsContactIdLazyImport
       parentRoute: typeof rootRoute
     }
+    '/contacts/create': {
+      preLoaderRoute: typeof ContactsCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/properties/$propertyId': {
       preLoaderRoute: typeof PropertiesPropertyIdLazyImport
       parentRoute: typeof rootRoute
@@ -114,6 +126,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthSignInLazyRoute,
   ContactsContactIdLazyRoute,
+  ContactsCreateLazyRoute,
   PropertiesPropertyIdLazyRoute,
   PropertiesCreateLazyRoute,
   ContactsIndexRoute,
