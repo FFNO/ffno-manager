@@ -1,3 +1,4 @@
+import { Page404 } from "@/components/errors";
 import { MainLayout } from "@/components/layouts";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 
@@ -7,4 +8,5 @@ export const Route = createRootRoute({
       <Outlet />
     </MainLayout>
   ),
+  notFoundComponent: () => <Page404 />,
 });

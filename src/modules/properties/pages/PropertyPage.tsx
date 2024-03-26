@@ -1,5 +1,5 @@
 import { useList, useOne } from "@/api";
-import { GetMemberResDto, PropertyResDto } from "@/libs";
+import { MemberResDto, PropertyResDto } from "@/libs";
 import { Route } from "@/routes/properties/$propertyId.lazy";
 import { Tabs } from "@mantine/core";
 import { TenantTab } from "../components";
@@ -12,7 +12,7 @@ export function PropertyPage() {
     id: propertyId,
   });
 
-  const { refetch } = useList<GetMemberResDto>({
+  const { refetch } = useList<MemberResDto>({
     resource: `properties/${propertyId}/tenants`,
     enabled: false,
   });

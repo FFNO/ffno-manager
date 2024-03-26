@@ -1,5 +1,5 @@
 import { useList } from "@/api";
-import { GetMemberResDto } from "@/libs";
+import { MemberResDto } from "@/libs";
 import { ContactCard } from "@/modules/contacts";
 import { Route } from "@/routes/properties/$propertyId.lazy";
 import { SimpleGrid } from "@mantine/core";
@@ -7,7 +7,7 @@ import { SimpleGrid } from "@mantine/core";
 export const TenantTab = () => {
   const { propertyId } = Route.useParams();
 
-  const { data, refetch } = useList<GetMemberResDto>({
+  const { data, refetch } = useList<MemberResDto>({
     resource: `properties/${propertyId}/tenants`,
     enabled: false,
   });

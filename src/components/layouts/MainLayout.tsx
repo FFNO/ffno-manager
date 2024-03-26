@@ -11,31 +11,42 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
-import { BuildingIcon, CircleGaugeIcon, ContactIcon } from "lucide-react";
+import {
+  BuildingIcon,
+  CircleGaugeIcon,
+  ContactIcon,
+  ReceiptIcon,
+} from "lucide-react";
 import { PropsWithChildren } from "react";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
-import { GetMemberResDto } from "@/libs";
+import { MemberResDto, Nullable } from "@/libs";
 
 const navLinks = [
-  { label: "Dashboard", icon: CircleGaugeIcon },
+  { label: "Tổng quan", icon: CircleGaugeIcon },
   {
-    label: "Properties",
+    label: "Bất động sản",
     icon: BuildingIcon,
     initiallyOpened: true,
     links: [
-      { label: "Properties", link: "/properties" },
-      { label: "Units", link: "/properties?view=units" },
-      { label: "Equipments", link: "/" },
+      { label: "Tòa nhà", link: "/properties" },
+      { label: "Căn hộ", link: "/properties?view=units" },
+      { label: "Thiết bị & nội thất", link: "/" },
     ],
   },
   {
-    label: "Contacts",
+    label: "Giao dịch",
+    icon: ReceiptIcon,
+    initiallyOpened: true,
+    links: [{ label: "Hóa đơn", link: "/invoices" }],
+  },
+  {
+    label: "Liên lạc",
     icon: ContactIcon,
     initiallyOpened: true,
     links: [
-      { label: "Tenants", link: "/contacts?type=0" },
-      { label: "Service pros", link: "/contacts?type=1" },
+      { label: "Người thuê nhà", link: "/contacts?type=0" },
+      { label: "Dịch vụ chuyên nghiệp", link: "/contacts?type=1" },
     ],
   },
 ];
@@ -43,12 +54,15 @@ const navLinks = [
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
-  const [member] = useLocalStorage<GetMemberResDto>({ key: "member" });
+  const [member] = useLocalStorage<Nullable<MemberResDto>>({
+    key: "member",
+    defaultValue: JSON.parse(localStorage.getItem("member") || "{}"),
+  });
 
-  if (!(member && member.id)) {
-    return (
+  return (
+    <>
       <Modal
-        opened
+        opened={!(member && member.id)}
         fullScreen
         withCloseButton={false}
         onClose={() => {}}
@@ -59,11 +73,6 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
           <SignInPage />
         </Center>
       </Modal>
-    );
-  }
-
-  return (
-    <>
       <AppShell
         header={{ height: 60 }}
         navbar={{ width: 300, breakpoint: "sm" }}
@@ -80,7 +89,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
               <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
                 {import.meta.env.VITE_APP_NAME}
               </Text>
-              <Code fw={700}>{member.id}</Code>
+              <Code fw={700}>{member?.id}</Code>
             </Group>
           </Group>
         </AppShell.Header>

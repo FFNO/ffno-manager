@@ -24,7 +24,10 @@ export const dataProvider = {
       params,
     });
 
-    return data;
+    return {
+      data: data.data ?? [],
+      total: data.total ?? 0,
+    };
   },
 
   getSimpleList: async ({ resource, params }: Props) => {
