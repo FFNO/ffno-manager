@@ -1,10 +1,11 @@
-import { useList } from "@/api";
+import { useList, useSimpleList } from "@/api";
 import { PropertyResDto } from "@/libs";
 import { Route } from "@/routes/invoices/index";
 import {
   Button,
   Drawer,
   Group,
+  MultiSelect,
   Select,
   Stack,
   Text,
@@ -18,6 +19,9 @@ import { SearchIcon } from "lucide-react";
 export function InvoiceFilter() {
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const { data: invoiceCategories } = useSimpleList({
+    resource: "invoice-categories",
+  });
   const { data: propertyList } = useList<PropertyResDto>({
     resource: "properties/simple-list",
   });
@@ -49,6 +53,7 @@ export function InvoiceFilter() {
               search: (prev) => ({
                 ...prev,
                 ...values,
+                page: 1,
               }),
             });
           })}
@@ -57,7 +62,17 @@ export function InvoiceFilter() {
             Filters
           </Title>
           <Stack>
+            <MultiSelect
+              searchable
+              size="sm"
+              label="Loại hóa đơn"
+              placeholder="Chọn loại hóa đơn"
+              data={invoiceCategories ?? []}
+              leftSection={<SearchIcon size={16} />}
+              {...form.getInputProps("categories")}
+            />
             <Select
+              searchable
               size="sm"
               label="Phòng"
               placeholder="Chọn phòng"
@@ -69,6 +84,7 @@ export function InvoiceFilter() {
               {...form.getInputProps("unitId")}
             />
             <Select
+              searchable
               size="sm"
               label="Tòa nhà"
               placeholder="Chọn tòa nhà"
@@ -82,7 +98,7 @@ export function InvoiceFilter() {
           </Stack>
           <Group justify="end" grow gap={"xs"} mt={12}>
             <Button type="submit" size="sm" onClick={close}>
-              Apply
+              Tìm kiếm
             </Button>
             <Button
               type="button"
@@ -90,17 +106,17 @@ export function InvoiceFilter() {
               variant="light"
               color="red"
               onClick={() => {
-                form.setValues({ propertyId: null, unitId: null });
+                form.reset();
                 navigate({
                   search: {
-                    ...search,
+                    page: 1,
                     propertyId: undefined,
                     unitId: undefined,
                   },
                 });
               }}
             >
-              Reset
+              Xóa
             </Button>
           </Group>
         </form>
