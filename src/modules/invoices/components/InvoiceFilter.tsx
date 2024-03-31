@@ -1,5 +1,5 @@
-import { useList, useSimpleList } from "@/api";
-import { PropertyResDto } from "@/libs";
+import { useList } from "@/api";
+import { PropertyResDto, invoiceCategories } from "@/libs";
 import { Route } from "@/routes/invoices/index";
 import {
   Button,
@@ -19,9 +19,6 @@ import { SearchIcon } from "lucide-react";
 export function InvoiceFilter() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const { data: invoiceCategories } = useSimpleList({
-    resource: "invoice-categories",
-  });
   const { data: propertyList } = useList<PropertyResDto>({
     resource: "properties/simple-list",
   });
@@ -33,6 +30,7 @@ export function InvoiceFilter() {
 
   const form = useForm({
     initialValues: {
+      categories: [],
       unitId: search.unitId || null,
       propertyId: search.propertyId || null,
     },
@@ -67,7 +65,7 @@ export function InvoiceFilter() {
               size="sm"
               label="Loại hóa đơn"
               placeholder="Chọn loại hóa đơn"
-              data={invoiceCategories ?? []}
+              data={invoiceCategories}
               leftSection={<SearchIcon size={16} />}
               {...form.getInputProps("categories")}
             />
@@ -112,6 +110,7 @@ export function InvoiceFilter() {
                     page: 1,
                     propertyId: undefined,
                     unitId: undefined,
+                    categories: [],
                   },
                 });
               }}

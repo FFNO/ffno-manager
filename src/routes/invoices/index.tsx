@@ -4,6 +4,7 @@ interface SearchParams {
   page?: number;
   propertyId?: string;
   unitId?: string;
+  categories?: number[];
 }
 
 export const Route = createFileRoute("/invoices/")({

@@ -1,6 +1,7 @@
+import { UnitResDto } from "./units-res.dto";
+
 export interface PropertyResDto {
   id: string;
-  amenities: string[];
   name: string;
   type: number;
   address: string;
@@ -8,8 +9,10 @@ export interface PropertyResDto {
   district: string;
   province: string;
   imgUrls: string[];
+  details: string;
   ownerId: string;
-  details?: string;
+  amenities: string[];
+  units: UnitResDto[];
 }
 
 export interface GetListPropertyResDto {

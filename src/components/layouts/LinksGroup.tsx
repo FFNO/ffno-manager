@@ -7,7 +7,7 @@ import {
   rem,
 } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import classes from "./LinksGroup.module.css";
 
@@ -16,6 +16,7 @@ interface LinksGroupProps {
   icon: React.FC<any>;
   label: string;
   initiallyOpened?: boolean;
+  link?: string;
   links?: { label: string; link: string }[];
 }
 
@@ -23,8 +24,10 @@ export function LinksGroup({
   icon: Icon,
   label,
   initiallyOpened,
+  link,
   links,
 }: LinksGroupProps) {
+  const router = useRouter();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
@@ -36,7 +39,9 @@ export function LinksGroup({
   return (
     <>
       <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
+        onClick={
+          link ? () => router.history.push(link) : () => setOpened((o) => !o)
+        }
         className={classes.control}
       >
         <Group justify="space-between" gap={0}>

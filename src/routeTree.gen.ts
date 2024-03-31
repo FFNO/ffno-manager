@@ -14,12 +14,15 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as PropertiesIndexImport } from './routes/properties/index'
 import { Route as InvoicesIndexImport } from './routes/invoices/index'
 import { Route as ContactsIndexImport } from './routes/contacts/index'
 
 // Create Virtual Routes
 
+const UnitsUnitIdLazyImport = createFileRoute('/units/$unitId')()
+const RequestsCreateLazyImport = createFileRoute('/requests/create')()
 const PropertiesCreateLazyImport = createFileRoute('/properties/create')()
 const PropertiesPropertyIdLazyImport = createFileRoute(
   '/properties/$propertyId',
@@ -35,6 +38,13 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const RequestsIndexRoute = RequestsIndexImport.update({
+  path: '/requests/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/requests/index.lazy').then((d) => d.Route),
+)
 
 const PropertiesIndexRoute = PropertiesIndexImport.update({
   path: '/properties/',
@@ -55,6 +65,18 @@ const ContactsIndexRoute = ContactsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/contacts/index.lazy').then((d) => d.Route),
+)
+
+const UnitsUnitIdLazyRoute = UnitsUnitIdLazyImport.update({
+  path: '/units/$unitId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/units/$unitId.lazy').then((d) => d.Route))
+
+const RequestsCreateLazyRoute = RequestsCreateLazyImport.update({
+  path: '/requests/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/requests/create.lazy').then((d) => d.Route),
 )
 
 const PropertiesCreateLazyRoute = PropertiesCreateLazyImport.update({
@@ -129,6 +151,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesCreateLazyImport
       parentRoute: typeof rootRoute
     }
+    '/requests/create': {
+      preLoaderRoute: typeof RequestsCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/units/$unitId': {
+      preLoaderRoute: typeof UnitsUnitIdLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/contacts/': {
       preLoaderRoute: typeof ContactsIndexImport
       parentRoute: typeof rootRoute
@@ -139,6 +169,10 @@ declare module '@tanstack/react-router' {
     }
     '/properties/': {
       preLoaderRoute: typeof PropertiesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/': {
+      preLoaderRoute: typeof RequestsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -154,9 +188,12 @@ export const routeTree = rootRoute.addChildren([
   InvoicesCreateLazyRoute,
   PropertiesPropertyIdLazyRoute,
   PropertiesCreateLazyRoute,
+  RequestsCreateLazyRoute,
+  UnitsUnitIdLazyRoute,
   ContactsIndexRoute,
   InvoicesIndexRoute,
   PropertiesIndexRoute,
+  RequestsIndexRoute,
 ])
 
 /* prettier-ignore-end */

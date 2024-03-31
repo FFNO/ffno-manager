@@ -14,6 +14,7 @@ import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import {
   BuildingIcon,
   CircleGaugeIcon,
+  ClipboardListIcon,
   ContactIcon,
   ReceiptIcon,
 } from "lucide-react";
@@ -23,7 +24,7 @@ import classes from "./MainLayout.module.css";
 import { MemberResDto, Nullable } from "@/libs";
 
 const navLinks = [
-  { label: "Tổng quan", icon: CircleGaugeIcon },
+  { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
   {
     label: "Bất động sản",
     icon: BuildingIcon,
@@ -49,12 +50,18 @@ const navLinks = [
       { label: "Dịch vụ chuyên nghiệp", link: "/contacts?type=1" },
     ],
   },
+  {
+    label: "Yêu cầu",
+    icon: ClipboardListIcon,
+    // initiallyOpened: true,
+    link: "/requests",
+  },
 ];
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
-  const [member] = useLocalStorage<Nullable<MemberResDto>>({
+  const [member, setMember] = useLocalStorage<Nullable<MemberResDto>>({
     key: "member",
     defaultValue: JSON.parse(localStorage.getItem("member") || "{}"),
   });
@@ -68,9 +75,8 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
         onClose={() => {}}
         padding={0}
       >
-        {JSON.stringify(member)}
         <Center h={"100vh"} bg={"blue"}>
-          <SignInPage />
+          <SignInPage setMember={setMember} />
         </Center>
       </Modal>
       <AppShell

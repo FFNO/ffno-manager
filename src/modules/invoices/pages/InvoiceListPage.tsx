@@ -24,7 +24,7 @@ export const InvoiceListPage = () => {
         </Button>
         <InvoiceFilter />
         <Link to="/invoices/create">
-          <Button leftSection={<PlusIcon size={16} />}>Add invoice</Button>
+          <Button leftSection={<PlusIcon size={16} />}>Thêm hóa đơn</Button>
         </Link>
       </Group>
       <SimpleGrid cols={2} px={32} py={24}>
