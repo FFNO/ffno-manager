@@ -1,9 +1,9 @@
-import { NullableObject, getOptionListFromRecord } from "@/libs";
+import {
+  InvoiceCategory,
+  NullableObject,
+  getOptionListFromRecord,
+} from "@/libs";
 import { CreateInvoiceSchema } from "./invoices.schema";
-
-export enum InvoiceCategory {
-  UNIT_CHARGE,
-}
 
 export const invoiceCategoryRecord: Record<InvoiceCategory, string> = {
   [InvoiceCategory.UNIT_CHARGE]: "Tiền phòng",

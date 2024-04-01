@@ -53,7 +53,6 @@ const navLinks = [
   {
     label: "Yêu cầu",
     icon: ClipboardListIcon,
-    // initiallyOpened: true,
     link: "/requests",
   },
 ];
@@ -107,6 +106,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
     </>
   );
 };
+
 function Navbar() {
   const links = navLinks.map((item) => (
     <LinksGroup {...item} key={item.label} />

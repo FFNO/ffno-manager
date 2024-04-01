@@ -8,11 +8,6 @@ export const createUnitSchema = z.object({
   price: z.coerce.number(),
   deposit: z.coerce.number(),
   details: z.string().optional(),
-  beds: z.string(),
-  baths: z.string(),
-  parking: z.string(),
-  laundry: z.string(),
-  airConditioning: z.string(),
 });
 
 export const createPropertySchema = z.object({

@@ -18,6 +18,7 @@ import OneSignal from "react-onesignal";
 import App from "./App.tsx";
 import { queryClient } from "./api";
 
+dayjs.locale("vi");
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
