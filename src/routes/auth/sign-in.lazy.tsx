@@ -15,6 +15,7 @@ import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import OneSignal from "react-onesignal";
 
 export const Route = createLazyFileRoute("/auth/sign-in")({
   component: SignInPage,
@@ -61,6 +62,7 @@ export function SignInPage(props: {
             "auth/sign-in",
             form.values
           );
+          OneSignal.User.addTag("memberId", data.id);
           props.setMember(data);
         })}
       >

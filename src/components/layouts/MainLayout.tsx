@@ -1,7 +1,10 @@
+import { MemberResDto, Nullable } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import {
   AppShell,
+  Box,
   Burger,
+  Button,
   Center,
   Code,
   Group,
@@ -19,9 +22,10 @@ import {
   ReceiptIcon,
 } from "lucide-react";
 import { PropsWithChildren } from "react";
+import OneSignal from "react-onesignal";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
-import { MemberResDto, Nullable } from "@/libs";
+import { axiosInstance } from "@/api/utils";
 
 const navLinks = [
   { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
@@ -78,6 +82,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
           <SignInPage setMember={setMember} />
         </Center>
       </Modal>
+
       <AppShell
         header={{ height: 60 }}
         navbar={{ width: 300, breakpoint: "sm" }}
@@ -96,6 +101,17 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
               </Text>
               <Code fw={700}>{member?.id}</Code>
             </Group>
+            <Box flex={1} />
+            <Button
+              variant="light"
+              onClick={async () => {
+                setMember(null);
+                OneSignal.User.removeTag("memberId");
+                await axiosInstance.delete("/auth/sign-out");
+              }}
+            >
+              Đăng xuất
+            </Button>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar>
@@ -117,7 +133,7 @@ function Navbar() {
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>{links}</div>
       </ScrollArea>
-      <div className={classes.footer}>{/* <UserButton /> */}</div>
+      <div className={classes.footer}></div>
     </nav>
   );
 }

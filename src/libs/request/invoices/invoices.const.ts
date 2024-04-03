@@ -1,8 +1,5 @@
-import {
-  InvoiceCategory,
-  NullableObject,
-  getOptionListFromRecord,
-} from "@/libs";
+import { InvoiceCategory, NullableObject } from "../../common";
+import { getOptionListFromRecord } from "../../utils";
 import { CreateInvoiceSchema } from "./invoices.schema";
 
 export const invoiceCategoryRecord: Record<InvoiceCategory, string> = {
