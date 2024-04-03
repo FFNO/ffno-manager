@@ -2,7 +2,6 @@ import { useCreate, useList } from "@/api";
 import {
   CreateRequestSchema,
   MemberResDto,
-  NullableObject,
   PropertyResDto,
   RequestCategory,
   UnitResDto,

@@ -1,5 +1,3 @@
-import { Nullable } from "../common";
-
 export interface InvoiceResDto {
   id: string;
   status: number;

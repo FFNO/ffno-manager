@@ -1,11 +1,3 @@
-export type Nullable<T> = T | null;
-
-export type NullableObject<T> = { [K in keyof T]: T[K] | null };
-
-export type DeepNullable<T> = {
-  [K in keyof T]: DeepNullable<T[K]> | null;
-};
-
 export enum MemberRole {
   ADMIN,
   LANDLORD,
@@ -23,24 +15,11 @@ export enum Gender {
   FEMALE,
 }
 
-export enum PropertyType {
-  SINGLE_UNIT,
-  MULTIPLE_UNIT,
-}
-
 export enum InvoiceStatus {
   PENDING,
   PAID,
   PARTIAL,
   OVERDUE,
-}
-
-export enum InvoiceCategory {
-  UNIT_CHARGE,
-}
-
-export enum RequestCategory {
-  UNIT_LEASE,
 }
 
 export enum RequestStatus {

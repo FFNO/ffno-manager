@@ -1,5 +1,10 @@
-import { PropertyType, getOptionListFromRecord } from "@/libs";
+import { getOptionListFromRecord } from "@/libs";
 import { CreatePropertySchema, CreateUnitSchema } from "./properties.schema";
+
+export enum PropertyType {
+  SINGLE_UNIT,
+  MULTIPLE_UNIT,
+}
 
 export const propertyTypeRecord: Record<PropertyType, string> = {
   [PropertyType.SINGLE_UNIT]: "Nhà nguyên căn",

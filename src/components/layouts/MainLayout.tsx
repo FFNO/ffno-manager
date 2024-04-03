@@ -1,4 +1,5 @@
-import { MemberResDto, Nullable } from "@/libs";
+import { axiosInstance } from "@/api/utils";
+import { MemberResDto } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import {
   AppShell,
@@ -25,7 +26,6 @@ import { PropsWithChildren } from "react";
 import OneSignal from "react-onesignal";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
-import { axiosInstance } from "@/api/utils";
 
 const navLinks = [
   { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },

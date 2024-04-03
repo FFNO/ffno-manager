@@ -1,9 +1,9 @@
-import {
-  NullableObject,
-  RequestCategory,
-  getOptionListFromRecord,
-} from "@/libs";
+import { getOptionListFromRecord } from "@/libs";
 import { CreateRequestSchema } from "./requests.schema";
+
+export enum RequestCategory {
+  UNIT_LEASE,
+}
 
 export const requestCategoryRecord: Record<RequestCategory, string> = {
   [RequestCategory.UNIT_LEASE]: "Thuê phòng",

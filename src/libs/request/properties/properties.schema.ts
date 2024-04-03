@@ -1,4 +1,3 @@
-import { NullableObject } from "@/libs";
 import { z } from "zod";
 
 export const createUnitSchema = z.object({

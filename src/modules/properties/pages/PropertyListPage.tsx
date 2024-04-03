@@ -1,13 +1,15 @@
 import { useList } from "@/api";
-import { PropertyResDto } from "@/libs";
+import { PropertyResDto, calculatePage } from "@/libs";
 import { Route } from "@/routes/properties/index";
-import { Button, Group, Stack } from "@mantine/core";
-import { Link } from "@tanstack/react-router";
+import { Button, Group, Pagination, Stack } from "@mantine/core";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";
 import { PropertyFilter, PropertyListView, UnitListView } from "../components";
 
 export function PropertyListPage() {
   const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
   const { data } = useList<PropertyResDto>({
     resource: "properties",
     params: search,
@@ -29,6 +31,12 @@ export function PropertyListPage() {
       ) : (
         <UnitListView properties={data?.data || []} />
       )}
+      <Pagination
+        withEdges
+        total={calculatePage(data?.total)}
+        value={search.page}
+        onChange={(page) => navigate({ search: (prev) => ({ ...prev, page }) })}
+      />
     </Stack>
   );
 }
