@@ -6,7 +6,6 @@ import {
   createUnitInitialValues,
 } from "@/libs";
 import {
-  Autocomplete,
   Button,
   Chip,
   Divider,
@@ -14,6 +13,7 @@ import {
   Grid,
   Group,
   LoadingOverlay,
+  NumberInput,
   SegmentedControl,
   Select,
   Stack,
@@ -89,20 +89,20 @@ export const PropertyCreatePage = () => {
         overlayProps={{ radius: "sm", blur: 2 }}
       />
       <form onSubmit={handleSubmit}>
-        <Fieldset legend="Basic information">
+        <Fieldset legend="Thông tin cơ bản">
           <Grid>
             <Grid.Col span={6}>
               <TextInput
-                label="Property name"
-                placeholder="Enter property name"
+                label="Tên tòa nhà"
+                placeholder="Nhập tên tòa nhà"
                 withAsterisk
                 {...form.getInputProps("name")}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <TextInput
-                label="Address"
-                placeholder="Enter address"
+                label="Địa chỉ"
+                placeholder="Nhập địa chỉ"
                 withAsterisk
                 {...form.getInputProps("address")}
               />
@@ -112,8 +112,8 @@ export const PropertyCreatePage = () => {
                 searchable
                 clearable
                 withAsterisk
-                label="Province"
-                placeholder="Select province"
+                label="Tỉnh"
+                placeholder="Chọn tỉnh"
                 data={provinces ?? []}
                 {...form.getInputProps("province")}
               />
@@ -124,8 +124,8 @@ export const PropertyCreatePage = () => {
                 searchable
                 clearable
                 disabled={!form.values.province}
-                label="District"
-                placeholder="Select district"
+                label="Huyện"
+                placeholder="Chọn huyện"
                 data={districts ?? []}
                 {...form.getInputProps("district")}
               />
@@ -136,8 +136,8 @@ export const PropertyCreatePage = () => {
                 clearable
                 searchable
                 disabled={!form.values.province || !form.values.district}
-                label="Ward"
-                placeholder="Select ward"
+                label="Xã"
+                placeholder="Chọn xã"
                 data={wards ?? []}
                 {...form.getInputProps("ward")}
               />
@@ -147,7 +147,7 @@ export const PropertyCreatePage = () => {
 
         <Divider mt={"lg"} pb={"lg"} />
 
-        <Fieldset legend="Property type">
+        <Fieldset legend="Kiểu tòa nhà">
           <SegmentedControl
             fullWidth
             withItemsBorders={false}
@@ -157,7 +157,9 @@ export const PropertyCreatePage = () => {
                 value: "0",
                 label: (
                   <Stack p={"lg"}>
-                    <Title order={5}>{"Single unit type".toUpperCase()}</Title>
+                    <Title order={5}>
+                      {"Nhà cho thuê nguyên căn".toUpperCase()}
+                    </Title>
                     <span
                       style={{
                         fontWeight: "400",
@@ -165,7 +167,7 @@ export const PropertyCreatePage = () => {
                       }}
                     >
                       <span style={{ fontWeight: "bold" }}>
-                        You cannot add more units
+                        Không thể thêm nhiều phòng
                       </span>
                     </span>
                   </Stack>
@@ -175,9 +177,7 @@ export const PropertyCreatePage = () => {
                 value: "1",
                 label: (
                   <Stack p={"lg"}>
-                    <Title order={5}>
-                      {"Multiple unit type".toUpperCase()}
-                    </Title>
+                    <Title order={5}>{"Nhiều phòng".toUpperCase()}</Title>
                     <span
                       style={{
                         fontWeight: "400",
@@ -194,7 +194,7 @@ export const PropertyCreatePage = () => {
 
         <Divider mt={"lg"} pb={"lg"} />
 
-        <Fieldset legend="Units information">
+        <Fieldset legend="Thông tin các phòng">
           {form.values.units?.map((unit, index) => (
             <Fieldset key={index} legend={unit.name} mb={"md"}>
               <Grid columns={10}>
@@ -206,7 +206,7 @@ export const PropertyCreatePage = () => {
                       onClick={() =>
                         form.insertListItem("units", {
                           ...unit,
-                          name: `Unit ${1 + (form.values.units?.length ?? 0)}`,
+                          name: `Phòng ${1 + (form.values.units?.length ?? 0)}`,
                         })
                       }
                     >
@@ -217,83 +217,49 @@ export const PropertyCreatePage = () => {
                       leftSection={<XIcon size={16} />}
                       onClick={() => form.removeListItem("units", index)}
                     >
-                      Delete
+                      Xóa
                     </Button>
                   </Group>
                 </Grid.Col>
                 <Grid.Col span={2}>
                   <TextInput
-                    label="Name"
-                    placeholder="Enter unit name"
+                    label="Tên phòng"
+                    placeholder="Nhập tên phòng"
                     withAsterisk
                     {...form.getInputProps(`units.${index}.name`)}
                   />
                 </Grid.Col>
                 <Grid.Col span={2}>
-                  <TextInput
-                    label="Type"
-                    placeholder="Enter unit type"
+                  <NumberInput
+                    label="Diện tích"
+                    placeholder="Nhập diện tích"
                     withAsterisk
-                    {...form.getInputProps(`units.${index}.type`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <TextInput
-                    label="Area"
-                    placeholder="Enter unit area"
-                    withAsterisk
+                    suffix=" m²"
                     {...form.getInputProps(`units.${index}.area`)}
                   />
                 </Grid.Col>
                 <Grid.Col span={2}>
-                  <TextInput
-                    label="Price"
-                    placeholder="Enter unit price"
+                  <NumberInput
+                    label="Giá thuê"
+                    placeholder="Nhập giá thuê"
                     withAsterisk
+                    min={0}
+                    prefix="₫ "
+                    thousandSeparator=","
+                    step={1000}
                     {...form.getInputProps(`units.${index}.price`)}
                   />
                 </Grid.Col>
                 <Grid.Col span={2}>
-                  <TextInput
-                    label="Deposit"
-                    placeholder="Enter unit deposit"
+                  <NumberInput
+                    label="Giá cọc"
+                    placeholder="Nhập giá cọc"
                     withAsterisk
+                    min={0}
+                    prefix="₫ "
+                    thousandSeparator=","
+                    step={1000}
                     {...form.getInputProps(`units.${index}.deposit`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <Select
-                    label="Beds"
-                    data={["NONE", "1", "2", "3", "4"]}
-                    {...form.getInputProps(`units.${index}.beds`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <Select
-                    label="Baths"
-                    data={["NONE", "SHARED", "1", "2", "3", "4"]}
-                    {...form.getInputProps(`units.${index}.baths`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <Autocomplete
-                    label="Parking"
-                    data={["FREE"]}
-                    {...form.getInputProps(`units.${index}.parking`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <Select
-                    label="Laundry"
-                    data={["SHARED", "EMBEDDED", "NONE"]}
-                    {...form.getInputProps(`units.${index}.laundry`)}
-                  />
-                </Grid.Col>
-                <Grid.Col span={2}>
-                  <Select
-                    label="Air Conditioner"
-                    data={["HOT", "COLD", "2-WAY", "NONE"]}
-                    {...form.getInputProps(`units.${index}.airConditioning`)}
                   />
                 </Grid.Col>
               </Grid>
@@ -303,17 +269,17 @@ export const PropertyCreatePage = () => {
             onClick={() =>
               form.insertListItem("units", {
                 ...createUnitInitialValues,
-                name: `Unit ${1 + (form.values.units?.length ?? 0)}`,
+                name: `Phòng ${1 + (form.values.units?.length ?? 0)}`,
               })
             }
           >
-            Add unit
+            Thêm phòng
           </Button>
         </Fieldset>
 
         <Divider mt={"lg"} pb={"lg"} />
 
-        <Fieldset legend="Property amenities">
+        <Fieldset legend="Tiện nghi">
           <Chip.Group multiple {...form.getInputProps("amenities")}>
             <Group justify="start">
               {amenities?.map((amenity) => (
@@ -328,14 +294,14 @@ export const PropertyCreatePage = () => {
         <Divider mt={"lg"} pb={"lg"} />
 
         <Group justify="end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Tạo</Button>
           <Button
             variant="outline"
             color="red"
             type="button"
             onClick={() => form.reset()}
           >
-            Cancel
+            Hủy
           </Button>
         </Group>
       </form>

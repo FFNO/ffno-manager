@@ -9,7 +9,6 @@ import {
   Select,
   Stack,
   Text,
-  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -56,9 +55,6 @@ export function InvoiceFilter() {
             });
           })}
         >
-          <Title order={5} pb={8}>
-            Filters
-          </Title>
           <Stack>
             <MultiSelect
               searchable

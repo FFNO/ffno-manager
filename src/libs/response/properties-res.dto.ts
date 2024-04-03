@@ -13,6 +13,8 @@ export interface PropertyResDto {
   ownerId: string;
   amenities: string[];
   units: UnitResDto[];
+  occupiedCount: number;
+  vacantCount: number;
 }
 
 export interface GetListPropertyResDto {

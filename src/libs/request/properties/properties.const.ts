@@ -1,11 +1,18 @@
+import { PropertyType, getOptionListFromRecord } from "@/libs";
 import { CreatePropertySchema, CreateUnitSchema } from "./properties.schema";
 
+export const propertyTypeRecord: Record<PropertyType, string> = {
+  [PropertyType.SINGLE_UNIT]: "Nhà nguyên căn",
+  [PropertyType.MULTIPLE_UNIT]: "Nhiều phòng",
+};
+
+export const propertyTypes = getOptionListFromRecord(propertyTypeRecord);
+
 export const createUnitInitialValues: CreateUnitSchema = {
-  name: "Unit 1",
+  name: "Phòng 1",
   area: 0,
   deposit: 0,
   price: 0,
-  type: "0",
   details: "",
 };
 

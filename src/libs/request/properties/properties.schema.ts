@@ -3,7 +3,6 @@ import { z } from "zod";
 
 export const createUnitSchema = z.object({
   name: z.string(),
-  type: z.string(),
   area: z.coerce.number(),
   price: z.coerce.number(),
   deposit: z.coerce.number(),
