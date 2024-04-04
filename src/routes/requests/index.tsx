@@ -4,6 +4,7 @@ export const Route = createFileRoute("/requests/")({
   validateSearch: (search: Record<string, string>) => {
     return {
       ...search,
+      page: +(search?.page ?? 1),
     };
   },
 });

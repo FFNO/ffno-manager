@@ -18,6 +18,7 @@ import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as PropertiesIndexImport } from './routes/properties/index'
 import { Route as InvoicesIndexImport } from './routes/invoices/index'
 import { Route as ContactsIndexImport } from './routes/contacts/index'
+import { Route as PropertiesPropertyIdCreateUnitImport } from './routes/properties_/$propertyId/create-unit'
 
 // Create Virtual Routes
 
@@ -31,9 +32,6 @@ const InvoicesCreateLazyImport = createFileRoute('/invoices/create')()
 const ContactsCreateLazyImport = createFileRoute('/contacts/create')()
 const ContactsContactIdLazyImport = createFileRoute('/contacts/$contactId')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
-const PropertiesPropertyIdCreateUnitLazyImport = createFileRoute(
-  '/properties/$propertyId/create-unit',
-)()
 
 // Create/Update Routes
 
@@ -122,8 +120,8 @@ const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
 
-const PropertiesPropertyIdCreateUnitLazyRoute =
-  PropertiesPropertyIdCreateUnitLazyImport.update({
+const PropertiesPropertyIdCreateUnitRoute =
+  PropertiesPropertyIdCreateUnitImport.update({
     path: '/properties/$propertyId/create-unit',
     getParentRoute: () => rootRoute,
   } as any).lazy(() =>
@@ -189,7 +187,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/properties/$propertyId/create-unit': {
-      preLoaderRoute: typeof PropertiesPropertyIdCreateUnitLazyImport
+      preLoaderRoute: typeof PropertiesPropertyIdCreateUnitImport
       parentRoute: typeof rootRoute
     }
   }
@@ -211,7 +209,7 @@ export const routeTree = rootRoute.addChildren([
   InvoicesIndexRoute,
   PropertiesIndexRoute,
   RequestsIndexRoute,
-  PropertiesPropertyIdCreateUnitLazyRoute,
+  PropertiesPropertyIdCreateUnitRoute,
 ])
 
 /* prettier-ignore-end */

@@ -1,5 +1,5 @@
 import { useList, useOne } from "@/api";
-import { MemberResDto, PropertyResDto, propertyTypeRecord } from "@/libs";
+import { MemberResDto, PropertyResDto } from "@/libs";
 import { Route } from "@/routes/properties/$propertyId.lazy";
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   Group,
   Input,
   Menu,
-  NumberFormatter,
   SimpleGrid,
   Stack,
   Tabs,

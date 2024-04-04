@@ -34,9 +34,7 @@ export const InvoiceCreate = () => {
     validate: zodResolver(createInvoiceSchema),
   });
 
-  const handleSubmit = form.onSubmit(async (values) => {
-    mutate.mutate(values);
-  });
+  const handleSubmit = form.onSubmit((values) => mutate.mutate(values));
 
   useEffect(() => {
     form.setValues({

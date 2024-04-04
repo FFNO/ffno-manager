@@ -27,9 +27,3 @@ export enum RequestStatus {
   ACCEPTED,
   REJECTED,
 }
-
-export enum UnitStatus {
-  GOOD,
-  MAINTAINING,
-  BAD,
-}

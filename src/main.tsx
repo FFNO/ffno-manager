@@ -7,6 +7,7 @@ import "./index.css";
 
 import { Drawer, MantineProvider, Select, createTheme } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
+import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { QueryClientProvider } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -49,10 +50,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
       <DatesProvider settings={{ locale: "vi" }}>
-        <Notifications position="bottom-right" />
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>
+        <ModalsProvider
+          modalProps={{ centered: true }}
+          labels={{ confirm: "Xác nhận", cancel: "Hủy" }}
+        >
+          <Notifications position="bottom-right" />
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        </ModalsProvider>
       </DatesProvider>
     </MantineProvider>
   </React.StrictMode>

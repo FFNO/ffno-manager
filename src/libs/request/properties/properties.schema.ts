@@ -6,6 +6,9 @@ export const createUnitSchema = z.object({
   price: z.coerce.number(),
   deposit: z.coerce.number(),
   details: z.string().optional(),
+  unitFeatures: z.array(z.string()).optional(),
+  propertyId: z.string().uuid().optional(),
+  status: z.coerce.string().optional(),
 });
 
 export const createPropertySchema = z.object({
