@@ -1,4 +1,4 @@
-export interface GetMemberResDto {
+export interface MemberResDto {
   id: string;
   name: string;
   email: string;

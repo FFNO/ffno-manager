@@ -24,7 +24,10 @@ export const dataProvider = {
       params,
     });
 
-    return data;
+    return {
+      data: data.data ?? [],
+      total: data.total ?? 0,
+    };
   },
 
   getSimpleList: async ({ resource, params }: Props) => {
@@ -42,6 +45,12 @@ export const dataProvider = {
   },
 
   create: async <T = unknown>(resource: string, payload: T) => {
+    const { data } = await axiosInstance.post<string>(resource, payload);
+
+    return data;
+  },
+
+  update: async <T = unknown>(resource: string, payload: T) => {
     const { data } = await axiosInstance.post<string>(resource, payload);
 
     return data;
@@ -86,6 +95,15 @@ export const useCreate = (resource: string) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.create(resource, data),
+  });
+
+  return mutation;
+};
+
+export const useUpdate = (resource: string) => {
+  const mutation = useMutation({
+    mutationKey: [resource],
+    mutationFn: (data: unknown) => dataProvider.update(resource, data),
   });
 
   return mutation;

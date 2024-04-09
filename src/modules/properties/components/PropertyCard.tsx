@@ -1,6 +1,7 @@
-import { PropertyResDto } from "@/libs";
+import { PropertyResDto, PropertyType } from "@/libs";
 import {
   AspectRatio,
+  Badge,
   Box,
   Card,
   Group,
@@ -28,7 +29,7 @@ export const PropertyCard = (props: Props) => {
       radius="md"
       withBorder
     >
-      <Group grow>
+      <Group>
         <AspectRatio ratio={1} style={{ flex: `0 0 ${rem(160)}` }}>
           <Image
             radius={"md"}
@@ -37,7 +38,7 @@ export const PropertyCard = (props: Props) => {
             fallbackSrc="/fallback.png"
           />
         </AspectRatio>
-        <Stack h={"100%"} justify="start" gap={"sm"}>
+        <Stack flex={1} h={"100%"} justify="start" gap={"sm"}>
           <Title order={5}>{props.name}</Title>
           <Group gap={"xs"}>
             <MapPinnedIcon size={24} color={theme.colors.gray[6]} />
@@ -51,13 +52,32 @@ export const PropertyCard = (props: Props) => {
             </Box>
           </Group>
           <Box flex={1} />
-          <Title order={4}>{propertyType(+props.type)}</Title>
+          <Title order={4}>
+            {propertyType(+props.type, props.units.length)}
+          </Title>
+          <Group>
+            {props.type === PropertyType.SINGLE_UNIT ? (
+              <>
+                {props.occupiedCount ? (
+                  <Badge color="green">Đã cho thuê</Badge>
+                ) : (
+                  <Badge color="yellow">Còn trống</Badge>
+                )}
+              </>
+            ) : (
+              <>
+                <Badge color="green">{props.occupiedCount} đã cho thuê</Badge>
+                <Box flex={1} />
+                <Badge color="yellow">{props.vacantCount} phòng trống</Badge>
+              </>
+            )}
+          </Group>
         </Stack>
       </Group>
     </Card>
   );
 };
 
-function propertyType(type: number) {
-  return (type === 0 ? "Single unit" : "Multiple unit").toUpperCase();
+function propertyType(type: PropertyType, unitCount: number) {
+  return (type === 0 ? "Nguyên căn" : `${unitCount} phòng`).toUpperCase();
 }

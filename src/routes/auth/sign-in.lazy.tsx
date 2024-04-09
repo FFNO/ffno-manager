@@ -1,8 +1,8 @@
 import { axiosInstance } from "@/api/utils";
+import { MemberResDto } from "@/libs";
 import {
   Anchor,
   Button,
-  Checkbox,
   Divider,
   Group,
   Paper,
@@ -14,21 +14,22 @@ import {
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
-import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import OneSignal from "react-onesignal";
 
 export const Route = createLazyFileRoute("/auth/sign-in")({
   component: SignInPage,
 });
 
-export function SignInPage() {
-  const router = useRouter();
+export function SignInPage(props: {
+  setMember: (value: MemberResDto) => void;
+}) {
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",
       name: "",
       password: "",
-      terms: true,
     },
   });
 
@@ -61,8 +62,8 @@ export function SignInPage() {
             "auth/sign-in",
             form.values
           );
-          localStorage.setItem("member", JSON.stringify(data));
-          router.history.push("/");
+          OneSignal.User.addTag("memberId", data.id);
+          props.setMember(data);
         })}
       >
         <Stack>
@@ -104,16 +105,6 @@ export function SignInPage() {
             }
             radius="md"
           />
-
-          {type === "register" && (
-            <Checkbox
-              label="I accept terms and conditions"
-              checked={form.values.terms}
-              onChange={(event) =>
-                form.setFieldValue("terms", event.currentTarget.checked)
-              }
-            />
-          )}
         </Stack>
 
         <Group justify="space-between" mt="xl">

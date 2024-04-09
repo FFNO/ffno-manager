@@ -1,5 +1,5 @@
 import { useList } from "@/api";
-import { GetMemberResDto } from "@/libs";
+import { MemberResDto } from "@/libs";
 import { ContactCard } from "@/modules/contacts";
 import { Route } from "@/routes/contacts/index";
 import {
@@ -19,7 +19,7 @@ import { PlusIcon, SearchIcon } from "lucide-react";
 export function ContactListPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const { data } = useList<GetMemberResDto>({
+  const { data } = useList<MemberResDto>({
     resource: `members/contacts`,
     params: { ...search },
   });

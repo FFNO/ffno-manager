@@ -1,7 +1,11 @@
+import { axiosInstance } from "@/api/utils";
+import { MemberResDto } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import {
   AppShell,
+  Box,
   Burger,
+  Button,
   Center,
   Code,
   Group,
@@ -11,59 +15,74 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
-import { BuildingIcon, CircleGaugeIcon, ContactIcon } from "lucide-react";
+import {
+  BuildingIcon,
+  CircleGaugeIcon,
+  ClipboardListIcon,
+  ContactIcon,
+  ReceiptIcon,
+} from "lucide-react";
 import { PropsWithChildren } from "react";
+import OneSignal from "react-onesignal";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
-import { GetMemberResDto } from "@/libs";
 
 const navLinks = [
-  { label: "Dashboard", icon: CircleGaugeIcon },
+  { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
   {
-    label: "Properties",
+    label: "Bất động sản",
     icon: BuildingIcon,
     initiallyOpened: true,
     links: [
-      { label: "Properties", link: "/properties" },
-      { label: "Units", link: "/properties?view=units" },
-      { label: "Equipments", link: "/" },
+      { label: "Tòa nhà", link: "/properties" },
+      { label: "Căn hộ", link: "/properties?view=units" },
+      { label: "Thiết bị & nội thất", link: "/" },
     ],
   },
   {
-    label: "Contacts",
+    label: "Giao dịch",
+    icon: ReceiptIcon,
+    initiallyOpened: true,
+    links: [{ label: "Hóa đơn", link: "/invoices" }],
+  },
+  {
+    label: "Liên lạc",
     icon: ContactIcon,
     initiallyOpened: true,
     links: [
-      { label: "Tenants", link: "/contacts?type=0" },
-      { label: "Service pros", link: "/contacts?type=1" },
+      { label: "Người thuê nhà", link: "/contacts?type=0" },
+      { label: "Dịch vụ chuyên nghiệp", link: "/contacts?type=1" },
     ],
+  },
+  {
+    label: "Yêu cầu",
+    icon: ClipboardListIcon,
+    link: "/requests",
   },
 ];
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
-  const [member] = useLocalStorage<GetMemberResDto>({ key: "member" });
+  const [member, setMember] = useLocalStorage<Nullable<MemberResDto>>({
+    key: "member",
+    defaultValue: JSON.parse(localStorage.getItem("member") || "{}"),
+  });
 
-  if (!(member && member.id)) {
-    return (
+  return (
+    <>
       <Modal
-        opened
+        opened={!(member && member.id)}
         fullScreen
         withCloseButton={false}
         onClose={() => {}}
         padding={0}
       >
-        {JSON.stringify(member)}
         <Center h={"100vh"} bg={"blue"}>
-          <SignInPage />
+          <SignInPage setMember={setMember} />
         </Center>
       </Modal>
-    );
-  }
 
-  return (
-    <>
       <AppShell
         header={{ height: 60 }}
         navbar={{ width: 300, breakpoint: "sm" }}
@@ -80,8 +99,19 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
               <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
                 {import.meta.env.VITE_APP_NAME}
               </Text>
-              <Code fw={700}>{member.id}</Code>
+              <Code fw={700}>{member?.id}</Code>
             </Group>
+            <Box flex={1} />
+            <Button
+              variant="light"
+              onClick={async () => {
+                setMember(null);
+                OneSignal.User.removeTag("memberId");
+                await axiosInstance.delete("/auth/sign-out");
+              }}
+            >
+              Đăng xuất
+            </Button>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar>
@@ -92,6 +122,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
     </>
   );
 };
+
 function Navbar() {
   const links = navLinks.map((item) => (
     <LinksGroup {...item} key={item.label} />
@@ -102,7 +133,7 @@ function Navbar() {
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>{links}</div>
       </ScrollArea>
-      <div className={classes.footer}>{/* <UserButton /> */}</div>
+      <div className={classes.footer}></div>
     </nav>
   );
 }
