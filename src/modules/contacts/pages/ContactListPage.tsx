@@ -1,7 +1,7 @@
 import { useList } from "@/api";
 import { MemberResDto } from "@/libs";
 import { ContactCard } from "@/modules/contacts";
-import { Route } from "@/routes/contacts/index";
+import { Route } from "@/routes/managers/contacts/index";
 import {
   Button,
   Group,

@@ -1,6 +1,6 @@
 import { useList } from "@/api";
 import { InvoiceResDto, calculatePage } from "@/libs";
-import { Route } from "@/routes/invoices/index";
+import { Route } from "@/routes/managers/invoices/index";
 import { Button, Group, Pagination, SimpleGrid, Stack } from "@mantine/core";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";

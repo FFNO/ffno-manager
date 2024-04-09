@@ -1,5 +1,5 @@
 import { useOne } from "@/api";
-import { Route } from "@/routes/contacts/$contactId.lazy";
+import { Route } from "@/routes/managers/contacts/$contactId.lazy";
 
 export function ContactPage() {
   const { contactId } = Route.useParams();

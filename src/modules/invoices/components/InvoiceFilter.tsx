@@ -1,6 +1,6 @@
 import { useList } from "@/api";
 import { PropertyResDto, invoiceCategories } from "@/libs";
-import { Route } from "@/routes/invoices/index";
+import { Route } from "@/routes/managers/invoices/index";
 import {
   Button,
   Drawer,

@@ -1,6 +1,6 @@
 import { useList } from "@/api";
 import { PropertyResDto, calculatePage } from "@/libs";
-import { Route } from "@/routes/properties/index";
+import { Route } from "@/routes/managers/properties/index";
 import { Button, Group, Pagination, Stack } from "@mantine/core";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";
@@ -22,7 +22,7 @@ export function PropertyListPage() {
           Tải lên
         </Button>
         <PropertyFilter />
-        <Link to="/properties/create">
+        <Link to="/managers/properties/create">
           <Button leftSection={<PlusIcon size={16} />}>Thêm tòa nhà</Button>
         </Link>
       </Group>

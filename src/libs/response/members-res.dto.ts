@@ -1,3 +1,5 @@
+import { MemberRole } from "../common";
+
 export interface MemberResDto {
   id: string;
   name: string;
@@ -5,4 +7,5 @@ export interface MemberResDto {
   phone: string;
   unit: string;
   imgUrl: string;
+  role: MemberRole;
 }

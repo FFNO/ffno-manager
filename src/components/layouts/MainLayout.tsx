@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/api/utils";
-import { MemberResDto } from "@/libs";
+import { MemberResDto, MemberRole } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import {
   AppShell,
@@ -27,24 +27,43 @@ import OneSignal from "react-onesignal";
 import { LinksGroup } from "./LinksGroup";
 import classes from "./MainLayout.module.css";
 
-const navLinks = [
-  { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
+const managerNavLinks = [
+  { label: "Tổng quan", icon: CircleGaugeIcon, link: "/managers" },
   {
     label: "Bất động sản",
     icon: BuildingIcon,
     initiallyOpened: true,
     links: [
-      { label: "Tòa nhà", link: "/properties" },
-      { label: "Căn hộ", link: "/properties?view=units" },
-      { label: "Thiết bị & nội thất", link: "/" },
+      { label: "Tòa nhà", link: "/managers/properties" },
+      { label: "Căn hộ", link: "/managers/properties?view=units" },
+      { label: "Thiết bị & nội thất", link: "/managers/" },
     ],
   },
   {
     label: "Giao dịch",
     icon: ReceiptIcon,
     initiallyOpened: true,
-    links: [{ label: "Hóa đơn", link: "/invoices" }],
+    links: [{ label: "Hóa đơn", link: "/managers/invoices" }],
   },
+  {
+    label: "Liên lạc",
+    icon: ContactIcon,
+    initiallyOpened: true,
+    links: [
+      { label: "Người thuê nhà", link: "/managers/contacts?type=0" },
+      { label: "Dịch vụ chuyên nghiệp", link: "/managers/contacts?type=1" },
+    ],
+  },
+  {
+    label: "Yêu cầu",
+    icon: ClipboardListIcon,
+    link: "/managers/requests",
+  },
+];
+
+const tenantNavLinks = [
+  { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
+  { label: "Căn hộ", icon: CircleGaugeIcon, link: "/units" },
   {
     label: "Liên lạc",
     icon: ContactIcon,
@@ -53,11 +72,6 @@ const navLinks = [
       { label: "Người thuê nhà", link: "/contacts?type=0" },
       { label: "Dịch vụ chuyên nghiệp", link: "/contacts?type=1" },
     ],
-  },
-  {
-    label: "Yêu cầu",
-    icon: ClipboardListIcon,
-    link: "/requests",
   },
 ];
 
@@ -115,7 +129,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
           </Group>
         </AppShell.Header>
         <AppShell.Navbar>
-          <Navbar />
+          <Navbar role={member?.role} />
         </AppShell.Navbar>
         <AppShell.Main>{children}</AppShell.Main>
       </AppShell>
@@ -123,10 +137,12 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   );
 };
 
-function Navbar() {
-  const links = navLinks.map((item) => (
-    <LinksGroup {...item} key={item.label} />
-  ));
+function Navbar({ role = MemberRole.ADMIN }: { role?: MemberRole }) {
+  const links = (
+    [MemberRole.ADMIN, MemberRole.LANDLORD].includes(role)
+      ? managerNavLinks
+      : tenantNavLinks
+  ).map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
     <nav className={classes.navbar}>

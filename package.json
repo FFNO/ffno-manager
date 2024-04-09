@@ -12,12 +12,14 @@
   "dependencies": {
     "@mantine/core": "^7.7.1",
     "@mantine/dates": "^7.6.2",
+    "@mantine/dropzone": "^7.7.1",
     "@mantine/form": "^7.6.1",
     "@mantine/hooks": "^7.7.1",
     "@mantine/modals": "^7.6.1",
     "@mantine/notifications": "^7.6.1",
     "@mantine/nprogress": "^7.6.1",
     "@mantine/tiptap": "^7.7.1",
+    "@supabase/supabase-js": "^2.42.0",
     "@tabler/icons-react": "^2.47.0",
     "@tanstack/react-query": "^5.25.0",
     "@tanstack/react-router": "^1.19.4",
@@ -33,6 +35,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-onesignal": "^3.0.1",
+    "sharp": "^0.33.3",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -41,6 +45,7 @@
     "@types/node": "^20.11.25",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "@vitejs/plugin-react-swc": "^3.5.0",

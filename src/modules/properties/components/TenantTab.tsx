@@ -1,7 +1,7 @@
 import { useList } from "@/api";
 import { MemberResDto } from "@/libs";
 import { ContactCard } from "@/modules/contacts";
-import { Route } from "@/routes/properties/$propertyId.lazy";
+import { Route } from "@/routes/managers/properties/$propertyId.lazy";
 import { SimpleGrid } from "@mantine/core";
 
 export const TenantTab = () => {

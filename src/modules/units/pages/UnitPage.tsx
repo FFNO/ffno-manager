@@ -1,6 +1,6 @@
 import { useOne } from "@/api";
 import { UnitResDto } from "@/libs";
-import { Route } from "@/routes/units/$unitId.lazy";
+import { Route } from "@/routes/managers/units/$unitId.lazy";
 import { Code } from "@mantine/core";
 
 export const UnitPage = () => {

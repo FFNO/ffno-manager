@@ -55,7 +55,7 @@ export function UnitCard(props: Props) {
           </Group>
         </Stack>
         <Box flex={1} />
-        <Link to="/units/$unitId" params={{ unitId: props.id }}>
+        <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
           <Button variant="outline">Xem chi tiết</Button>
         </Link>
       </Group>

@@ -1,3 +1,5 @@
+export { supabase } from "./supabase";
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance, queryClient } from "./utils";
 

@@ -1,4 +1,5 @@
 import { useCreate, useList, useSimpleList } from "@/api";
+import { ImageUpload } from "@/components/ImageUpload";
 import {
   CreateUnitSchema,
   PropertyResDto,
@@ -6,7 +7,7 @@ import {
   createUnitSchema,
   unitStatuses,
 } from "@/libs";
-import { Route } from "@/routes/properties_/$propertyId/create-unit";
+import { Route } from "@/routes/managers/properties_/$propertyId/create-unit";
 import {
   Button,
   CheckIcon,
@@ -23,11 +24,12 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { Navigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 export const CreateUnitPage = () => {
   const { propertyId } = Route.useParams();
   const mutate = useCreate("units");
+  const navigate = useNavigate();
   const form = useForm<CreateUnitSchema>({
     initialValues: {
       ...createUnitInitialValues,
@@ -47,13 +49,16 @@ export const CreateUnitPage = () => {
 
   if (mutate.isSuccess) {
     notifications.show({
-      id: "create-invoice-successfully",
+      id: "create-unit-successfully",
       icon: <CheckIcon />,
       color: "green",
       title: "Thành công",
-      message: "Thêm hóa đơn thành công",
+      message: "Thêm phòng thành công",
     });
-    return <Navigate to={"/units"} params={{ unitId: mutate.data }} search />;
+    navigate({
+      to: "/units/$unitId",
+      params: { unitId: mutate.data },
+    });
   }
 
   return (
@@ -143,6 +148,8 @@ export const CreateUnitPage = () => {
             {...form.getInputProps("unitFeatures")}
           />
         </Fieldset>
+
+        <ImageUpload setUrls={(urls) => form.setFieldValue("imgUrls", urls)} />
 
         <Group justify="end">
           <Button type="submit">Tạo</Button>

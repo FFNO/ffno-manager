@@ -5,7 +5,7 @@ import {
   calculatePage,
   requestCategoryRecord,
 } from "@/libs";
-import { Route } from "@/routes/requests/index";
+import { Route } from "@/routes/managers/requests/index";
 import {
   ActionIcon,
   Avatar,

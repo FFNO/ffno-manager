@@ -1,6 +1,6 @@
 import { useSimpleList } from "@/api";
 import { propertyTypes } from "@/libs";
-import { Route } from "@/routes/properties";
+import { Route } from "@/routes/managers/properties";
 import {
   Button,
   Drawer,

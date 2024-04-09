@@ -1,6 +1,6 @@
 import { useList, useOne } from "@/api";
 import { MemberResDto, PropertyResDto } from "@/libs";
-import { Route } from "@/routes/properties/$propertyId.lazy";
+import { Route } from "@/routes/managers/properties/$propertyId.lazy";
 import {
   Box,
   Button,
