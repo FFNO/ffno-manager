@@ -29,6 +29,7 @@
     "@tiptap/starter-kit": "^2.2.4",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
+    "jotai": "^2.8.0",
     "lucide-react": "^0.356.0",
     "mantine-form-zod-resolver": "^1.1.0",
     "query-string": "^9.0.0",

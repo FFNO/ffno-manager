@@ -12,6 +12,7 @@ export interface UnitResDto {
   unitFeatures: string[];
   tenants: MemberResDto[];
   payer: MemberResDto;
+  isListing: boolean;
 }
 
 export interface GetListUnitResDto {

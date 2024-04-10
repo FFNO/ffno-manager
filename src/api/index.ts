@@ -53,7 +53,7 @@ export const dataProvider = {
   },
 
   update: async <T = unknown>(resource: string, payload: T) => {
-    const { data } = await axiosInstance.post<string>(resource, payload);
+    const { data } = await axiosInstance.patch<string>(resource, payload);
 
     return data;
   },

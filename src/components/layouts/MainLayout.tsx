@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/utils";
-import { MemberResDto, MemberRole } from "@/libs";
+import { MemberRole } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
+import { memberAtom } from "@/states";
 import {
   AppShell,
   Box,
@@ -14,7 +15,8 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure, useLocalStorage } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
+import { useAtom } from "jotai";
 import {
   BuildingIcon,
   CircleGaugeIcon,
@@ -63,7 +65,7 @@ const managerNavLinks = [
 
 const tenantNavLinks = [
   { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
-  { label: "Căn hộ", icon: CircleGaugeIcon, link: "/units" },
+  { label: "Căn hộ", icon: CircleGaugeIcon, link: "/tenants/units" },
   {
     label: "Liên lạc",
     icon: ContactIcon,
@@ -78,10 +80,7 @@ const tenantNavLinks = [
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
-  const [member, setMember] = useLocalStorage<Nullable<MemberResDto>>({
-    key: "member",
-    defaultValue: JSON.parse(localStorage.getItem("member") || "{}"),
-  });
+  const [member, setMember] = useAtom(memberAtom);
 
   return (
     <>
