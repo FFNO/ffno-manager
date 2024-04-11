@@ -16,7 +16,7 @@ export const Route = createLazyFileRoute("/managers/contacts/create")({
 });
 
 function ContactCreatePage() {
-  const mutate = useCreate("members/create-tenant");
+  const mutate = useCreate({ resource: "members/create-tenant" });
 
   const form = useForm<LinkTenantSchema>({
     initialValues: { keyword: "", email: "", phone: "" },
@@ -24,8 +24,6 @@ function ContactCreatePage() {
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    console.log(values);
-
     mutate.mutate({ keyword: values.email || values.phone || values.keyword });
   });
 

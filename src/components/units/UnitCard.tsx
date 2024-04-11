@@ -1,10 +1,12 @@
 import { useUpdate } from "@/api";
 import {
   MemberRole,
+  RequestCategory,
   UnitResDto,
   UnitStatus,
   showSuccessNotification,
 } from "@/libs";
+import { requestFormAtom } from "@/states";
 import {
   AspectRatio,
   Badge,
@@ -20,7 +22,8 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
 
 interface Props extends UnitResDto {
@@ -29,9 +32,29 @@ interface Props extends UnitResDto {
 }
 
 export function UnitCard(props: Props) {
+  const setRequestForm = useSetAtom(requestFormAtom);
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(props.isListing);
-  const openMutation = useUpdate("units/open");
-  const closeMutation = useUpdate("units/close");
+
+  const openMutation = useUpdate({
+    resource: "units/open",
+    onSuccess: () => {
+      showSuccessNotification({
+        message: `Tiếp nhận yêu cầu thuê phòng ${props.name} thành công`,
+      });
+      setIsOpen(true);
+    },
+  });
+
+  const closeMutation = useUpdate({
+    resource: "units/close",
+    onSuccess: () => {
+      showSuccessNotification({
+        message: `Dừng nhận yêu cầu thuê phòng ${props.name} thành công`,
+      });
+      setIsOpen(false);
+    },
+  });
 
   function handleOpenUnit() {
     openMutation.mutate({ unitIds: [props.id] });
@@ -39,26 +62,6 @@ export function UnitCard(props: Props) {
 
   function handleCloseUnit() {
     closeMutation.mutate({ unitIds: [props.id] });
-  }
-
-  if (openMutation.isSuccess) {
-    showSuccessNotification({
-      id: `open-unit-${props.id}`,
-      message: `Tiếp nhận yêu cầu thuê phòng ${props.name} thành công`,
-    });
-    if (!isOpen) {
-      setIsOpen(true);
-    }
-  }
-
-  if (closeMutation.isSuccess) {
-    showSuccessNotification({
-      id: `close-unit-${props.id}`,
-      message: `Dừng nhận yêu cầu thuê phòng ${props.name} thành công`,
-    });
-    if (isOpen) {
-      setIsOpen(false);
-    }
   }
 
   return (
@@ -87,15 +90,28 @@ export function UnitCard(props: Props) {
           </Group>
           <Group>
             {props.memberRole === MemberRole.TENANT ? (
-              <Button>Yêu cầu thuê</Button>
+              <Button
+                onClick={() => {
+                  setRequestForm({
+                    name: `Yêu cầu thuê phòng ${props.name}`,
+                    details: "",
+                    category: RequestCategory.UNIT_LEASE,
+                    unitId: props.id,
+                    propertyId: props.propertyId,
+                  });
+                  navigate({ to: "/requests/create" });
+                }}
+              >
+                Yêu cầu thuê
+              </Button>
             ) : (
               <>
                 {isOpen ? (
-                  <Button onClick={() => handleCloseUnit()}>
+                  <Button color={"red"} onClick={() => handleCloseUnit()}>
                     Dừng nhận yêu cầu cho thuê
                   </Button>
                 ) : (
-                  <Button onClick={() => handleOpenUnit()}>
+                  <Button color={"green"} onClick={() => handleOpenUnit()}>
                     Tiếp nhận yêu cầu cho thuê
                   </Button>
                 )}

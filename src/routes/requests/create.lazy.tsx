@@ -1,15 +1,14 @@
-import { useCreate, useList } from "@/api";
+import { useCreate, useList, useSimpleList } from "@/api";
 import {
   CreateRequestSchema,
   MemberResDto,
-  PropertyResDto,
   RequestCategory,
-  UnitResDto,
   createRequestInitialValues,
   createRequestSchema,
   requestCategories,
   showSuccessNotification,
 } from "@/libs";
+import { requestFormAtom } from "@/states";
 import {
   Button,
   Divider,
@@ -17,23 +16,30 @@ import {
   Grid,
   Group,
   LoadingOverlay,
+  NativeSelect,
   Select,
   Stack,
   TextInput,
   Textarea,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-export const Route = createLazyFileRoute("/managers/requests/create")({
+export const Route = createLazyFileRoute("/requests/create")({
   component: RequestCreatePage,
 });
 
 function RequestCreatePage() {
-  const mutate = useCreate("requests");
+  const [formValue, setFormValue] = useAtom(requestFormAtom);
+  const navigate = useNavigate();
+  const mutate = useCreate({
+    resource: "requests",
+    onSuccess: onCreateSuccess,
+  });
   const form = useForm<NullableObject<CreateRequestSchema>>({
-    initialValues: createRequestInitialValues,
+    initialValues: formValue,
     validate: zodResolver(createRequestSchema),
   });
 
@@ -41,12 +47,12 @@ function RequestCreatePage() {
     resource: "members/contacts",
   });
 
-  const { data: properties } = useList<PropertyResDto>({
-    resource: "properties/simple-list",
+  const { data: properties } = useSimpleList({
+    resource: "properties",
   });
 
-  const { data: units } = useList<UnitResDto>({
-    resource: "units/simple-list",
+  const { data: units } = useSimpleList({
+    resource: "units",
     params: { propertyId: form.values.propertyId },
   });
 
@@ -55,23 +61,30 @@ function RequestCreatePage() {
   });
 
   useEffect(() => {
+    if (formValue.propertyId) {
+      form.setValues(formValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formValue]);
+
+  useEffect(() => {
+    if (formValue.unitId) {
+      setFormValue(createRequestInitialValues);
+      return;
+    }
+
     form.setValues({
       unitId: null,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.propertyId]);
 
-  if (mutate.isSuccess) {
-    showSuccessNotification({
-      id: "create-request-successfully",
-      message: "Thêm yêu cầu thành công",
+  function onCreateSuccess() {
+    showSuccessNotification({ message: "Thêm yêu cầu thành công" });
+    navigate({
+      to: "/requests",
+      search: true,
     });
-    return (
-      <Navigate
-        to="/managers/properties/$propertyId"
-        params={{ propertyId: mutate.data }}
-      />
-    );
   }
 
   return (
@@ -94,18 +107,15 @@ function RequestCreatePage() {
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <Select
+              <NativeSelect
                 withAsterisk
-                clearable
-                searchable
                 label="Loại yêu cầu"
-                placeholder="Chọn loại yêu cầu"
                 data={requestCategories}
                 {...form.getInputProps("category")}
               />
             </Grid.Col>
 
-            {form.values.category === String(RequestCategory.UNIT_LEASE) && (
+            {form.values.category === RequestCategory.UNIT_LEASE && (
               <>
                 <Grid.Col span={6}>
                   <Select
@@ -114,10 +124,7 @@ function RequestCreatePage() {
                     searchable
                     label="Tòa nhà"
                     placeholder="Chọn tòa nhà"
-                    data={properties?.data.map((property) => ({
-                      value: property.id,
-                      label: property.name,
-                    }))}
+                    data={properties}
                     {...form.getInputProps("propertyId")}
                   />
                 </Grid.Col>
@@ -129,10 +136,7 @@ function RequestCreatePage() {
                     searchable
                     label="Phòng"
                     placeholder="Chọn phòng"
-                    data={units?.data.map((property) => ({
-                      value: property.id,
-                      label: property.name,
-                    }))}
+                    data={units}
                     {...form.getInputProps("unitId")}
                   />
                 </Grid.Col>

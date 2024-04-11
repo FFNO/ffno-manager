@@ -20,7 +20,7 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm, zodResolver } from "@mantine/form";
-import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const Route = createLazyFileRoute("/managers/invoices/create")({
@@ -28,9 +28,16 @@ export const Route = createLazyFileRoute("/managers/invoices/create")({
 });
 
 function InvoiceCreate() {
-  const mutate = useCreate("invoices");
+  const mutate = useCreate({ resource: "invoices" });
+  const navigate = useNavigate();
 
-  const { data } = useList<UnitResDto>({ resource: "units/simple-list" });
+  const { data } = useList<UnitResDto>({
+    resource: "units/simple-list",
+    onSuccess() {
+      showSuccessNotification({ message: "Thêm hóa đơn thành công" });
+      navigate({ to: "/managers/invoices", search: true, params: true });
+    },
+  });
 
   const form = useForm<NullableObject<CreateInvoiceSchema>>({
     initialValues: createInvoiceInitialValues,
@@ -45,20 +52,6 @@ function InvoiceCreate() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.unitId]);
-
-  if (mutate.isSuccess) {
-    showSuccessNotification({
-      id: "create-invoice-successfully",
-      message: "Thêm hóa đơn thành công",
-    });
-    return (
-      <Navigate
-        to="/managers/invoices"
-        params={{ propertyId: mutate.data }}
-        search
-      />
-    );
-  }
 
   return (
     <Stack p={"lg"} pos={"relative"}>

@@ -23,7 +23,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { CopyIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 
@@ -32,8 +32,13 @@ export const Route = createLazyFileRoute("/managers/properties/create")({
 });
 
 function PropertyCreatePage() {
+  const navigate = useNavigate();
   const theme = useMantineTheme();
-  const mutate = useCreate("properties");
+  const mutate = useCreate({
+    resource: "properties",
+    onSuccess: onCreateSuccess,
+  });
+
   const form = useForm<CreatePropertySchema>({
     initialValues: createPropertyFormInitialValues,
     validate: zodResolver(createPropertySchema),
@@ -54,6 +59,16 @@ function PropertyCreatePage() {
     mutate.mutate(values);
   });
 
+  function onCreateSuccess() {
+    showSuccessNotification({
+      message: "Thêm tòa nhà thành công",
+    });
+    navigate({
+      to: "/managers/properties/$propertyId",
+      params: { propertyId: mutate.data! },
+    });
+  }
+
   useEffect(() => {
     form.setValues({
       district: null,
@@ -68,19 +83,6 @@ function PropertyCreatePage() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.district]);
-
-  if (mutate.isSuccess) {
-    showSuccessNotification({
-      id: "create-property-successfully",
-      message: "Create property successfully",
-    });
-    return (
-      <Navigate
-        to="/managers/properties/$propertyId"
-        params={{ propertyId: mutate.data }}
-      />
-    );
-  }
 
   return (
     <Stack p={"lg"} pos={"relative"}>

@@ -14,6 +14,6 @@ export const requestCategories = getOptionListFromRecord(requestCategoryRecord);
 export const createRequestInitialValues: NullableObject<CreateRequestSchema> = {
   name: "",
   details: "",
-  category: String(RequestCategory.UNIT_LEASE),
+  category: RequestCategory.UNIT_LEASE,
   receiverIds: [],
 };

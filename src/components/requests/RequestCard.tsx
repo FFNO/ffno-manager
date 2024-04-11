@@ -15,14 +15,13 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { CheckIcon, EllipsisIcon, XIcon } from "lucide-react";
 
 export function RequestCard(props: RequestResDto) {
   const theme = useMantineTheme();
-  const navigate = useNavigate();
 
-  const mutate = useUpdate("request");
+  const mutate = useUpdate({ resource: "request" });
 
   const confirmApprove = () =>
     modals.openConfirmModal({
@@ -56,7 +55,7 @@ export function RequestCard(props: RequestResDto) {
           </Tooltip>
           {props.unit && <Kbd>{props.unit.name}</Kbd>}
           {renderStatus(props.status)}
-          <Link to="/managers/requests" search>
+          <Link to="/requests/$requestId" params={{ requestId: props.id }}>
             <Button variant="subtle">Xem chi tiết</Button>
           </Link>
           <Menu>

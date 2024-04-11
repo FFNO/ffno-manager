@@ -5,7 +5,7 @@ import { Button, Group, Pagination, SimpleGrid, Stack } from "@mantine/core";
 import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";
 
-export const Route = createLazyFileRoute("/managers/requests/")({
+export const Route = createLazyFileRoute("/requests/")({
   component: () => <RequestListPage />,
 });
 
@@ -26,7 +26,7 @@ function RequestListPage() {
             Tải lên
           </Button>
           {/* <InvoiceFilter /> */}
-          <Link to="/managers/requests/create">
+          <Link to="/requests/create">
             <Button leftSection={<PlusIcon size={16} />}>Thêm yêu cầu</Button>
           </Link>
         </Group>

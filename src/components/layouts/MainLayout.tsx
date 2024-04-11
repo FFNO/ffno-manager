@@ -59,7 +59,7 @@ const managerNavLinks = [
   {
     label: "Yêu cầu",
     icon: ClipboardListIcon,
-    link: "/managers/requests",
+    link: "/requests",
   },
 ];
 
@@ -67,13 +67,9 @@ const tenantNavLinks = [
   { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
   { label: "Căn hộ", icon: CircleGaugeIcon, link: "/tenants/units" },
   {
-    label: "Liên lạc",
-    icon: ContactIcon,
-    initiallyOpened: true,
-    links: [
-      { label: "Người thuê nhà", link: "/contacts?type=0" },
-      { label: "Dịch vụ chuyên nghiệp", link: "/contacts?type=1" },
-    ],
+    label: "Yêu cầu",
+    icon: ClipboardListIcon,
+    link: "/requests",
   },
 ];
 

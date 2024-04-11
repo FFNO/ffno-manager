@@ -12,6 +12,7 @@ interface Props {
   resource: string;
   enabled?: boolean;
   params?: Record<string, unknown>;
+  onSuccess?: () => void;
 }
 
 interface PropsWithId extends Props {
@@ -93,19 +94,21 @@ export const useSimpleList = ({ resource, params, enabled = true }: Props) => {
   return { ...query };
 };
 
-export const useCreate = (resource: string) => {
+export const useCreate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.create(resource, data),
+    onSuccess,
   });
 
   return mutation;
 };
 
-export const useUpdate = (resource: string) => {
+export const useUpdate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.update(resource, data),
+    onSuccess,
   });
 
   return mutation;

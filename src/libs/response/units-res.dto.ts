@@ -13,6 +13,7 @@ export interface UnitResDto {
   tenants: MemberResDto[];
   payer: MemberResDto;
   isListing: boolean;
+  propertyId: string;
 }
 
 export interface GetListUnitResDto {

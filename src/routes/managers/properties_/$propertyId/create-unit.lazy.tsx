@@ -32,7 +32,7 @@ export const Route = createLazyFileRoute(
 
 function CreateUnitPage() {
   const { propertyId } = Route.useParams();
-  const mutate = useCreate("units");
+  const mutate = useCreate({ resource: "units", onSuccess: onCreateSuccess });
   const navigate = useNavigate();
   const form = useForm<CreateUnitSchema>({
     initialValues: {
@@ -51,14 +51,14 @@ function CreateUnitPage() {
     mutate.mutate(values);
   });
 
-  if (mutate.isSuccess) {
+  function onCreateSuccess() {
     showSuccessNotification({
       id: "create-unit-successfully",
       message: "Thêm phòng thành công",
     });
     navigate({
       to: "/managers/units/$unitId",
-      params: { unitId: mutate.data },
+      params: { unitId: mutate.data! },
     });
   }
 
