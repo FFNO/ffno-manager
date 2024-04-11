@@ -15,13 +15,16 @@ import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { HttpStatusCode } from "axios";
 import OneSignal from "react-onesignal";
 
 export const Route = createLazyFileRoute("/auth/sign-in")({
   component: SignInPage,
 });
 
-export function SignInPage(props: {
+export function SignInPage({
+  setMember,
+}: {
   setMember: (value: MemberResDto) => void;
 }) {
   const [type, toggle] = useToggle(["login", "register"]);
@@ -58,12 +61,15 @@ export function SignInPage(props: {
 
       <form
         onSubmit={form.onSubmit(async () => {
-          const { data } = await axiosInstance.post(
+          const { data, status } = await axiosInstance.post(
             "auth/sign-in",
             form.values
           );
-          OneSignal.User.addTag("memberId", data.id);
-          props.setMember(data);
+          if (status === HttpStatusCode.Created) {
+            OneSignal.User.addTag("memberId", data.id);
+            setMember(data);
+            localStorage.setItem("member", JSON.stringify(data));
+          }
         })}
       >
         <Stack>

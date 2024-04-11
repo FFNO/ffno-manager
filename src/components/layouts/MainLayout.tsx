@@ -4,18 +4,19 @@ import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import { memberAtom } from "@/states";
 import {
   AppShell,
+  BackgroundImage,
   Box,
   Burger,
   Button,
   Center,
   Code,
   Group,
-  Modal,
   ScrollArea,
   Text,
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useRouterState } from "@tanstack/react-router";
 import { useAtom } from "jotai";
 import {
   BuildingIcon,
@@ -73,62 +74,54 @@ const tenantNavLinks = [
   },
 ];
 
+const isPublicRoute = (path: string) => path.startsWith("/public");
+
 export const MainLayout = ({ children }: PropsWithChildren) => {
+  const router = useRouterState();
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
   const [member, setMember] = useAtom(memberAtom);
 
-  return (
-    <>
-      <Modal
-        opened={!(member && member.id)}
-        fullScreen
-        withCloseButton={false}
-        onClose={() => {}}
-        padding={0}
-      >
-        <Center h={"100vh"} bg={"blue"}>
-          <SignInPage setMember={setMember} />
-        </Center>
-      </Modal>
+  if (isPublicRoute(router.location.pathname)) {
+    return children;
+  }
 
-      <AppShell
-        header={{ height: 60 }}
-        navbar={{ width: 300, breakpoint: "sm" }}
-      >
-        <AppShell.Header>
-          <Group h="100%" px="md">
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              hiddenFrom="sm"
-              size="sm"
-            />
-            <Group justify="space-between">
-              <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
-                {import.meta.env.VITE_APP_NAME}
-              </Text>
-              <Code fw={700}>{member?.id}</Code>
-            </Group>
-            <Box flex={1} />
-            <Button
-              variant="light"
-              onClick={async () => {
-                setMember(null);
-                OneSignal.User.removeTag("memberId");
-                await axiosInstance.delete("/auth/sign-out");
-              }}
-            >
-              Đăng xuất
-            </Button>
+  return !member || !member.id ? (
+    <BackgroundImage src="/auth-bg.jpg">
+      <Center h={"100vh"}>
+        <SignInPage setMember={setMember} />
+      </Center>
+    </BackgroundImage>
+  ) : (
+    <AppShell header={{ height: 60 }} navbar={{ width: 300, breakpoint: "sm" }}>
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Group justify="space-between">
+            <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
+              {import.meta.env.VITE_APP_NAME}
+            </Text>
+            <Code fw={700}>{member?.id}</Code>
           </Group>
-        </AppShell.Header>
-        <AppShell.Navbar>
-          <Navbar role={member?.role} />
-        </AppShell.Navbar>
-        <AppShell.Main>{children}</AppShell.Main>
-      </AppShell>
-    </>
+          <Box flex={1} />
+          <Button
+            variant="light"
+            onClick={async () => {
+              localStorage.clear();
+              setMember(null);
+              OneSignal.User.removeTag("memberId");
+              await axiosInstance.delete("/auth/sign-out");
+            }}
+          >
+            Đăng xuất
+          </Button>
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar>
+        <Navbar role={member?.role} />
+      </AppShell.Navbar>
+      <AppShell.Main>{children}</AppShell.Main>
+    </AppShell>
   );
 };
 
