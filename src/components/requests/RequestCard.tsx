@@ -18,7 +18,11 @@ import { modals } from "@mantine/modals";
 import { Link } from "@tanstack/react-router";
 import { CheckIcon, EllipsisIcon, XIcon } from "lucide-react";
 
-export function RequestCard(props: RequestResDto) {
+interface Props extends RequestResDto {
+  type?: string;
+}
+
+export function RequestCard(props: Props) {
   const theme = useMantineTheme();
 
   const mutate = useUpdate({ resource: "request" });
@@ -45,6 +49,16 @@ export function RequestCard(props: RequestResDto) {
       },
     });
 
+  const confirmCancelRequest = () => {
+    modals.openConfirmModal({
+      title: "Đồng ý hủy yêu cầu",
+      children: <Text size="sm">Bạn có chắc chắn hủy yêu cầu này không</Text>,
+      onConfirm: () => {
+        mutate.mutate({ status: RequestStatus.PENDING });
+      },
+    });
+  };
+
   return (
     <>
       <Card withBorder>
@@ -66,20 +80,39 @@ export function RequestCard(props: RequestResDto) {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item
-                leftSection={
-                  <CheckIcon color={theme.colors.green[5]} size={16} />
-                }
-                onClick={confirmApprove}
-              >
-                Chấp thuận
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<XIcon color={theme.colors.red[5]} size={16} />}
-                onClick={confirmReject}
-              >
-                Từ chối
-              </Menu.Item>
+              {props.type === "received" ? (
+                <>
+                  <Menu.Item
+                    leftSection={
+                      <CheckIcon color={theme.colors.green[5]} size={16} />
+                    }
+                    onClick={confirmApprove}
+                  >
+                    Chấp thuận
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <XIcon color={theme.colors.red[5]} size={16} />
+                    }
+                    onClick={confirmReject}
+                  >
+                    Từ chối
+                  </Menu.Item>
+                </>
+              ) : (
+                <>
+                  {props.status !== RequestStatus.ACCEPTED && (
+                    <Menu.Item
+                      leftSection={
+                        <XIcon color={theme.colors.red[5]} size={16} />
+                      }
+                      onClick={confirmCancelRequest}
+                    >
+                      Hủy yêu cầu
+                    </Menu.Item>
+                  )}
+                </>
+              )}
             </Menu.Dropdown>
           </Menu>
         </Group>

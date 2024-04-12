@@ -1,7 +1,14 @@
 import { useList } from "@/api";
 import { RequestCard } from "@/components/requests";
 import { RequestResDto, calculatePage } from "@/libs";
-import { Button, Group, Pagination, SimpleGrid, Stack } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Pagination,
+  SimpleGrid,
+  Stack,
+  Tabs,
+} from "@mantine/core";
 import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";
 
@@ -30,9 +37,19 @@ function RequestListPage() {
             <Button leftSection={<PlusIcon size={16} />}>Thêm yêu cầu</Button>
           </Link>
         </Group>
+        <Tabs
+          variant="pills"
+          defaultValue={"received"}
+          onChange={(value) => navigate({ search: { type: value } })}
+        >
+          <Tabs.List>
+            <Tabs.Tab value="received">Yêu cầu</Tabs.Tab>
+            <Tabs.Tab value="sent">Đã gửi</Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
         <SimpleGrid cols={1} px={32} py={24}>
           {data?.data.map((request) => (
-            <RequestCard key={request.id} {...request} />
+            <RequestCard key={request.id} {...request} type={search.type} />
           ))}
         </SimpleGrid>
         <Pagination
