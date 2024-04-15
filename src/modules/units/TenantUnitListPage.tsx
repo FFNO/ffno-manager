@@ -1,6 +1,4 @@
-import { useList } from "@/api";
 import { UnitCard } from "@/components/units";
-import { PropertyResDto } from "@/libs";
 import { memberAtom } from "@/states";
 import {
   AspectRatio,
@@ -14,30 +12,20 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAtom, useAtomValue } from "jotai";
+import { Link, useLoaderData } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
 import { MapPinnedIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 
-export const Route = createLazyFileRoute("/tenants/units/")({
-  component: () => <UnitListPage />,
-});
-
-function UnitListPage() {
-  const member = useAtomValue(memberAtom);
+export const TenantUnitListPage = () => {
   const theme = useMantineTheme();
-  const search = Route.useSearch();
-  const navigate = useNavigate();
-
-  const { data: properties } = useList<PropertyResDto>({
-    resource: "units",
-    params: search,
-  });
+  const member = useAtomValue(memberAtom);
+  const data = useLoaderData({ from: "/tenants/units/" });
 
   return (
     <>
       <SimpleGrid cols={1} px={32} py={24}>
-        {properties?.data.map((property) => (
+        {data?.data.map((property) => (
           <Card key={property.id} withBorder shadow="lg" mb={"lg"}>
             <Card.Section>
               <Group bg={theme.colors.gray[0]} p={"lg"}>
@@ -69,7 +57,12 @@ function UnitListPage() {
               {property.units.map((unit, index) => (
                 <Fragment key={unit.id}>
                   {index !== 0 && <Divider ml={60} />}
-                  <UnitCard ml={60} {...unit} memberRole={member!.role} />
+                  <Link
+                    to="/managers/units/$unitId"
+                    params={{ unitId: unit.id }}
+                  >
+                    <UnitCard ml={60} {...unit} memberRole={member!.role} />
+                  </Link>
                 </Fragment>
               ))}
             </Card.Section>
@@ -78,4 +71,4 @@ function UnitListPage() {
       </SimpleGrid>
     </>
   );
-}
+};

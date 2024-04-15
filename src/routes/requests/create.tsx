@@ -23,11 +23,11 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-export const Route = createLazyFileRoute("/requests/create")({
+export const Route = createFileRoute("/requests/create")({
   component: RequestCreatePage,
 });
 

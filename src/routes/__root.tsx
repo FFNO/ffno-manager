@@ -18,14 +18,13 @@ function RootRoute() {
   const router = useRouterState();
   const member = useAtomValue(memberAtom);
 
+  const isForbidden =
+    ![MemberRole.ADMIN, MemberRole.LANDLORD].includes(member.role) &&
+    router.location.pathname.startsWith("/managers");
+
   return (
     <MainLayout>
-      {member?.role === MemberRole.TENANT &&
-      router.location.pathname.startsWith("/managers") ? (
-        <>Forbidden resources</>
-      ) : (
-        <Outlet />
-      )}
+      {isForbidden ? <>Forbidden resources</> : <Outlet />}
     </MainLayout>
   );
 }

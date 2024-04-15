@@ -1,6 +1,5 @@
-import { useList } from "@/api";
 import { RequestCard } from "@/components/requests";
-import { RequestResDto, calculatePage } from "@/libs";
+import { calculatePage } from "@/libs";
 import {
   Button,
   Group,
@@ -9,21 +8,18 @@ import {
   Stack,
   Tabs,
 } from "@mantine/core";
-import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  Link,
+  useLoaderData,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { PlusIcon, UploadIcon } from "lucide-react";
 
-export const Route = createLazyFileRoute("/requests/")({
-  component: () => <RequestListPage />,
-});
-
-function RequestListPage() {
-  const search = Route.useSearch();
+export function RequestListPage() {
+  const data = useLoaderData({ from: "/requests/" });
+  const search = useSearch({ from: "/requests/" });
   const navigate = useNavigate();
-
-  const { data } = useList<RequestResDto>({
-    resource: "requests",
-    params: search,
-  });
 
   return (
     <div>

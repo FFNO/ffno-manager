@@ -1,15 +1,8 @@
 import { useOne } from "@/api";
-import {
-  Code,
-  NumberFormatter,
-  Paper,
-  Table,
-  TableData,
-  Title,
-} from "@mantine/core";
+import { NumberFormatter, Paper, Table, Title } from "@mantine/core";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/public/invoices/$invoiceId")({
+export const Route = createLazyFileRoute("/preview/invoices/$invoiceId")({
   component: PublicInvoicePage,
 });
 

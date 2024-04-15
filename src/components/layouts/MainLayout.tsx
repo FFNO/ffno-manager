@@ -74,7 +74,7 @@ const tenantNavLinks = [
   },
 ];
 
-const isPublicRoute = (path: string) => path.startsWith("/public");
+const isPublicRoute = (path: string) => path.startsWith("/preview");
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const router = useRouterState();
