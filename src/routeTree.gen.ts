@@ -17,6 +17,7 @@ import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as ManagersIndexImport } from './routes/managers/index'
 import { Route as RequestsCreateImport } from './routes/requests/create'
 import { Route as RequestsRequestIdImport } from './routes/requests/$requestId'
+import { Route as MembersMeImport } from './routes/members/me'
 import { Route as TenantsUnitsIndexImport } from './routes/tenants/units/index'
 import { Route as ManagersPropertiesIndexImport } from './routes/managers/properties/index'
 import { Route as ManagersInvoicesIndexImport } from './routes/managers/invoices/index'
@@ -72,6 +73,11 @@ const RequestsCreateRoute = RequestsCreateImport.update({
 
 const RequestsRequestIdRoute = RequestsRequestIdImport.update({
   path: '/requests/$requestId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MembersMeRoute = MembersMeImport.update({
+  path: '/members/me',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -174,6 +180,10 @@ const ManagersPropertiesPropertyIdCreateUnitRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/members/me': {
+      preLoaderRoute: typeof MembersMeImport
+      parentRoute: typeof rootRoute
+    }
     '/requests/$requestId': {
       preLoaderRoute: typeof RequestsRequestIdImport
       parentRoute: typeof rootRoute
@@ -248,6 +258,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
+  MembersMeRoute,
   RequestsRequestIdRoute,
   RequestsCreateRoute,
   AuthSignInLazyRoute,

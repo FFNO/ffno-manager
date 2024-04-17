@@ -32,7 +32,7 @@ OneSignal.init({
 const theme = createTheme({
   fontFamily: "Inter",
   fontFamilyMonospace: "JetBrains Mono",
-  primaryColor: "orange",
+  primaryColor: "indigo",
   components: {
     Select: Select.extend({
       defaultProps: {

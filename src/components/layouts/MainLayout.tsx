@@ -1,21 +1,24 @@
 import { axiosInstance } from "@/api/utils";
-import { MemberRole } from "@/libs";
+import { MemberResDto, MemberRole, memberRoleRecord } from "@/libs";
 import { SignInPage } from "@/routes/auth/sign-in.lazy";
 import { memberAtom } from "@/states";
+import { isOpenBurgerAtom } from "@/states/app";
 import {
   AppShell,
+  Avatar,
   BackgroundImage,
   Box,
   Burger,
   Button,
   Center,
   Code,
+  Divider,
   Group,
   ScrollArea,
+  Stack,
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { useRouterState } from "@tanstack/react-router";
 import { useAtom } from "jotai";
 import {
@@ -23,6 +26,7 @@ import {
   CircleGaugeIcon,
   ClipboardListIcon,
   ContactIcon,
+  LogOutIcon,
   ReceiptIcon,
 } from "lucide-react";
 import { PropsWithChildren } from "react";
@@ -78,8 +82,6 @@ const isPublicRoute = (path: string) => path.startsWith("/preview");
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const router = useRouterState();
-  const theme = useMantineTheme();
-  const [opened, { toggle }] = useDisclosure();
   const [member, setMember] = useAtom(memberAtom);
 
   if (isPublicRoute(router.location.pathname)) {
@@ -87,36 +89,13 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   }
 
   return !member || !member.id ? (
-    <BackgroundImage src="/auth-bg.jpg">
+    <BackgroundImage src="//auth-bg.jpg">
       <Center h={"100vh"}>
         <SignInPage setMember={setMember} />
       </Center>
     </BackgroundImage>
   ) : (
-    <AppShell header={{ height: 60 }} navbar={{ width: 300, breakpoint: "sm" }}>
-      <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Group justify="space-between">
-            <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
-              {import.meta.env.VITE_APP_NAME}
-            </Text>
-            <Code fw={700}>{member?.id}</Code>
-          </Group>
-          <Box flex={1} />
-          <Button
-            variant="light"
-            onClick={async () => {
-              localStorage.clear();
-              setMember(null);
-              OneSignal.User.removeTag("memberId");
-              await axiosInstance.delete("/auth/sign-out");
-            }}
-          >
-            Đăng xuất
-          </Button>
-        </Group>
-      </AppShell.Header>
+    <AppShell navbar={{ width: 300, breakpoint: "sm" }}>
       <AppShell.Navbar>
         <Navbar role={member?.role} />
       </AppShell.Navbar>
@@ -126,6 +105,10 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
 };
 
 function Navbar({ role = MemberRole.ADMIN }: { role?: MemberRole }) {
+  const theme = useMantineTheme();
+
+  const [member, setMember] = useAtom(memberAtom);
+
   const links = (
     [MemberRole.ADMIN, MemberRole.LANDLORD].includes(role)
       ? managerNavLinks
@@ -134,10 +117,43 @@ function Navbar({ role = MemberRole.ADMIN }: { role?: MemberRole }) {
 
   return (
     <nav className={classes.navbar}>
+      <Group justify="space-between" mb="md">
+        <Text ff={"mono"} fw={900} fz={"lg"} c={theme.primaryColor}>
+          {import.meta.env.VITE_APP_NAME}
+        </Text>
+      </Group>
+      <Divider mx={-16} />
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>{links}</div>
       </ScrollArea>
-      <div className={classes.footer}></div>
+      <Divider />
+      <Stack my={"sm"}>
+        <Group>
+          <Avatar size={"md"} src={member.imgUrl} />
+          <Stack gap={0}>
+            <Text>{member.name}</Text>
+            <Text fz={"sm"} fw={"bold"}>
+              {memberRoleRecord[member.role]}
+            </Text>
+          </Stack>
+        </Group>
+        <Button
+          radius={0}
+          mx={-16}
+          px={"md"}
+          variant="subtle"
+          justify="start"
+          leftSection={<LogOutIcon strokeWidth={1.5} />}
+          onClick={async () => {
+            localStorage.clear();
+            setMember({} as MemberResDto);
+            OneSignal.User.removeTag("memberId");
+            await axiosInstance.delete("/auth/sign-out");
+          }}
+        >
+          <span>Đăng xuất</span>
+        </Button>
+      </Stack>
     </nav>
   );
 }
