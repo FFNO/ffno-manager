@@ -1,13 +1,13 @@
 import { axiosInstance } from "@/api/utils";
 import {
   Gender,
-  MemberResDto,
   SignInSchema,
   SignUpSchema,
   genders,
   signInSchema,
   signUpSchema,
 } from "@/libs";
+import { memberAtom } from "@/states";
 import {
   Anchor,
   Button,
@@ -27,17 +27,14 @@ import { upperFirst, useToggle } from "@mantine/hooks";
 import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { HttpStatusCode } from "axios";
+import { useSetAtom } from "jotai";
 import OneSignal from "react-onesignal";
 
 export const Route = createLazyFileRoute("/auth/sign-in")({
   component: SignInPage,
 });
 
-export function SignInPage({
-  setMember,
-}: {
-  setMember: (value: MemberResDto) => void;
-}) {
+export function SignInPage() {
   const [type, toggle] = useToggle(["login", "register"]);
   const signInForm = useForm<SignInSchema>({
     initialValues: {
@@ -46,6 +43,7 @@ export function SignInPage({
     },
     validate: zodResolver(signInSchema),
   });
+  const setMember = useSetAtom(memberAtom);
 
   const signUpForm = useForm<DeepNullable<SignUpSchema>>({
     transformValues(values) {
@@ -102,7 +100,6 @@ export function SignInPage({
             if (status === HttpStatusCode.Created) {
               OneSignal.User.addTag("memberId", data.id);
               setMember(data);
-              localStorage.setItem("member", JSON.stringify(data));
             }
           })}
         >
@@ -158,7 +155,6 @@ export function SignInPage({
             if (status === HttpStatusCode.Created) {
               OneSignal.User.addTag("memberId", data.id);
               setMember(data);
-              localStorage.setItem("member", JSON.stringify(data));
             }
           })}
         >

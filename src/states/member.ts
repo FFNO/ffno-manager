@@ -1,6 +1,7 @@
 import { MemberResDto } from "@/libs";
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const memberAtom = atom(
+export const memberAtom = atomWithStorage(
+  "member",
   JSON.parse(localStorage.getItem("member") || "{}") as MemberResDto
 );

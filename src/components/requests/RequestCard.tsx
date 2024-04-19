@@ -1,31 +1,32 @@
 import { useUpdate } from "@/api";
 import { RequestResDto, RequestStatus, requestCategoryRecord } from "@/libs";
 import {
-  ActionIcon,
   Avatar,
   Badge,
+  Box,
   Button,
   Card,
   Group,
   Kbd,
-  Menu,
   Text,
   Title,
   Tooltip,
-  useMantineTheme,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Link } from "@tanstack/react-router";
-import { CheckIcon, EllipsisIcon, XIcon } from "lucide-react";
+import { Link, useRouter } from "@tanstack/react-router";
 
 interface Props extends RequestResDto {
   type?: string;
 }
 
 export function RequestCard(props: Props) {
-  const theme = useMantineTheme();
-
-  const mutate = useUpdate({ resource: "request" });
+  const router = useRouter();
+  const mutate = useUpdate({
+    resource: `requests/${props.id}`,
+    onSuccess() {
+      router.invalidate();
+    },
+  });
 
   const confirmApprove = () =>
     modals.openConfirmModal({
@@ -33,9 +34,7 @@ export function RequestCard(props: Props) {
       children: (
         <Text size="sm">Bạn có chắc chắn đồng ý với yêu cầu này không</Text>
       ),
-      onConfirm: () => {
-        mutate.mutate({ status: RequestStatus.ACCEPTED });
-      },
+      onConfirm: () => handleRequest(RequestStatus.ACCEPTED),
     });
 
   const confirmReject = () =>
@@ -44,20 +43,20 @@ export function RequestCard(props: Props) {
       children: (
         <Text size="sm">Bạn có chắc chắn từ chối yêu cầu này không</Text>
       ),
-      onConfirm: () => {
-        mutate.mutate({ status: RequestStatus.REJECTED });
-      },
+      onConfirm: () => handleRequest(RequestStatus.REJECTED),
     });
 
   const confirmCancelRequest = () => {
     modals.openConfirmModal({
       title: "Đồng ý hủy yêu cầu",
       children: <Text size="sm">Bạn có chắc chắn hủy yêu cầu này không</Text>,
-      onConfirm: () => {
-        mutate.mutate({ status: RequestStatus.PENDING });
-      },
+      onConfirm: () => handleRequest(RequestStatus.PENDING),
     });
   };
+
+  function handleRequest(status: RequestStatus) {
+    mutate.mutate({ status });
+  }
 
   return (
     <>
@@ -67,54 +66,13 @@ export function RequestCard(props: Props) {
           <Tooltip label={props.sender.name}>
             <Avatar src={props.sender.imgUrl} />
           </Tooltip>
+          {props.unit?.propertyId && <Kbd>{props.unit.propertyId}</Kbd>}
           {props.unit && <Kbd>{props.unit.name}</Kbd>}
           {renderStatus(props.status)}
+          <Box flex={1} />
           <Link to="/requests/$requestId" params={{ requestId: props.id }}>
             <Button variant="subtle">Xem chi tiết</Button>
           </Link>
-          <Menu>
-            <Menu.Target>
-              <ActionIcon variant="subtle">
-                <EllipsisIcon size={20} />
-              </ActionIcon>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              {props.type === "received" ? (
-                <>
-                  <Menu.Item
-                    leftSection={
-                      <CheckIcon color={theme.colors.green[5]} size={16} />
-                    }
-                    onClick={confirmApprove}
-                  >
-                    Chấp thuận
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={
-                      <XIcon color={theme.colors.red[5]} size={16} />
-                    }
-                    onClick={confirmReject}
-                  >
-                    Từ chối
-                  </Menu.Item>
-                </>
-              ) : (
-                <>
-                  {props.status !== RequestStatus.ACCEPTED && (
-                    <Menu.Item
-                      leftSection={
-                        <XIcon color={theme.colors.red[5]} size={16} />
-                      }
-                      onClick={confirmCancelRequest}
-                    >
-                      Hủy yêu cầu
-                    </Menu.Item>
-                  )}
-                </>
-              )}
-            </Menu.Dropdown>
-          </Menu>
         </Group>
       </Card>
     </>
