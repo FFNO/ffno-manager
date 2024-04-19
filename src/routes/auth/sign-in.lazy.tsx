@@ -1,40 +1,74 @@
 import { axiosInstance } from "@/api/utils";
-import { MemberResDto } from "@/libs";
+import {
+  Gender,
+  SignInSchema,
+  SignUpSchema,
+  genders,
+  signInSchema,
+  signUpSchema,
+} from "@/libs";
+import { memberAtom } from "@/states";
 import {
   Anchor,
   Button,
   Divider,
+  Grid,
   Group,
+  NativeSelect,
   Paper,
   PasswordInput,
   Stack,
   Text,
   TextInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { DatePickerInput } from "@mantine/dates";
+import { useForm, zodResolver } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { HttpStatusCode } from "axios";
+import { useSetAtom } from "jotai";
 import OneSignal from "react-onesignal";
 
 export const Route = createLazyFileRoute("/auth/sign-in")({
   component: SignInPage,
 });
 
-export function SignInPage(props: {
-  setMember: (value: MemberResDto) => void;
-}) {
+export function SignInPage() {
   const [type, toggle] = useToggle(["login", "register"]);
-  const form = useForm({
+  const signInForm = useForm<SignInSchema>({
     initialValues: {
       email: "",
-      name: "",
       password: "",
     },
+    validate: zodResolver(signInSchema),
+  });
+  const setMember = useSetAtom(memberAtom);
+
+  const signUpForm = useForm<DeepNullable<SignUpSchema>>({
+    transformValues(values) {
+      values.gender = values.gender ? +values.gender : null;
+      return values;
+    },
+    initialValues: {
+      email: "",
+      password: "",
+      name: "",
+      address: "",
+      identityNumber: "",
+      dateOfBirth: null,
+      gender: Gender.MALE,
+    },
+    validate: zodResolver(signUpSchema),
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder>
+    <Paper
+      p="xl"
+      withBorder
+      miw={{ base: "100%", md: 512 }}
+      maw={{ base: "100%", md: 512 }}
+    >
       <Text size="lg" fw={500}>
         Welcome to Mantine, {type} with
       </Text>
@@ -44,86 +78,165 @@ export function SignInPage(props: {
           leftSection={<IconBrandGoogle strokeWidth={1} />}
           variant="default"
         >
-          Sign in with Google
+          Google
         </Button>
         <Button
           leftSection={<IconBrandDiscord strokeWidth={1} />}
           variant="default"
         >
-          Sign in with Discord
+          Discord
         </Button>
       </Group>
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form
-        onSubmit={form.onSubmit(async () => {
-          const { data } = await axiosInstance.post(
-            "auth/sign-in",
-            form.values
-          );
-          OneSignal.User.addTag("memberId", data.id);
-          props.setMember(data);
-        })}
-      >
-        <Stack>
-          {type === "register" && (
+      {type === "login" ? (
+        <form
+          onSubmit={signInForm.onSubmit(async () => {
+            const { data, status } = await axiosInstance.post(
+              "auth/sign-in",
+              signInForm.values
+            );
+            if (status === HttpStatusCode.Created) {
+              OneSignal.User.addTag("memberId", data.id);
+              setMember(data);
+            }
+          })}
+        >
+          <Stack>
             <TextInput
-              label="Name"
-              placeholder="Your name"
-              value={form.values.name}
+              required
+              label="Email"
+              placeholder="hello@mantine.dev"
+              value={signInForm.values.email}
               onChange={(event) =>
-                form.setFieldValue("name", event.currentTarget.value)
+                signInForm.setFieldValue("email", event.currentTarget.value)
               }
-              radius="md"
+              error={signInForm.errors.email && "Invalid email"}
             />
-          )}
 
-          <TextInput
-            required
-            label="Email"
-            placeholder="hello@mantine.dev"
-            value={form.values.email}
-            onChange={(event) =>
-              form.setFieldValue("email", event.currentTarget.value)
-            }
-            error={form.errors.email && "Invalid email"}
-            radius="md"
-          />
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="Your password"
+              value={signInForm.values.password}
+              onChange={(event) =>
+                signInForm.setFieldValue("password", event.currentTarget.value)
+              }
+              error={
+                signInForm.errors.password &&
+                "Password should include at least 6 characters"
+              }
+            />
+          </Stack>
 
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            value={form.values.password}
-            onChange={(event) =>
-              form.setFieldValue("password", event.currentTarget.value)
+          <Group justify="space-between" mt="xl">
+            <Anchor
+              component="button"
+              type="button"
+              c="dimmed"
+              onClick={() => toggle()}
+              size="xs"
+            >
+              Don't have an account? Register
+            </Anchor>
+            <Button type="submit" radius="xl">
+              {upperFirst(type)}
+            </Button>
+          </Group>
+        </form>
+      ) : (
+        <form
+          onSubmit={signUpForm.onSubmit(async () => {
+            const { data, status } = await axiosInstance.post(
+              "auth/sign-up",
+              signUpForm.values
+            );
+            if (status === HttpStatusCode.Created) {
+              OneSignal.User.addTag("memberId", data.id);
+              setMember(data);
             }
-            error={
-              form.errors.password &&
-              "Password should include at least 6 characters"
-            }
-            radius="md"
-          />
-        </Stack>
+          })}
+        >
+          <Grid>
+            <Grid.Col span={12}>
+              <TextInput
+                required
+                label="Email"
+                placeholder="hello@mantine.dev"
+                {...signUpForm.getInputProps("email")}
+              />
+            </Grid.Col>
 
-        <Group justify="space-between" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            c="dimmed"
-            onClick={() => toggle()}
-            size="xs"
-          >
-            {type === "register"
-              ? "Already have an account? Login"
-              : "Don't have an account? Register"}
-          </Anchor>
-          <Button type="submit" radius="xl">
-            {upperFirst(type)}
-          </Button>
-        </Group>
-      </form>
+            <Grid.Col span={12}>
+              <TextInput
+                required
+                label="Họ và tên"
+                {...signUpForm.getInputProps("name")}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={12}>
+              <TextInput
+                label="Địa chỉ"
+                {...signUpForm.getInputProps("address")}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={12}>
+              <TextInput
+                label="CMND/CCCD"
+                {...signUpForm.getInputProps("identityNumber")}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <NativeSelect
+                label="Giới tính"
+                data={genders}
+                {...signUpForm.getInputProps("gender")}
+                onChange={(e) =>
+                  signUpForm.setFieldValue(
+                    "gender",
+                    e.currentTarget.value ? +e.currentTarget.value : null
+                  )
+                }
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <DatePickerInput
+                label="Ngày sinh"
+                maxDate={new Date()}
+                {...signUpForm.getInputProps("dateOfBirth")}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={12}>
+              <PasswordInput
+                required
+                label="Password"
+                placeholder="Your password"
+                {...signUpForm.getInputProps("password")}
+              />
+            </Grid.Col>
+          </Grid>
+          <Group justify="space-between" mt="xl">
+            <Anchor
+              component="button"
+              type="button"
+              c="dimmed"
+              onClick={() => toggle()}
+              size="xs"
+            >
+              Đã có tài khoản? Đăng nhập ngay
+            </Anchor>
+            <Button type="submit" radius="xl">
+              {upperFirst(type)}
+            </Button>
+          </Group>
+        </form>
+      )}
     </Paper>
   );
 }

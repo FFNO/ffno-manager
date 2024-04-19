@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     const customError: HttpError = {
       ...error,
-      message: error.response?.data?.message,
+      message: error.response?.data?.message ?? error.message,
       statusCode: error.response?.status,
     };
 

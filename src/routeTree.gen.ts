@@ -13,119 +13,165 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
 import { Route as RequestsIndexImport } from './routes/requests/index'
-import { Route as PropertiesIndexImport } from './routes/properties/index'
-import { Route as InvoicesIndexImport } from './routes/invoices/index'
-import { Route as ContactsIndexImport } from './routes/contacts/index'
-import { Route as PropertiesPropertyIdCreateUnitImport } from './routes/properties_/$propertyId/create-unit'
+import { Route as ManagersIndexImport } from './routes/managers/index'
+import { Route as RequestsCreateImport } from './routes/requests/create'
+import { Route as RequestsRequestIdImport } from './routes/requests/$requestId'
+import { Route as MembersMeImport } from './routes/members/me'
+import { Route as TenantsUnitsIndexImport } from './routes/tenants/units/index'
+import { Route as ManagersPropertiesIndexImport } from './routes/managers/properties/index'
+import { Route as ManagersInvoicesIndexImport } from './routes/managers/invoices/index'
+import { Route as ManagersContactsIndexImport } from './routes/managers/contacts/index'
+import { Route as ManagersPropertiesPropertyIdCreateUnitImport } from './routes/managers/properties_/$propertyId/create-unit'
 
 // Create Virtual Routes
 
-const UnitsUnitIdLazyImport = createFileRoute('/units/$unitId')()
-const RequestsCreateLazyImport = createFileRoute('/requests/create')()
-const PropertiesCreateLazyImport = createFileRoute('/properties/create')()
-const PropertiesPropertyIdLazyImport = createFileRoute(
-  '/properties/$propertyId',
-)()
-const InvoicesCreateLazyImport = createFileRoute('/invoices/create')()
-const ContactsCreateLazyImport = createFileRoute('/contacts/create')()
-const ContactsContactIdLazyImport = createFileRoute('/contacts/$contactId')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
+const PreviewInvoicesInvoiceIdLazyImport = createFileRoute(
+  '/preview/invoices/$invoiceId',
+)()
+const ManagersUnitsUnitIdLazyImport = createFileRoute(
+  '/managers/units/$unitId',
+)()
+const ManagersPropertiesCreateLazyImport = createFileRoute(
+  '/managers/properties/create',
+)()
+const ManagersPropertiesPropertyIdLazyImport = createFileRoute(
+  '/managers/properties/$propertyId',
+)()
+const ManagersInvoicesCreateLazyImport = createFileRoute(
+  '/managers/invoices/create',
+)()
+const ManagersContactsCreateLazyImport = createFileRoute(
+  '/managers/contacts/create',
+)()
+const ManagersContactsContactIdLazyImport = createFileRoute(
+  '/managers/contacts/$contactId',
+)()
 
 // Create/Update Routes
-
-const IndexRoute = IndexImport.update({
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const RequestsIndexRoute = RequestsIndexImport.update({
   path: '/requests/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/requests/index.lazy').then((d) => d.Route),
-)
+} as any)
 
-const PropertiesIndexRoute = PropertiesIndexImport.update({
-  path: '/properties/',
+const ManagersIndexRoute = ManagersIndexImport.update({
+  path: '/managers/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/index.lazy').then((d) => d.Route),
-)
-
-const InvoicesIndexRoute = InvoicesIndexImport.update({
-  path: '/invoices/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/invoices/index.lazy').then((d) => d.Route),
-)
-
-const ContactsIndexRoute = ContactsIndexImport.update({
-  path: '/contacts/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/index.lazy').then((d) => d.Route),
-)
-
-const UnitsUnitIdLazyRoute = UnitsUnitIdLazyImport.update({
-  path: '/units/$unitId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/units/$unitId.lazy').then((d) => d.Route))
-
-const RequestsCreateLazyRoute = RequestsCreateLazyImport.update({
-  path: '/requests/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/requests/create.lazy').then((d) => d.Route),
-)
-
-const PropertiesCreateLazyRoute = PropertiesCreateLazyImport.update({
-  path: '/properties/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/create.lazy').then((d) => d.Route),
-)
-
-const PropertiesPropertyIdLazyRoute = PropertiesPropertyIdLazyImport.update({
-  path: '/properties/$propertyId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/$propertyId.lazy').then((d) => d.Route),
-)
-
-const InvoicesCreateLazyRoute = InvoicesCreateLazyImport.update({
-  path: '/invoices/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/invoices/create.lazy').then((d) => d.Route),
-)
-
-const ContactsCreateLazyRoute = ContactsCreateLazyImport.update({
-  path: '/contacts/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/create.lazy').then((d) => d.Route),
-)
-
-const ContactsContactIdLazyRoute = ContactsContactIdLazyImport.update({
-  path: '/contacts/$contactId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/$contactId.lazy').then((d) => d.Route),
-)
+} as any)
 
 const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
 
-const PropertiesPropertyIdCreateUnitRoute =
-  PropertiesPropertyIdCreateUnitImport.update({
-    path: '/properties/$propertyId/create-unit',
+const RequestsCreateRoute = RequestsCreateImport.update({
+  path: '/requests/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RequestsRequestIdRoute = RequestsRequestIdImport.update({
+  path: '/requests/$requestId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MembersMeRoute = MembersMeImport.update({
+  path: '/members/me',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TenantsUnitsIndexRoute = TenantsUnitsIndexImport.update({
+  path: '/tenants/units/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ManagersPropertiesIndexRoute = ManagersPropertiesIndexImport.update({
+  path: '/managers/properties/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/managers/properties/index.lazy').then((d) => d.Route),
+)
+
+const ManagersInvoicesIndexRoute = ManagersInvoicesIndexImport.update({
+  path: '/managers/invoices/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/managers/invoices/index.lazy').then((d) => d.Route),
+)
+
+const ManagersContactsIndexRoute = ManagersContactsIndexImport.update({
+  path: '/managers/contacts/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/managers/contacts/index.lazy').then((d) => d.Route),
+)
+
+const PreviewInvoicesInvoiceIdLazyRoute =
+  PreviewInvoicesInvoiceIdLazyImport.update({
+    path: '/preview/invoices/$invoiceId',
     getParentRoute: () => rootRoute,
   } as any).lazy(() =>
-    import('./routes/properties_/$propertyId/create-unit.lazy').then(
+    import('./routes/preview/invoices/$invoiceId.lazy').then((d) => d.Route),
+  )
+
+const ManagersUnitsUnitIdLazyRoute = ManagersUnitsUnitIdLazyImport.update({
+  path: '/managers/units/$unitId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/managers/units/$unitId.lazy').then((d) => d.Route),
+)
+
+const ManagersPropertiesCreateLazyRoute =
+  ManagersPropertiesCreateLazyImport.update({
+    path: '/managers/properties/create',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/managers/properties/create.lazy').then((d) => d.Route),
+  )
+
+const ManagersPropertiesPropertyIdLazyRoute =
+  ManagersPropertiesPropertyIdLazyImport.update({
+    path: '/managers/properties/$propertyId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/managers/properties/$propertyId.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const ManagersInvoicesCreateLazyRoute = ManagersInvoicesCreateLazyImport.update(
+  {
+    path: '/managers/invoices/create',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/managers/invoices/create.lazy').then((d) => d.Route),
+)
+
+const ManagersContactsCreateLazyRoute = ManagersContactsCreateLazyImport.update(
+  {
+    path: '/managers/contacts/create',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/managers/contacts/create.lazy').then((d) => d.Route),
+)
+
+const ManagersContactsContactIdLazyRoute =
+  ManagersContactsContactIdLazyImport.update({
+    path: '/managers/contacts/$contactId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/managers/contacts/$contactId.lazy').then((d) => d.Route),
+  )
+
+const ManagersPropertiesPropertyIdCreateUnitRoute =
+  ManagersPropertiesPropertyIdCreateUnitImport.update({
+    path: '/managers/properties/$propertyId/create-unit',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/managers/properties_/$propertyId/create-unit.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -134,60 +180,76 @@ const PropertiesPropertyIdCreateUnitRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      preLoaderRoute: typeof IndexImport
+    '/members/me': {
+      preLoaderRoute: typeof MembersMeImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/$requestId': {
+      preLoaderRoute: typeof RequestsRequestIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/create': {
+      preLoaderRoute: typeof RequestsCreateImport
       parentRoute: typeof rootRoute
     }
     '/auth/sign-in': {
       preLoaderRoute: typeof AuthSignInLazyImport
       parentRoute: typeof rootRoute
     }
-    '/contacts/$contactId': {
-      preLoaderRoute: typeof ContactsContactIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/contacts/create': {
-      preLoaderRoute: typeof ContactsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoices/create': {
-      preLoaderRoute: typeof InvoicesCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/properties/$propertyId': {
-      preLoaderRoute: typeof PropertiesPropertyIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/properties/create': {
-      preLoaderRoute: typeof PropertiesCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/requests/create': {
-      preLoaderRoute: typeof RequestsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/units/$unitId': {
-      preLoaderRoute: typeof UnitsUnitIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/contacts/': {
-      preLoaderRoute: typeof ContactsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoices/': {
-      preLoaderRoute: typeof InvoicesIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/properties/': {
-      preLoaderRoute: typeof PropertiesIndexImport
+    '/managers/': {
+      preLoaderRoute: typeof ManagersIndexImport
       parentRoute: typeof rootRoute
     }
     '/requests/': {
       preLoaderRoute: typeof RequestsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/properties/$propertyId/create-unit': {
-      preLoaderRoute: typeof PropertiesPropertyIdCreateUnitImport
+    '/managers/contacts/$contactId': {
+      preLoaderRoute: typeof ManagersContactsContactIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/contacts/create': {
+      preLoaderRoute: typeof ManagersContactsCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/invoices/create': {
+      preLoaderRoute: typeof ManagersInvoicesCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/properties/$propertyId': {
+      preLoaderRoute: typeof ManagersPropertiesPropertyIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/properties/create': {
+      preLoaderRoute: typeof ManagersPropertiesCreateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/units/$unitId': {
+      preLoaderRoute: typeof ManagersUnitsUnitIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/preview/invoices/$invoiceId': {
+      preLoaderRoute: typeof PreviewInvoicesInvoiceIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/contacts/': {
+      preLoaderRoute: typeof ManagersContactsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/invoices/': {
+      preLoaderRoute: typeof ManagersInvoicesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/properties/': {
+      preLoaderRoute: typeof ManagersPropertiesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/tenants/units/': {
+      preLoaderRoute: typeof TenantsUnitsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/managers/properties/$propertyId/create-unit': {
+      preLoaderRoute: typeof ManagersPropertiesPropertyIdCreateUnitImport
       parentRoute: typeof rootRoute
     }
   }
@@ -196,20 +258,24 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexRoute,
+  MembersMeRoute,
+  RequestsRequestIdRoute,
+  RequestsCreateRoute,
   AuthSignInLazyRoute,
-  ContactsContactIdLazyRoute,
-  ContactsCreateLazyRoute,
-  InvoicesCreateLazyRoute,
-  PropertiesPropertyIdLazyRoute,
-  PropertiesCreateLazyRoute,
-  RequestsCreateLazyRoute,
-  UnitsUnitIdLazyRoute,
-  ContactsIndexRoute,
-  InvoicesIndexRoute,
-  PropertiesIndexRoute,
+  ManagersIndexRoute,
   RequestsIndexRoute,
-  PropertiesPropertyIdCreateUnitRoute,
+  ManagersContactsContactIdLazyRoute,
+  ManagersContactsCreateLazyRoute,
+  ManagersInvoicesCreateLazyRoute,
+  ManagersPropertiesPropertyIdLazyRoute,
+  ManagersPropertiesCreateLazyRoute,
+  ManagersUnitsUnitIdLazyRoute,
+  PreviewInvoicesInvoiceIdLazyRoute,
+  ManagersContactsIndexRoute,
+  ManagersInvoicesIndexRoute,
+  ManagersPropertiesIndexRoute,
+  TenantsUnitsIndexRoute,
+  ManagersPropertiesPropertyIdCreateUnitRoute,
 ])
 
 /* prettier-ignore-end */

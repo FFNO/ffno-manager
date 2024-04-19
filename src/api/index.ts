@@ -1,3 +1,5 @@
+export { supabase } from "./supabase";
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance, queryClient } from "./utils";
 
@@ -10,6 +12,7 @@ interface Props {
   resource: string;
   enabled?: boolean;
   params?: Record<string, unknown>;
+  onSuccess?: () => void;
 }
 
 interface PropsWithId extends Props {
@@ -51,7 +54,7 @@ export const dataProvider = {
   },
 
   update: async <T = unknown>(resource: string, payload: T) => {
-    const { data } = await axiosInstance.post<string>(resource, payload);
+    const { data } = await axiosInstance.patch<string>(resource, payload);
 
     return data;
   },
@@ -91,19 +94,21 @@ export const useSimpleList = ({ resource, params, enabled = true }: Props) => {
   return { ...query };
 };
 
-export const useCreate = (resource: string) => {
+export const useCreate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.create(resource, data),
+    onSuccess,
   });
 
   return mutation;
 };
 
-export const useUpdate = (resource: string) => {
+export const useUpdate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.update(resource, data),
+    onSuccess,
   });
 
   return mutation;

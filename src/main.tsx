@@ -1,5 +1,6 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
+import "@mantine/dropzone/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/tiptap/styles.css";
 import "dayjs/locale/vi";
@@ -31,7 +32,7 @@ OneSignal.init({
 const theme = createTheme({
   fontFamily: "Inter",
   fontFamilyMonospace: "JetBrains Mono",
-  primaryColor: "orange",
+  primaryColor: "indigo",
   components: {
     Select: Select.extend({
       defaultProps: {
