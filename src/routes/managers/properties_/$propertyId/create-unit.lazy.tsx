@@ -16,6 +16,7 @@ import {
   Group,
   LoadingOverlay,
   MultiSelect,
+  NativeSelect,
   NumberInput,
   Select,
   Stack,
@@ -81,9 +82,8 @@ function CreateUnitPage() {
               />
             </Grid.Col>
             <Grid.Col span={4}>
-              <Select
+              <NativeSelect
                 label="Trạng thái"
-                placeholder="Chọn trạng thái"
                 withAsterisk
                 data={unitStatuses}
                 {...form.getInputProps(`status`)}
