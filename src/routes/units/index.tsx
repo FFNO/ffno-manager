@@ -1,4 +1,6 @@
+import { dataProvider } from "@/api";
 import { UnitCard } from "@/components/units";
+import { PropertyResDto } from "@/libs";
 import { memberAtom } from "@/states";
 import {
   AspectRatio,
@@ -12,15 +14,26 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
 import { MapPinnedIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
+import { z } from "zod";
 
-export const TenantUnitListPage = () => {
+const searchSchema = z.object({});
+
+export const Route = createFileRoute("/units/")({
+  component: TenantUnitListPage,
+  validateSearch: searchSchema.parse,
+  loaderDeps: ({ search }) => search,
+  loader: ({ deps }) =>
+    dataProvider.getList<PropertyResDto>({ resource: "units", params: deps }),
+});
+
+function TenantUnitListPage() {
   const theme = useMantineTheme();
   const member = useAtomValue(memberAtom);
-  const data = useLoaderData({ from: "/tenants/units/" });
+  const data = useLoaderData({ from: "/units/" });
 
   return (
     <>
@@ -57,10 +70,7 @@ export const TenantUnitListPage = () => {
               {property.units.map((unit, index) => (
                 <Fragment key={unit.id}>
                   {index !== 0 && <Divider ml={60} />}
-                  <Link
-                    to="/managers/units/$unitId"
-                    params={{ unitId: unit.id }}
-                  >
+                  <Link to="/units/$unitId" params={{ unitId: unit.id }}>
                     <UnitCard ml={60} {...unit} memberRole={member!.role} />
                   </Link>
                 </Fragment>
@@ -71,4 +81,4 @@ export const TenantUnitListPage = () => {
       </SimpleGrid>
     </>
   );
-};
+}

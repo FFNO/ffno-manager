@@ -17,7 +17,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   }
 
   return !member || !member.id ? (
-    <BackgroundImage src="//auth-bg.jpg">
+    <BackgroundImage src="/auth-background.svg">
       <Center h={"100vh"}>
         <SignInPage />
       </Center>

@@ -13,12 +13,13 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UnitsIndexImport } from './routes/units/index'
 import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as ManagersIndexImport } from './routes/managers/index'
+import { Route as UnitsUnitIdImport } from './routes/units/$unitId'
 import { Route as RequestsCreateImport } from './routes/requests/create'
 import { Route as RequestsRequestIdImport } from './routes/requests/$requestId'
 import { Route as MembersMeImport } from './routes/members/me'
-import { Route as TenantsUnitsIndexImport } from './routes/tenants/units/index'
 import { Route as ManagersPropertiesIndexImport } from './routes/managers/properties/index'
 import { Route as ManagersInvoicesIndexImport } from './routes/managers/invoices/index'
 import { Route as ManagersContactsIndexImport } from './routes/managers/contacts/index'
@@ -51,6 +52,11 @@ const ManagersContactsContactIdLazyImport = createFileRoute(
 
 // Create/Update Routes
 
+const UnitsIndexRoute = UnitsIndexImport.update({
+  path: '/units/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RequestsIndexRoute = RequestsIndexImport.update({
   path: '/requests/',
   getParentRoute: () => rootRoute,
@@ -66,6 +72,11 @@ const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
 
+const UnitsUnitIdRoute = UnitsUnitIdImport.update({
+  path: '/units/$unitId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RequestsCreateRoute = RequestsCreateImport.update({
   path: '/requests/create',
   getParentRoute: () => rootRoute,
@@ -78,11 +89,6 @@ const RequestsRequestIdRoute = RequestsRequestIdImport.update({
 
 const MembersMeRoute = MembersMeImport.update({
   path: '/members/me',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TenantsUnitsIndexRoute = TenantsUnitsIndexImport.update({
-  path: '/tenants/units/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -192,6 +198,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsCreateImport
       parentRoute: typeof rootRoute
     }
+    '/units/$unitId': {
+      preLoaderRoute: typeof UnitsUnitIdImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/sign-in': {
       preLoaderRoute: typeof AuthSignInLazyImport
       parentRoute: typeof rootRoute
@@ -202,6 +212,10 @@ declare module '@tanstack/react-router' {
     }
     '/requests/': {
       preLoaderRoute: typeof RequestsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/units/': {
+      preLoaderRoute: typeof UnitsIndexImport
       parentRoute: typeof rootRoute
     }
     '/managers/contacts/$contactId': {
@@ -244,10 +258,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagersPropertiesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/tenants/units/': {
-      preLoaderRoute: typeof TenantsUnitsIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/managers/properties/$propertyId/create-unit': {
       preLoaderRoute: typeof ManagersPropertiesPropertyIdCreateUnitImport
       parentRoute: typeof rootRoute
@@ -261,9 +271,11 @@ export const routeTree = rootRoute.addChildren([
   MembersMeRoute,
   RequestsRequestIdRoute,
   RequestsCreateRoute,
+  UnitsUnitIdRoute,
   AuthSignInLazyRoute,
   ManagersIndexRoute,
   RequestsIndexRoute,
+  UnitsIndexRoute,
   ManagersContactsContactIdLazyRoute,
   ManagersContactsCreateLazyRoute,
   ManagersInvoicesCreateLazyRoute,
@@ -274,7 +286,6 @@ export const routeTree = rootRoute.addChildren([
   ManagersContactsIndexRoute,
   ManagersInvoicesIndexRoute,
   ManagersPropertiesIndexRoute,
-  TenantsUnitsIndexRoute,
   ManagersPropertiesPropertyIdCreateUnitRoute,
 ])
 

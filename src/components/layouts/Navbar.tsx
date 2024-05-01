@@ -61,7 +61,7 @@ const managerNavLinks = [
 
 const tenantNavLinks = [
   { label: "Tổng quan", icon: CircleGaugeIcon, link: "/" },
-  { label: "Căn hộ", icon: CircleGaugeIcon, link: "/tenants/units" },
+  { label: "Căn hộ", icon: CircleGaugeIcon, link: "/units" },
   {
     label: "Yêu cầu",
     icon: ClipboardListIcon,

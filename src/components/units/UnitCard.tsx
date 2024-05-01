@@ -90,20 +90,7 @@ export function UnitCard(props: Props) {
           </Group>
           <Group>
             {props.memberRole === MemberRole.TENANT ? (
-              <Button
-                onClick={() => {
-                  setRequestForm({
-                    name: `Yêu cầu thuê phòng ${props.name}`,
-                    details: "",
-                    category: RequestCategory.UNIT_LEASE,
-                    unitId: props.id,
-                    propertyId: props.propertyId,
-                  });
-                  navigate({ to: "/requests/create" });
-                }}
-              >
-                Yêu cầu thuê
-              </Button>
+              <Button onClick={() => handleRequestLease()}>Yêu cầu thuê</Button>
             ) : (
               <>
                 {isOpen ? (
@@ -125,12 +112,29 @@ export function UnitCard(props: Props) {
           </Group>
         </Stack>
         <Box flex={1} />
-        <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
-          <Button variant="outline">Xem chi tiết</Button>
-        </Link>
+        {props.memberRole == MemberRole.TENANT ? (
+          <Link to="/units/$unitId" params={{ unitId: props.id }}>
+            <Button variant="outline">Xem chi tiết</Button>
+          </Link>
+        ) : (
+          <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
+            <Button variant="outline">Xem chi tiết</Button>
+          </Link>
+        )}
       </Group>
     </Card>
   );
+
+  function handleRequestLease() {
+    setRequestForm({
+      name: `Yêu cầu thuê phòng ${props.name}`,
+      details: "",
+      category: RequestCategory.UNIT_LEASE,
+      unitId: props.id,
+      propertyId: props.propertyId,
+    });
+    navigate({ to: "/requests/create" });
+  }
 }
 
 function renderStatus(status: UnitStatus) {
