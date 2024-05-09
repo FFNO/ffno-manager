@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/utils';
-import { MemberResDto, MemberRole, memberRoleRecord } from '@/shared';
+import { MemberResDto, memberRoleRecord } from '@/shared';
 import { memberAtom } from '@/states';
 import {
   Avatar,
@@ -19,13 +19,14 @@ import {
   ClipboardListIcon,
   ContactIcon,
   LogOutIcon,
+  MessageCircleIcon,
   ReceiptIcon,
 } from 'lucide-react';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
 
-const managerNavLinks = [
+const navItems = [
   { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/managers' },
   {
     label: 'Bất động sản',
@@ -57,28 +58,21 @@ const managerNavLinks = [
     icon: ClipboardListIcon,
     link: '/requests',
   },
-];
-
-const tenantNavLinks = [
-  { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/' },
-  { label: 'Căn hộ', icon: CircleGaugeIcon, link: '/units' },
   {
-    label: 'Yêu cầu',
-    icon: ClipboardListIcon,
-    link: '/requests',
+    label: 'Chat',
+    icon: MessageCircleIcon,
+    link: '/chat',
   },
 ];
 
-export function Navbar({ role = MemberRole.ADMIN }: { role?: MemberRole }) {
+export function Navbar() {
   const theme = useMantineTheme();
 
   const [member, setMember] = useAtom(memberAtom);
 
-  const links = (
-    [MemberRole.ADMIN, MemberRole.LANDLORD].includes(role)
-      ? managerNavLinks
-      : tenantNavLinks
-  ).map((item) => <LinksGroup {...item} key={item.label} />);
+  const links = navItems.map((item) => (
+    <LinksGroup {...item} key={item.label} />
+  ));
 
   return (
     <nav className={classes.navbar}>

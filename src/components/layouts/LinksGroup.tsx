@@ -6,10 +6,10 @@ import {
   UnstyledButton,
   rem,
 } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
 import { Link, useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import classes from './LinksGroup.module.css';
+import { ArrowRight01Icon } from 'hugeicons-react';
 
 interface LinksGroupProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,9 +52,9 @@ export function LinksGroup({
             <Box ml="md">{label}</Box>
           </Box>
           {hasLinks && (
-            <IconChevronRight
+            <ArrowRight01Icon
               className={classes.chevron}
-              stroke={1.5}
+              strokeWidth={1.5}
               style={{
                 width: rem(16),
                 height: rem(16),

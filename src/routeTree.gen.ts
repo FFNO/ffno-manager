@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ChatImport } from './routes/chat'
 import { Route as UnitsIndexImport } from './routes/units/index'
 import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as ManagersIndexImport } from './routes/managers/index'
@@ -20,6 +21,7 @@ import { Route as UnitsUnitIdImport } from './routes/units/$unitId'
 import { Route as RequestsCreateImport } from './routes/requests/create'
 import { Route as RequestsRequestIdImport } from './routes/requests/$requestId'
 import { Route as MembersMeImport } from './routes/members/me'
+import { Route as ChatChannelIdImport } from './routes/chat/$channelId'
 import { Route as ManagersPropertiesIndexImport } from './routes/managers/properties/index'
 import { Route as ManagersInvoicesIndexImport } from './routes/managers/invoices/index'
 import { Route as ManagersContactsIndexImport } from './routes/managers/contacts/index'
@@ -51,6 +53,11 @@ const ManagersContactsContactIdLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
+
+const ChatRoute = ChatImport.update({
+  path: '/chat',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const UnitsIndexRoute = UnitsIndexImport.update({
   path: '/units/',
@@ -90,6 +97,11 @@ const RequestsRequestIdRoute = RequestsRequestIdImport.update({
 const MembersMeRoute = MembersMeImport.update({
   path: '/members/me',
   getParentRoute: () => rootRoute,
+} as any)
+
+const ChatChannelIdRoute = ChatChannelIdImport.update({
+  path: '/$channelId',
+  getParentRoute: () => ChatRoute,
 } as any)
 
 const ManagersPropertiesIndexRoute = ManagersPropertiesIndexImport.update({
@@ -186,6 +198,14 @@ const ManagersPropertiesPropertyIdCreateUnitRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/chat': {
+      preLoaderRoute: typeof ChatImport
+      parentRoute: typeof rootRoute
+    }
+    '/chat/$channelId': {
+      preLoaderRoute: typeof ChatChannelIdImport
+      parentRoute: typeof ChatImport
+    }
     '/members/me': {
       preLoaderRoute: typeof MembersMeImport
       parentRoute: typeof rootRoute
@@ -268,6 +288,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
+  ChatRoute.addChildren([ChatChannelIdRoute]),
   MembersMeRoute,
   RequestsRequestIdRoute,
   RequestsCreateRoute,

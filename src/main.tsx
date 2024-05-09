@@ -20,6 +20,7 @@ import ReactDOM from 'react-dom/client';
 import OneSignal from 'react-onesignal';
 import App from './App.tsx';
 import { queryClient } from './api';
+import { NextUIProvider } from '@nextui-org/react';
 
 dayjs.locale('vi');
 dayjs.extend(isSameOrAfter);
@@ -51,17 +52,19 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <DatesProvider settings={{ locale: 'vi' }}>
-        <ModalsProvider
-          modalProps={{ centered: true }}
-          labels={{ confirm: 'Xác nhận', cancel: 'Hủy' }}
-        >
-          <Notifications position="bottom-right" />
-          <QueryClientProvider client={queryClient}>
-            <App />
-          </QueryClientProvider>
-        </ModalsProvider>
-      </DatesProvider>
+      <NextUIProvider>
+        <DatesProvider settings={{ locale: 'vi' }}>
+          <ModalsProvider
+            modalProps={{ centered: true }}
+            labels={{ confirm: 'Xác nhận', cancel: 'Hủy' }}
+          >
+            <Notifications position="bottom-right" />
+            <QueryClientProvider client={queryClient}>
+              <App />
+            </QueryClientProvider>
+          </ModalsProvider>
+        </DatesProvider>
+      </NextUIProvider>
     </MantineProvider>
   </React.StrictMode>,
 );
