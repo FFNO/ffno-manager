@@ -1,5 +1,5 @@
 import { useList, useOne } from '@/api';
-import { MemberResDto, PropertyResDto } from '@/shared';
+import { IMemberResDto, IPropertyResDto } from '@/libs';
 import {
   Box,
   Button,
@@ -26,12 +26,12 @@ function PropertyPage() {
   const navigate = useNavigate();
   const { propertyId } = Route.useParams();
 
-  const { data: propertyInfo } = useOne<PropertyResDto>({
+  const { data: propertyInfo } = useOne<IPropertyResDto>({
     resource: 'properties',
     id: propertyId,
   });
 
-  const { refetch } = useList<MemberResDto>({
+  const { refetch } = useList<IMemberResDto>({
     resource: `properties/${propertyId}/tenants`,
     enabled: false,
   });

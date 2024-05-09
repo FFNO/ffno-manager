@@ -1,6 +1,6 @@
 import { useList } from '@/api';
 import { ContactCard } from '@/components/contacts';
-import { MemberResDto } from '@/shared';
+import { IMemberResDto } from '@/libs';
 import {
   Button,
   Group,
@@ -22,7 +22,7 @@ export const Route = createLazyFileRoute('/managers/contacts/')({
 function ContactListPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const { data } = useList<MemberResDto>({
+  const { data } = useList<IMemberResDto>({
     resource: `members/contacts`,
     params: { ...search },
   });

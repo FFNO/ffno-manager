@@ -1,5 +1,5 @@
 import { UnitCard } from '@/components/units';
-import { PropertyResDto } from '@/shared';
+import { IPropertyResDto } from '@/libs';
 import {
   AspectRatio,
   Card,
@@ -15,7 +15,11 @@ import {
 import { MapPinnedIcon } from 'lucide-react';
 import { Fragment } from 'react/jsx-runtime';
 
-export function UnitListView({ properties }: { properties: PropertyResDto[] }) {
+export function UnitListView({
+  properties,
+}: {
+  properties: IPropertyResDto[];
+}) {
   const theme = useMantineTheme();
 
   return (

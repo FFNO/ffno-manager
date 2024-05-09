@@ -1,6 +1,7 @@
 import { useList } from '@/api';
-import { PropertyResDto, invoiceCategories } from '@/shared';
+import { IPropertyResDto } from '@/libs';
 import { Route } from '@/routes/managers/invoices/index';
+import { invoiceCategories } from '@/shared';
 import {
   Button,
   Drawer,
@@ -18,10 +19,10 @@ import { SearchIcon } from 'lucide-react';
 export function InvoiceFilter() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const { data: propertyList } = useList<PropertyResDto>({
+  const { data: propertyList } = useList<IPropertyResDto>({
     resource: 'properties/simple-list',
   });
-  const { data: unitList } = useList<PropertyResDto>({
+  const { data: unitList } = useList<IPropertyResDto>({
     resource: 'units/simple-list',
   });
 

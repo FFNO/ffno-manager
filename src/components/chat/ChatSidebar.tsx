@@ -8,7 +8,6 @@ import {
   Box,
   Divider,
   Group,
-  Indicator,
   Stack,
   Text,
 } from '@mantine/core';

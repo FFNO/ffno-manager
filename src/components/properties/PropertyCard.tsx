@@ -1,4 +1,4 @@
-import { PropertyResDto, PropertyType } from '@/shared';
+import { IPropertyResDto, PropertyType } from '@/libs';
 import {
   AspectRatio,
   Badge,
@@ -15,7 +15,7 @@ import {
 import { Link } from '@tanstack/react-router';
 import { MapPinnedIcon } from 'lucide-react';
 
-interface Props extends PropertyResDto {}
+interface Props extends IPropertyResDto {}
 
 export const PropertyCard = (props: Props) => {
   const { id, imgUrls } = props;

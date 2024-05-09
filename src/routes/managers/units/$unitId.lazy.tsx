@@ -1,5 +1,5 @@
 import { useOne } from '@/api';
-import { UnitResDto } from '@/shared';
+import { IUnitResDto } from '@/libs';
 import { Code } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/managers/units/$unitId')({
 function UnitPage() {
   const { unitId } = Route.useParams();
 
-  const { data: unitInfo } = useOne<UnitResDto>({
+  const { data: unitInfo } = useOne<IUnitResDto>({
     resource: 'units',
     id: unitId,
   });

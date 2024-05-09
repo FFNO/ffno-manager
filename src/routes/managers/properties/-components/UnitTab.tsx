@@ -1,8 +1,8 @@
 import { UnitCard } from '@/components/units';
-import { UnitResDto } from '@/shared';
+import { IUnitResDto } from '@/libs';
 import { Paper, SimpleGrid } from '@mantine/core';
 
-export const UnitTab = ({ items }: { items: UnitResDto[] }) => {
+export const UnitTab = ({ items }: { items: IUnitResDto[] }) => {
   return (
     <SimpleGrid cols={1} py={'lg'}>
       {items.map((item) => (

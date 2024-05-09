@@ -1,5 +1,5 @@
 import { dataProvider } from '@/api';
-import { UnitResDto } from '@/shared';
+import { IUnitResDto } from '@/libs';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
@@ -26,7 +26,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 export const Route = createFileRoute('/units/$unitId')({
   component: UnitPage,
   loader: ({ params: { unitId } }) =>
-    dataProvider.getOne<UnitResDto>({ resource: 'units', id: unitId }),
+    dataProvider.getOne<IUnitResDto>({ resource: 'units', id: unitId }),
 });
 
 function UnitPage() {

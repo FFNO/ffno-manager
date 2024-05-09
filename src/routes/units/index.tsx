@@ -1,7 +1,6 @@
 import { dataProvider } from '@/api';
 import { UnitCard } from '@/components/units';
-import { PropertyResDto } from '@/shared';
-import { memberAtom } from '@/states';
+import { IPropertyResDto } from '@/libs';
 import {
   AspectRatio,
   Card,
@@ -15,7 +14,6 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link, createFileRoute, useLoaderData } from '@tanstack/react-router';
-import { useAtomValue } from 'jotai';
 import { MapPinnedIcon } from 'lucide-react';
 import { Fragment } from 'react/jsx-runtime';
 import { z } from 'zod';
@@ -27,12 +25,11 @@ export const Route = createFileRoute('/units/')({
   validateSearch: searchSchema.parse,
   loaderDeps: ({ search }) => search,
   loader: ({ deps }) =>
-    dataProvider.getList<PropertyResDto>({ resource: 'units', params: deps }),
+    dataProvider.getList<IPropertyResDto>({ resource: 'units', params: deps }),
 });
 
 function TenantUnitListPage() {
   const theme = useMantineTheme();
-  const member = useAtomValue(memberAtom);
   const data = useLoaderData({ from: '/units/' });
 
   return (
@@ -71,7 +68,7 @@ function TenantUnitListPage() {
                 <Fragment key={unit.id}>
                   {index !== 0 && <Divider ml={60} />}
                   <Link to="/units/$unitId" params={{ unitId: unit.id }}>
-                    <UnitCard ml={60} {...unit} memberRole={member!.role} />
+                    <UnitCard ml={60} {...unit} />
                   </Link>
                 </Fragment>
               ))}

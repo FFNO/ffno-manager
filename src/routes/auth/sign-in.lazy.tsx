@@ -1,6 +1,6 @@
 import { axiosInstance } from '@/api/utils';
-import { MemberRole } from '@/libs';
-import { SignInSchema, showErrorNotification, signInSchema } from '@/shared';
+import { ISignInDto, MemberRole } from '@/libs';
+import { showErrorNotification, signInSchema } from '@/shared';
 import { memberAtom } from '@/states';
 import {
   Button,
@@ -23,7 +23,7 @@ export const Route = createLazyFileRoute('/auth/sign-in')({
 });
 
 export function SignInPage() {
-  const signInForm = useForm<SignInSchema>({
+  const signInForm = useForm<ISignInDto>({
     initialValues: {
       email: '',
       password: '',
@@ -32,7 +32,7 @@ export function SignInPage() {
   });
   const setMember = useSetAtom(memberAtom);
 
-  const handleSignIn = async (values: SignInSchema) => {
+  const handleSignIn = async (values: ISignInDto) => {
     const { data, status } = await axiosInstance.post('auth/sign-in', values);
     if (status === HttpStatusCode.Created) {
       if (![MemberRole.ADMIN, MemberRole.LANDLORD].includes(data.role)) {

@@ -1,12 +1,6 @@
 import { useUpdate } from '@/api';
-import {
-  MemberRole,
-  RequestCategory,
-  UnitResDto,
-  UnitStatus,
-  showSuccessNotification,
-} from '@/shared';
-import { requestFormAtom } from '@/states';
+import { IUnitResDto, UnitStatus } from '@/libs';
+import { showSuccessNotification } from '@/shared';
 import {
   AspectRatio,
   Badge,
@@ -22,18 +16,14 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { useSetAtom } from 'jotai';
+import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
-interface Props extends UnitResDto {
-  memberRole: MemberRole;
+interface Props extends IUnitResDto {
   ml?: StyleProp<MantineSpacing> | undefined;
 }
 
 export function UnitCard(props: Props) {
-  const setRequestForm = useSetAtom(requestFormAtom);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(props.isListing);
 
   const openMutation = useUpdate({
@@ -89,20 +79,14 @@ export function UnitCard(props: Props) {
             {renderStatus(props.status)}
           </Group>
           <Group>
-            {props.memberRole === MemberRole.TENANT ? (
-              <Button onClick={() => handleRequestLease()}>Yêu cầu thuê</Button>
+            {isOpen ? (
+              <Button color={'red'} onClick={() => handleCloseUnit()}>
+                Dừng nhận yêu cầu cho thuê
+              </Button>
             ) : (
-              <>
-                {isOpen ? (
-                  <Button color={'red'} onClick={() => handleCloseUnit()}>
-                    Dừng nhận yêu cầu cho thuê
-                  </Button>
-                ) : (
-                  <Button color={'green'} onClick={() => handleOpenUnit()}>
-                    Tiếp nhận yêu cầu cho thuê
-                  </Button>
-                )}
-              </>
+              <Button color={'green'} onClick={() => handleOpenUnit()}>
+                Tiếp nhận yêu cầu cho thuê
+              </Button>
             )}
             <NumberFormatter
               suffix=" ₫"
@@ -112,29 +96,13 @@ export function UnitCard(props: Props) {
           </Group>
         </Stack>
         <Box flex={1} />
-        {props.memberRole == MemberRole.TENANT ? (
-          <Link to="/units/$unitId" params={{ unitId: props.id }}>
-            <Button variant="outline">Xem chi tiết</Button>
-          </Link>
-        ) : (
-          <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
-            <Button variant="outline">Xem chi tiết</Button>
-          </Link>
-        )}
+
+        <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
+          <Button variant="outline">Xem chi tiết</Button>
+        </Link>
       </Group>
     </Card>
   );
-
-  function handleRequestLease() {
-    setRequestForm({
-      name: `Yêu cầu thuê phòng ${props.name}`,
-      details: '',
-      category: RequestCategory.UNIT_LEASE,
-      unitId: props.id,
-      propertyId: props.propertyId,
-    });
-    navigate({ to: '/requests/create' });
-  }
 }
 
 function renderStatus(status: UnitStatus) {

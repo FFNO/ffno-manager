@@ -1,5 +1,6 @@
 import { useList } from '@/api';
-import { InvoiceResDto, calculatePage } from '@/shared';
+import { IInvoiceResDto } from '@/libs';
+import { calculatePage } from '@/shared';
 import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, UploadIcon } from 'lucide-react';
@@ -13,7 +14,7 @@ function InvoiceListPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
 
-  const { data } = useList<InvoiceResDto>({
+  const { data } = useList<IInvoiceResDto>({
     resource: 'invoices',
     params: search,
   });

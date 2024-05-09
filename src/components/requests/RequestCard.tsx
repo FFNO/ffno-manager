@@ -1,5 +1,5 @@
 import { useUpdate } from '@/api';
-import { RequestResDto, RequestStatus, requestCategoryRecord } from '@/shared';
+import { IRequestResDto, RequestStatus, requestCategoryRecord } from '@/libs';
 import {
   Avatar,
   Badge,
@@ -15,7 +15,7 @@ import {
 import { modals } from '@mantine/modals';
 import { Link, useRouter } from '@tanstack/react-router';
 
-interface Props extends RequestResDto {
+interface Props extends IRequestResDto {
   type?: string;
 }
 

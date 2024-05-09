@@ -1,5 +1,5 @@
 import { dataProvider } from '@/api';
-import { RequestResDto } from '@/shared';
+import { IRequestResDto } from '@/libs';
 import { RequestListPage } from '@/modules/requests/RequestListPage';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
@@ -14,7 +14,7 @@ export const Route = createFileRoute('/requests/')({
   validateSearch: searchSchema.parse,
   loaderDeps: ({ search }) => search,
   loader: ({ deps }) =>
-    dataProvider.getList<RequestResDto>({
+    dataProvider.getList<IRequestResDto>({
       resource: 'requests',
       params: deps,
     }),

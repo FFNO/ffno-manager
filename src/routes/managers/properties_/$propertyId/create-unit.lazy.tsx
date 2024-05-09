@@ -1,8 +1,8 @@
 import { useCreate, useList, useSimpleList } from '@/api';
 import { ImageUpload } from '@/components/common';
+import { IPropertyResDto } from '@/libs';
 import {
   CreateUnitSchema,
-  PropertyResDto,
   createUnitInitialValues,
   createUnitSchema,
   showSuccessNotification,
@@ -44,7 +44,7 @@ function CreateUnitPage() {
   });
 
   const { data: unitFeatures } = useSimpleList({ resource: 'unit-features' });
-  const { data: propertyList } = useList<PropertyResDto>({
+  const { data: propertyList } = useList<IPropertyResDto>({
     resource: 'properties/simple-list',
   });
 

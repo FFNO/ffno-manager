@@ -1,27 +1,6 @@
+import { UnitStatus, propertyTypeRecord, unitStatusRecord } from '@/libs';
 import { getOptionListFromRecord } from '@/shared';
 import { CreatePropertySchema, CreateUnitSchema } from './properties.schema';
-
-export enum PropertyType {
-  SINGLE_UNIT,
-  MULTIPLE_UNIT,
-}
-
-export enum UnitStatus {
-  GOOD,
-  MAINTAINING,
-  BAD,
-}
-
-export const propertyTypeRecord: Record<PropertyType, string> = {
-  [PropertyType.SINGLE_UNIT]: 'Nhà nguyên căn',
-  [PropertyType.MULTIPLE_UNIT]: 'Nhiều phòng',
-};
-
-export const unitStatusRecord: Record<UnitStatus, string> = {
-  [UnitStatus.GOOD]: 'Tốt',
-  [UnitStatus.MAINTAINING]: 'Đang bảo trì',
-  [UnitStatus.BAD]: 'Có vấn đề',
-};
 
 export const propertyTypes = getOptionListFromRecord(propertyTypeRecord);
 

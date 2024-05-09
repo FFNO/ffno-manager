@@ -1,5 +1,6 @@
 import { useList } from '@/api';
-import { PropertyResDto, calculatePage } from '@/shared';
+import { IPropertyResDto } from '@/libs';
+import { calculatePage } from '@/shared';
 import { Button, Group, Pagination, Stack } from '@mantine/core';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, UploadIcon } from 'lucide-react';
@@ -14,7 +15,7 @@ function PropertyListPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
 
-  const { data } = useList<PropertyResDto>({
+  const { data } = useList<IPropertyResDto>({
     resource: 'properties',
     params: search,
   });

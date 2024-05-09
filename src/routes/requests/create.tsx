@@ -1,8 +1,7 @@
-import { useCreate, useList, useSimpleList } from '@/api';
+import { useCreate, useSimpleList } from '@/api';
+import { RequestCategory } from '@/libs';
 import {
   CreateRequestSchema,
-  MemberResDto,
-  RequestCategory,
   createRequestInitialValues,
   createRequestSchema,
   requestCategories,
@@ -43,10 +42,6 @@ function RequestCreatePage() {
     validate: zodResolver(createRequestSchema),
   });
 
-  const { data: contacts } = useList<MemberResDto>({
-    resource: 'members/contacts',
-  });
-
   const { data: properties } = useSimpleList({
     resource: 'properties',
   });
@@ -83,7 +78,7 @@ function RequestCreatePage() {
     showSuccessNotification({ message: 'Thêm yêu cầu thành công' });
     navigate({
       to: '/requests',
-      search: true,
+      search: { page: 1, type: 'send' },
     });
   }
 

@@ -1,4 +1,4 @@
-import { PropertyType } from '@/shared';
+import { PropertyType } from '@/libs';
 import { createFileRoute } from '@tanstack/react-router';
 
 interface SearchParams {

@@ -1,7 +1,7 @@
 import { useCreate, useList } from '@/api';
+import { IUnitResDto } from '@/libs';
 import {
   CreateInvoiceSchema,
-  UnitResDto,
   createInvoiceInitialValues,
   createInvoiceSchema,
   invoiceCategories,
@@ -31,7 +31,7 @@ function InvoiceCreate() {
   const mutate = useCreate({ resource: 'invoices' });
   const navigate = useNavigate();
 
-  const { data } = useList<UnitResDto>({
+  const { data } = useList<IUnitResDto>({
     resource: 'units/simple-list',
     onSuccess() {
       showSuccessNotification({ message: 'Thêm hóa đơn thành công' });

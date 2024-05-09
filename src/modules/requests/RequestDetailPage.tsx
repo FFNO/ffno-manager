@@ -1,5 +1,5 @@
 import { useUpdate } from '@/api';
-import { RequestStatus, requestCategoryRecord } from '@/shared';
+import { RequestStatus, requestCategoryRecord } from '@/libs';
 import { memberAtom } from '@/states';
 import {
   Avatar,

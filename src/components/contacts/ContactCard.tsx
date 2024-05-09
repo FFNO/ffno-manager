@@ -1,4 +1,4 @@
-import { MemberResDto } from '@/shared';
+import { IMemberResDto } from '@/libs';
 import {
   Avatar,
   Box,
@@ -14,7 +14,7 @@ import {
 import { Link } from '@tanstack/react-router';
 import { CableIcon, EllipsisIcon } from 'lucide-react';
 
-interface Props extends MemberResDto {}
+interface Props extends IMemberResDto {}
 
 export const ContactCard = (props: Props) => {
   const theme = useMantineTheme();

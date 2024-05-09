@@ -1,10 +1,10 @@
 import { useList } from '@/api';
 import { ContactCard } from '@/components/contacts';
-import { MemberResDto } from '@/shared';
+import { IMemberResDto } from '@/libs';
 import { SimpleGrid } from '@mantine/core';
 
 export const TenantTab = ({ propertyId }: { propertyId: string }) => {
-  const { data } = useList<MemberResDto>({
+  const { data } = useList<IMemberResDto>({
     resource: `properties/${propertyId}/tenants`,
     enabled: false,
   });

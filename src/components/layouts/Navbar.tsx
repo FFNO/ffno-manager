@@ -1,5 +1,4 @@
 import { axiosInstance } from '@/api/utils';
-import { MemberResDto, memberRoleRecord } from '@/shared';
 import { memberAtom } from '@/states';
 import {
   Avatar,
@@ -25,6 +24,7 @@ import {
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
+import { IMemberResDto, memberRoleRecord } from '@/libs';
 
 const navItems = [
   { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/managers' },
@@ -106,7 +106,7 @@ export function Navbar() {
           justify="start"
           leftSection={<LogOutIcon strokeWidth={1.5} />}
           onClick={async () => {
-            setMember({} as MemberResDto);
+            setMember({} as IMemberResDto);
             OneSignal.User.removeTag('memberId');
             await axiosInstance.delete('/auth/sign-out');
           }}
