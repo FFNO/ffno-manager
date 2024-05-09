@@ -1,4 +1,4 @@
-import { MemberRole } from "../common";
+import { MemberRole } from '../common';
 
 export interface MemberResDto {
   id: string;

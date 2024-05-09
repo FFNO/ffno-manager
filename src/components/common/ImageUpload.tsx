@@ -1,8 +1,8 @@
-import { supabase } from "@/api";
-import { Image, LoadingOverlay, SimpleGrid, Text } from "@mantine/core";
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useEffect, useState } from "react";
-import { v4 } from "uuid";
+import { supabase } from '@/api';
+import { Image, LoadingOverlay, SimpleGrid, Text } from '@mantine/core';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 interface Props {
   setUrls: (urls: string[]) => void;
@@ -34,20 +34,20 @@ export const ImageUpload = ({ setUrls }: Props) => {
 
         const urls = await Promise.all(
           files.map(async (file) => {
-            const fileExt = file.name.split(".").pop();
+            const fileExt = file.name.split('.').pop();
             const fileName = `${v4()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { data, error: uploadError } = await supabase.storage
-              .from("Image")
+              .from('Image')
               .upload(filePath, file);
 
             if (uploadError) {
               throw uploadError;
             }
-            return supabase.storage.from("Image").getPublicUrl(data.path).data
+            return supabase.storage.from('Image').getPublicUrl(data.path).data
               .publicUrl;
-          })
+          }),
         );
 
         setUrls(urls);
@@ -67,13 +67,13 @@ export const ImageUpload = ({ setUrls }: Props) => {
       <LoadingOverlay
         visible={uploading}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
         <Text ta="center">Thả ảnh vào đây</Text>
       </Dropzone>
 
-      <SimpleGrid cols={{ base: 1, sm: 3 }} mt={previews.length > 0 ? "xl" : 0}>
+      <SimpleGrid cols={{ base: 1, sm: 3 }} mt={previews.length > 0 ? 'xl' : 0}>
         {previews}
       </SimpleGrid>
     </div>

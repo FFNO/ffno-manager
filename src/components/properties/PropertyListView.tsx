@@ -1,6 +1,6 @@
-import { PropertyResDto } from "@/libs";
-import { SimpleGrid } from "@mantine/core";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyResDto } from '@/shared';
+import { SimpleGrid } from '@mantine/core';
+import { PropertyCard } from './PropertyCard';
 
 export function PropertyListView({ items }: { items: PropertyResDto[] }) {
   return (

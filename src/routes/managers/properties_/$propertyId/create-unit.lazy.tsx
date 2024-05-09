@@ -1,5 +1,5 @@
-import { useCreate, useList, useSimpleList } from "@/api";
-import { ImageUpload } from "@/components/common";
+import { useCreate, useList, useSimpleList } from '@/api';
+import { ImageUpload } from '@/components/common';
 import {
   CreateUnitSchema,
   PropertyResDto,
@@ -7,7 +7,7 @@ import {
   createUnitSchema,
   showSuccessNotification,
   unitStatuses,
-} from "@/libs";
+} from '@/shared';
 import {
   Button,
   Divider,
@@ -21,19 +21,19 @@ import {
   Select,
   Stack,
   TextInput,
-} from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+} from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute(
-  "/managers/properties/$propertyId/create-unit"
+  '/managers/properties/$propertyId/create-unit',
 )({
   component: CreateUnitPage,
 });
 
 function CreateUnitPage() {
   const { propertyId } = Route.useParams();
-  const mutate = useCreate({ resource: "units", onSuccess: onCreateSuccess });
+  const mutate = useCreate({ resource: 'units', onSuccess: onCreateSuccess });
   const navigate = useNavigate();
   const form = useForm<CreateUnitSchema>({
     initialValues: {
@@ -43,9 +43,9 @@ function CreateUnitPage() {
     validate: zodResolver(createUnitSchema),
   });
 
-  const { data: unitFeatures } = useSimpleList({ resource: "unit-features" });
+  const { data: unitFeatures } = useSimpleList({ resource: 'unit-features' });
   const { data: propertyList } = useList<PropertyResDto>({
-    resource: "properties/simple-list",
+    resource: 'properties/simple-list',
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
@@ -54,21 +54,21 @@ function CreateUnitPage() {
 
   function onCreateSuccess() {
     showSuccessNotification({
-      id: "create-unit-successfully",
-      message: "Thêm phòng thành công",
+      id: 'create-unit-successfully',
+      message: 'Thêm phòng thành công',
     });
     navigate({
-      to: "/managers/units/$unitId",
+      to: '/managers/units/$unitId',
       params: { unitId: mutate.data! },
     });
   }
 
   return (
-    <Stack p={"lg"} pos={"relative"}>
+    <Stack p={'lg'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <form onSubmit={handleSubmit}>
         <Fieldset legend="Thông tin phòng">
@@ -138,7 +138,7 @@ function CreateUnitPage() {
           </Grid>
         </Fieldset>
 
-        <Divider mt={"lg"} pb={"lg"} />
+        <Divider mt={'lg'} pb={'lg'} />
 
         <Fieldset legend="Tiện nghi">
           <MultiSelect
@@ -146,11 +146,11 @@ function CreateUnitPage() {
             data={
               unitFeatures?.map((item) => ({ value: item, label: item })) ?? []
             }
-            {...form.getInputProps("unitFeatures")}
+            {...form.getInputProps('unitFeatures')}
           />
         </Fieldset>
 
-        <ImageUpload setUrls={(urls) => form.setFieldValue("imgUrls", urls)} />
+        <ImageUpload setUrls={(urls) => form.setFieldValue('imgUrls', urls)} />
 
         <Group justify="end">
           <Button type="submit">Tạo</Button>

@@ -1,7 +1,7 @@
-import { useList } from "@/api";
-import { ContactCard } from "@/components/contacts";
-import { MemberResDto } from "@/libs";
-import { SimpleGrid } from "@mantine/core";
+import { useList } from '@/api';
+import { ContactCard } from '@/components/contacts';
+import { MemberResDto } from '@/shared';
+import { SimpleGrid } from '@mantine/core';
 
 export const TenantTab = ({ propertyId }: { propertyId: string }) => {
   const { data } = useList<MemberResDto>({
@@ -10,7 +10,7 @@ export const TenantTab = ({ propertyId }: { propertyId: string }) => {
   });
 
   return (
-    <SimpleGrid cols={4} py={"lg"}>
+    <SimpleGrid cols={4} py={'lg'}>
       {data?.data.map((tenant) => <ContactCard key={tenant.id} {...tenant} />)}
     </SimpleGrid>
   );

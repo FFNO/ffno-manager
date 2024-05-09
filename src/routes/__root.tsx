@@ -1,13 +1,13 @@
-import { Page404 } from "@/components/errors";
-import { MainLayout } from "@/components/layouts";
-import { MemberRole } from "@/libs";
-import { memberAtom } from "@/states";
+import { Page404 } from '@/components/errors';
+import { MainLayout } from '@/components/layouts';
+import { MemberRole } from '@/shared';
+import { memberAtom } from '@/states';
 import {
   Outlet,
   createRootRoute,
   useRouterState,
-} from "@tanstack/react-router";
-import { useAtomValue } from "jotai";
+} from '@tanstack/react-router';
+import { useAtomValue } from 'jotai';
 
 export const Route = createRootRoute({
   component: () => <RootRoute />,
@@ -20,7 +20,7 @@ function RootRoute() {
 
   const isForbidden =
     ![MemberRole.ADMIN, MemberRole.LANDLORD].includes(member.role) &&
-    router.location.pathname.startsWith("/managers");
+    router.location.pathname.startsWith('/managers');
 
   return (
     <MainLayout>

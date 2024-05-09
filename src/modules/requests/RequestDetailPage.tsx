@@ -1,6 +1,6 @@
-import { useUpdate } from "@/api";
-import { RequestStatus, requestCategoryRecord } from "@/libs";
-import { memberAtom } from "@/states";
+import { useUpdate } from '@/api';
+import { RequestStatus, requestCategoryRecord } from '@/shared';
+import { memberAtom } from '@/states';
 import {
   Avatar,
   Badge,
@@ -13,18 +13,18 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { useLoaderData, useRouter } from "@tanstack/react-router";
-import dayjs from "dayjs";
-import { useAtomValue } from "jotai";
-import { CheckIcon, XIcon } from "lucide-react";
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { useLoaderData, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { useAtomValue } from 'jotai';
+import { CheckIcon, XIcon } from 'lucide-react';
 
 export function RequestPage() {
   const router = useRouter();
 
   const currentMember = useAtomValue(memberAtom);
-  const data = useLoaderData({ from: "/requests/$requestId" });
+  const data = useLoaderData({ from: '/requests/$requestId' });
   const mutate = useUpdate({
     resource: `requests/${data.id}`,
     onSuccess: () => router.invalidate(),
@@ -32,7 +32,7 @@ export function RequestPage() {
 
   const confirmApprove = () =>
     modals.openConfirmModal({
-      title: "Đồng ý duyệt yêu cầu",
+      title: 'Đồng ý duyệt yêu cầu',
       children: (
         <Text size="sm">Bạn có chắc chắn đồng ý với yêu cầu này không</Text>
       ),
@@ -41,7 +41,7 @@ export function RequestPage() {
 
   const rejectApprove = () =>
     modals.openConfirmModal({
-      title: " duyệt yêu cầu",
+      title: ' duyệt yêu cầu',
       children: (
         <Text size="sm">Bạn có chắc chắn từ chối với yêu cầu này không</Text>
       ),
@@ -49,19 +49,19 @@ export function RequestPage() {
     });
 
   return (
-    <Paper p={"lg"}>
-      <Stack gap={"md"}>
+    <Paper p={'lg'}>
+      <Stack gap={'md'}>
         <Title order={3}>{data.name}</Title>
         <Group gap={4}>
           {renderStatus(data.status)}
-          <Avatar size={"sm"} src={data.sender.imgUrl} />
-          <Text fw={"bold"}>{data.sender.name}</Text>
+          <Avatar size={'sm'} src={data.sender.imgUrl} />
+          <Text fw={'bold'}>{data.sender.name}</Text>
           <Text>đã yêu cầu</Text>
-          <Text fw={"bold"}>{requestCategoryRecord[data.category]}</Text>
+          <Text fw={'bold'}>{requestCategoryRecord[data.category]}</Text>
         </Group>
         <Text>{data.details}</Text>
 
-        <Fieldset legend={"Người nhận"}>
+        <Fieldset legend={'Người nhận'}>
           <Stack>
             {data.receivers.map(({ member, status, updatedAt }) => (
               <Card withBorder key={member.id}>
@@ -90,7 +90,7 @@ export function RequestPage() {
                   ) : (
                     <>
                       {renderStatus(status)}
-                      {dayjs(updatedAt).format("HH:mm:ss DD/MM/YYYY")}
+                      {dayjs(updatedAt).format('HH:mm:ss DD/MM/YYYY')}
                     </>
                   )}
                 </Group>

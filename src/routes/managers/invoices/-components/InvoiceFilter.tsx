@@ -1,6 +1,6 @@
-import { useList } from "@/api";
-import { PropertyResDto, invoiceCategories } from "@/libs";
-import { Route } from "@/routes/managers/invoices/index";
+import { useList } from '@/api';
+import { PropertyResDto, invoiceCategories } from '@/shared';
+import { Route } from '@/routes/managers/invoices/index';
 import {
   Button,
   Drawer,
@@ -9,20 +9,20 @@ import {
   Select,
   Stack,
   Text,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
-import { useNavigate } from "@tanstack/react-router";
-import { SearchIcon } from "lucide-react";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import { SearchIcon } from 'lucide-react';
 
 export function InvoiceFilter() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const { data: propertyList } = useList<PropertyResDto>({
-    resource: "properties/simple-list",
+    resource: 'properties/simple-list',
   });
   const { data: unitList } = useList<PropertyResDto>({
-    resource: "units/simple-list",
+    resource: 'units/simple-list',
   });
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -63,7 +63,7 @@ export function InvoiceFilter() {
               placeholder="Chọn loại hóa đơn"
               data={invoiceCategories}
               leftSection={<SearchIcon size={16} />}
-              {...form.getInputProps("categories")}
+              {...form.getInputProps('categories')}
             />
             <Select
               searchable
@@ -75,7 +75,7 @@ export function InvoiceFilter() {
                 label: item.name,
               }))}
               leftSection={<SearchIcon size={16} />}
-              {...form.getInputProps("unitId")}
+              {...form.getInputProps('unitId')}
             />
             <Select
               searchable
@@ -87,10 +87,10 @@ export function InvoiceFilter() {
                 label: item.name,
               }))}
               leftSection={<SearchIcon size={16} />}
-              {...form.getInputProps("propertyId")}
+              {...form.getInputProps('propertyId')}
             />
           </Stack>
-          <Group justify="end" grow gap={"xs"} mt={12}>
+          <Group justify="end" grow gap={'xs'} mt={12}>
             <Button type="submit" size="sm" onClick={close}>
               Tìm kiếm
             </Button>

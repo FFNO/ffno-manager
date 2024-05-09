@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { RequestCategory } from "./requests.const";
+import { z } from 'zod';
+import { RequestCategory } from './requests.const';
 
 export const createRequestSchema = z.object({
   name: z.string(),

@@ -1,7 +1,7 @@
-import { RequestStatus } from "../common";
-import { RequestCategory } from "../request";
-import { MemberResDto } from "./members-res.dto";
-import { UnitResDto } from "./units-res.dto";
+import { RequestStatus } from '../common';
+import { RequestCategory } from '../request';
+import { MemberResDto } from './members-res.dto';
+import { UnitResDto } from './units-res.dto';
 
 export interface RequestResDto {
   id: string;

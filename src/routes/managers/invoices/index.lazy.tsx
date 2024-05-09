@@ -1,11 +1,11 @@
-import { useList } from "@/api";
-import { InvoiceResDto, calculatePage } from "@/libs";
-import { Button, Group, Pagination, SimpleGrid, Stack } from "@mantine/core";
-import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { PlusIcon, UploadIcon } from "lucide-react";
-import { InvoiceCard, InvoiceFilter } from "./-components";
+import { useList } from '@/api';
+import { InvoiceResDto, calculatePage } from '@/shared';
+import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
+import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { PlusIcon, UploadIcon } from 'lucide-react';
+import { InvoiceCard, InvoiceFilter } from './-components';
 
-export const Route = createLazyFileRoute("/managers/invoices/")({
+export const Route = createLazyFileRoute('/managers/invoices/')({
   component: () => <InvoiceListPage />,
 });
 
@@ -14,12 +14,12 @@ function InvoiceListPage() {
   const navigate = useNavigate();
 
   const { data } = useList<InvoiceResDto>({
-    resource: "invoices",
+    resource: 'invoices',
     params: search,
   });
 
   return (
-    <Stack p={"lg"}>
+    <Stack p={'lg'}>
       <Group justify="end">
         <Button variant="outline" leftSection={<UploadIcon size={16} />}>
           Import

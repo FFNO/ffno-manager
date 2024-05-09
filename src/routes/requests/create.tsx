@@ -1,4 +1,4 @@
-import { useCreate, useList, useSimpleList } from "@/api";
+import { useCreate, useList, useSimpleList } from '@/api';
 import {
   CreateRequestSchema,
   MemberResDto,
@@ -7,8 +7,8 @@ import {
   createRequestSchema,
   requestCategories,
   showSuccessNotification,
-} from "@/libs";
-import { requestFormAtom } from "@/states";
+} from '@/shared';
+import { requestFormAtom } from '@/states';
 import {
   Button,
   Divider,
@@ -21,13 +21,13 @@ import {
   Stack,
   TextInput,
   Textarea,
-} from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
+} from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useAtom } from 'jotai';
+import { useEffect } from 'react';
 
-export const Route = createFileRoute("/requests/create")({
+export const Route = createFileRoute('/requests/create')({
   component: RequestCreatePage,
 });
 
@@ -35,7 +35,7 @@ function RequestCreatePage() {
   const [formValue, setFormValue] = useAtom(requestFormAtom);
   const navigate = useNavigate();
   const mutate = useCreate({
-    resource: "requests",
+    resource: 'requests',
     onSuccess: onCreateSuccess,
   });
   const form = useForm<NullableObject<CreateRequestSchema>>({
@@ -44,15 +44,15 @@ function RequestCreatePage() {
   });
 
   const { data: contacts } = useList<MemberResDto>({
-    resource: "members/contacts",
+    resource: 'members/contacts',
   });
 
   const { data: properties } = useSimpleList({
-    resource: "properties",
+    resource: 'properties',
   });
 
   const { data: units } = useSimpleList({
-    resource: "units",
+    resource: 'units',
     params: { propertyId: form.values.propertyId },
   });
 
@@ -80,19 +80,19 @@ function RequestCreatePage() {
   }, [form.values.propertyId]);
 
   function onCreateSuccess() {
-    showSuccessNotification({ message: "Thêm yêu cầu thành công" });
+    showSuccessNotification({ message: 'Thêm yêu cầu thành công' });
     navigate({
-      to: "/requests",
+      to: '/requests',
       search: true,
     });
   }
 
   return (
-    <Stack p={"lg"} pos={"relative"}>
+    <Stack p={'lg'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <form onSubmit={handleSubmit}>
         <Fieldset legend="Basic information">
@@ -102,7 +102,7 @@ function RequestCreatePage() {
                 label="Yêu cầu"
                 placeholder="Nhập tiêu đề cho yêu cầu"
                 withAsterisk
-                {...form.getInputProps("name")}
+                {...form.getInputProps('name')}
               />
             </Grid.Col>
 
@@ -111,7 +111,7 @@ function RequestCreatePage() {
                 withAsterisk
                 label="Loại yêu cầu"
                 data={requestCategories}
-                {...form.getInputProps("category")}
+                {...form.getInputProps('category')}
               />
             </Grid.Col>
 
@@ -125,7 +125,7 @@ function RequestCreatePage() {
                     label="Tòa nhà"
                     placeholder="Chọn tòa nhà"
                     data={properties}
-                    {...form.getInputProps("propertyId")}
+                    {...form.getInputProps('propertyId')}
                   />
                 </Grid.Col>
                 <Grid.Col span={6}>
@@ -137,7 +137,7 @@ function RequestCreatePage() {
                     label="Phòng"
                     placeholder="Chọn phòng"
                     data={units}
-                    {...form.getInputProps("unitId")}
+                    {...form.getInputProps('unitId')}
                   />
                 </Grid.Col>
               </>
@@ -149,13 +149,13 @@ function RequestCreatePage() {
                 placeholder="Nhập chi tiết yêu cầu"
                 withAsterisk
                 rows={4}
-                {...form.getInputProps("details")}
+                {...form.getInputProps('details')}
               />
             </Grid.Col>
           </Grid>
         </Fieldset>
 
-        <Divider mt={"lg"} pb={"lg"} />
+        <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
           <Button type="submit">Gửi</Button>

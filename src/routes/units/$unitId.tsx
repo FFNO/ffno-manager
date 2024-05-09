@@ -1,6 +1,6 @@
-import { dataProvider } from "@/api";
-import { UnitResDto } from "@/libs";
-import { Carousel } from "@mantine/carousel";
+import { dataProvider } from '@/api';
+import { UnitResDto } from '@/shared';
+import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
   AspectRatio,
@@ -19,21 +19,21 @@ import {
   Tabs,
   Text,
   Title,
-} from "@mantine/core";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+} from '@mantine/core';
+import { createFileRoute, useLoaderData } from '@tanstack/react-router';
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 
-export const Route = createFileRoute("/units/$unitId")({
+export const Route = createFileRoute('/units/$unitId')({
   component: UnitPage,
   loader: ({ params: { unitId } }) =>
-    dataProvider.getOne<UnitResDto>({ resource: "units", id: unitId }),
+    dataProvider.getOne<UnitResDto>({ resource: 'units', id: unitId }),
 });
 
 function UnitPage() {
-  const data = useLoaderData({ from: "/units/$unitId" });
+  const data = useLoaderData({ from: '/units/$unitId' });
 
   return (
-    <Paper p={"lg"}>
+    <Paper p={'lg'}>
       <Group>
         <Title>{`Phong ${data.name} toa nha ${data.propertyId}`}</Title>
         <Box flex={1} />
@@ -49,12 +49,12 @@ function UnitPage() {
               slideGap="md"
               height={300}
               nextControlIcon={
-                <ActionIcon radius={"xl"}>
+                <ActionIcon radius={'xl'}>
                   <ArrowRightIcon />
                 </ActionIcon>
               }
               previousControlIcon={
-                <ActionIcon radius={"xl"}>
+                <ActionIcon radius={'xl'}>
                   <ArrowLeftIcon />
                 </ActionIcon>
               }
@@ -96,9 +96,9 @@ function UnitPage() {
                     />
                   </Text>
                   <Text>
-                    Tình trạng:{" "}
-                    <Badge color={data.status === 0 ? "green" : "red"}>
-                      {data.status === 0 ? "Còn trống" : "Đã thuê"}
+                    Tình trạng:{' '}
+                    <Badge color={data.status === 0 ? 'green' : 'red'}>
+                      {data.status === 0 ? 'Còn trống' : 'Đã thuê'}
                     </Badge>
                   </Text>
                   <Divider m="md" />
@@ -119,7 +119,7 @@ function UnitPage() {
                       <Table.Tr key={tenant.id}>
                         <Table.Td>
                           <Group>
-                            <Avatar size={"sm"} src={tenant.imgUrl} />
+                            <Avatar size={'sm'} src={tenant.imgUrl} />
                             {tenant.name}
                           </Group>
                         </Table.Td>

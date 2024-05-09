@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/api/utils";
+import { axiosInstance } from '@/api/utils';
 import {
   Gender,
   SignInSchema,
@@ -6,8 +6,8 @@ import {
   genders,
   signInSchema,
   signUpSchema,
-} from "@/libs";
-import { memberAtom } from "@/states";
+} from '@/shared';
+import { memberAtom } from '@/states';
 import {
   Anchor,
   Button,
@@ -20,26 +20,26 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
-import { useForm, zodResolver } from "@mantine/form";
-import { upperFirst, useToggle } from "@mantine/hooks";
-import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { HttpStatusCode } from "axios";
-import { useSetAtom } from "jotai";
-import OneSignal from "react-onesignal";
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import { useForm, zodResolver } from '@mantine/form';
+import { upperFirst, useToggle } from '@mantine/hooks';
+import { IconBrandDiscord, IconBrandGoogle } from '@tabler/icons-react';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import { HttpStatusCode } from 'axios';
+import { useSetAtom } from 'jotai';
+import OneSignal from 'react-onesignal';
 
-export const Route = createLazyFileRoute("/auth/sign-in")({
+export const Route = createLazyFileRoute('/auth/sign-in')({
   component: SignInPage,
 });
 
 export function SignInPage() {
-  const [type, toggle] = useToggle(["login", "register"]);
+  const [type, toggle] = useToggle(['login', 'register']);
   const signInForm = useForm<SignInSchema>({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validate: zodResolver(signInSchema),
   });
@@ -51,11 +51,11 @@ export function SignInPage() {
       return values;
     },
     initialValues: {
-      email: "",
-      password: "",
-      name: "",
-      address: "",
-      identityNumber: "",
+      email: '',
+      password: '',
+      name: '',
+      address: '',
+      identityNumber: '',
       dateOfBirth: null,
       gender: Gender.MALE,
     },
@@ -66,8 +66,8 @@ export function SignInPage() {
     <Paper
       p="xl"
       withBorder
-      miw={{ base: "100%", md: 512 }}
-      maw={{ base: "100%", md: 512 }}
+      miw={{ base: '100%', md: 512 }}
+      maw={{ base: '100%', md: 512 }}
     >
       <Text size="lg" fw={500}>
         Welcome to Mantine, {type} with
@@ -90,15 +90,15 @@ export function SignInPage() {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      {type === "login" ? (
+      {type === 'login' ? (
         <form
           onSubmit={signInForm.onSubmit(async () => {
             const { data, status } = await axiosInstance.post(
-              "auth/sign-in",
-              signInForm.values
+              'auth/sign-in',
+              signInForm.values,
             );
             if (status === HttpStatusCode.Created) {
-              OneSignal.User.addTag("memberId", data.id);
+              OneSignal.User.addTag('memberId', data.id);
               setMember(data);
             }
           })}
@@ -110,9 +110,9 @@ export function SignInPage() {
               placeholder="hello@mantine.dev"
               value={signInForm.values.email}
               onChange={(event) =>
-                signInForm.setFieldValue("email", event.currentTarget.value)
+                signInForm.setFieldValue('email', event.currentTarget.value)
               }
-              error={signInForm.errors.email && "Invalid email"}
+              error={signInForm.errors.email && 'Invalid email'}
             />
 
             <PasswordInput
@@ -121,11 +121,11 @@ export function SignInPage() {
               placeholder="Your password"
               value={signInForm.values.password}
               onChange={(event) =>
-                signInForm.setFieldValue("password", event.currentTarget.value)
+                signInForm.setFieldValue('password', event.currentTarget.value)
               }
               error={
                 signInForm.errors.password &&
-                "Password should include at least 6 characters"
+                'Password should include at least 6 characters'
               }
             />
           </Stack>
@@ -149,11 +149,11 @@ export function SignInPage() {
         <form
           onSubmit={signUpForm.onSubmit(async () => {
             const { data, status } = await axiosInstance.post(
-              "auth/sign-up",
-              signUpForm.values
+              'auth/sign-up',
+              signUpForm.values,
             );
             if (status === HttpStatusCode.Created) {
-              OneSignal.User.addTag("memberId", data.id);
+              OneSignal.User.addTag('memberId', data.id);
               setMember(data);
             }
           })}
@@ -164,7 +164,7 @@ export function SignInPage() {
                 required
                 label="Email"
                 placeholder="hello@mantine.dev"
-                {...signUpForm.getInputProps("email")}
+                {...signUpForm.getInputProps('email')}
               />
             </Grid.Col>
 
@@ -172,21 +172,21 @@ export function SignInPage() {
               <TextInput
                 required
                 label="Họ và tên"
-                {...signUpForm.getInputProps("name")}
+                {...signUpForm.getInputProps('name')}
               />
             </Grid.Col>
 
             <Grid.Col span={12}>
               <TextInput
                 label="Địa chỉ"
-                {...signUpForm.getInputProps("address")}
+                {...signUpForm.getInputProps('address')}
               />
             </Grid.Col>
 
             <Grid.Col span={12}>
               <TextInput
                 label="CMND/CCCD"
-                {...signUpForm.getInputProps("identityNumber")}
+                {...signUpForm.getInputProps('identityNumber')}
               />
             </Grid.Col>
 
@@ -194,11 +194,11 @@ export function SignInPage() {
               <NativeSelect
                 label="Giới tính"
                 data={genders}
-                {...signUpForm.getInputProps("gender")}
+                {...signUpForm.getInputProps('gender')}
                 onChange={(e) =>
                   signUpForm.setFieldValue(
-                    "gender",
-                    e.currentTarget.value ? +e.currentTarget.value : null
+                    'gender',
+                    e.currentTarget.value ? +e.currentTarget.value : null,
                   )
                 }
               />
@@ -208,7 +208,7 @@ export function SignInPage() {
               <DatePickerInput
                 label="Ngày sinh"
                 maxDate={new Date()}
-                {...signUpForm.getInputProps("dateOfBirth")}
+                {...signUpForm.getInputProps('dateOfBirth')}
               />
             </Grid.Col>
 
@@ -217,7 +217,7 @@ export function SignInPage() {
                 required
                 label="Password"
                 placeholder="Your password"
-                {...signUpForm.getInputProps("password")}
+                {...signUpForm.getInputProps('password')}
               />
             </Grid.Col>
           </Grid>

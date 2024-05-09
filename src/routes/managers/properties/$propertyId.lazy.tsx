@@ -1,5 +1,5 @@
-import { useList, useOne } from "@/api";
-import { MemberResDto, PropertyResDto } from "@/libs";
+import { useList, useOne } from '@/api';
+import { MemberResDto, PropertyResDto } from '@/shared';
 import {
   Box,
   Button,
@@ -13,12 +13,12 @@ import {
   Tabs,
   Text,
   Title,
-} from "@mantine/core";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { EllipsisIcon, HomeIcon, PlusIcon } from "lucide-react";
-import { TenantTab, UnitTab } from "./-components";
+} from '@mantine/core';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { EllipsisIcon, HomeIcon, PlusIcon } from 'lucide-react';
+import { TenantTab, UnitTab } from './-components';
 
-export const Route = createLazyFileRoute("/managers/properties/$propertyId")({
+export const Route = createLazyFileRoute('/managers/properties/$propertyId')({
   component: PropertyPage,
 });
 
@@ -27,7 +27,7 @@ function PropertyPage() {
   const { propertyId } = Route.useParams();
 
   const { data: propertyInfo } = useOne<PropertyResDto>({
-    resource: "properties",
+    resource: 'properties',
     id: propertyId,
   });
 
@@ -38,7 +38,7 @@ function PropertyPage() {
 
   return (
     <>
-      <Group p={"lg"}>
+      <Group p={'lg'}>
         <Title order={4}>{propertyInfo?.name}</Title>
         <Box flex={1} />
         <Button>Chuyển vào</Button>
@@ -54,7 +54,7 @@ function PropertyPage() {
               leftSection={<PlusIcon size={16} />}
               onClick={() =>
                 navigate({
-                  to: "/managers/properties/$propertyId/create-unit",
+                  to: '/managers/properties/$propertyId/create-unit',
                   params: { propertyId },
                 })
               }
@@ -64,7 +64,7 @@ function PropertyPage() {
           </Menu.Dropdown>
         </Menu>
       </Group>
-      <Tabs variant="pills" defaultValue={"info"} px={"lg"}>
+      <Tabs variant="pills" defaultValue={'info'} px={'lg'}>
         <Tabs.List>
           <Tabs.Tab value="info">Tổng quan</Tabs.Tab>
           <Tabs.Tab value="units">Danh sách phòng</Tabs.Tab>
@@ -73,10 +73,10 @@ function PropertyPage() {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="info">
-          <Stack py={"lg"}>
+          <Stack py={'lg'}>
             <Fieldset
               legend={
-                <Group gap={"xs"} px={"sm"}>
+                <Group gap={'xs'} px={'sm'}>
                   <HomeIcon size={20} />
                   <Title order={4}>Thông tin cơ bản</Title>
                 </Group>

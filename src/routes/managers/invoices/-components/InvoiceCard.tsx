@@ -1,5 +1,5 @@
-import { InvoiceResDto } from "@/libs";
-import { Code } from "@mantine/core";
+import { InvoiceResDto } from '@/shared';
+import { Code } from '@mantine/core';
 
 interface Props extends InvoiceResDto {}
 

@@ -1,6 +1,6 @@
-import { Button, Container, Group, Text, Title } from "@mantine/core";
-import classes from "./404.module.css";
-import { Link } from "@tanstack/react-router";
+import { Button, Container, Group, Text, Title } from '@mantine/core';
+import classes from './404.module.css';
+import { Link } from '@tanstack/react-router';
 
 export function Page404() {
   return (

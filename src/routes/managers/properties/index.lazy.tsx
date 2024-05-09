@@ -1,12 +1,12 @@
-import { useList } from "@/api";
-import { PropertyResDto, calculatePage } from "@/libs";
-import { Button, Group, Pagination, Stack } from "@mantine/core";
-import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { PlusIcon, UploadIcon } from "lucide-react";
-import { PropertyListView, UnitListView } from "../../../components/properties";
-import { PropertyFilter } from "./-components";
+import { useList } from '@/api';
+import { PropertyResDto, calculatePage } from '@/shared';
+import { Button, Group, Pagination, Stack } from '@mantine/core';
+import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { PlusIcon, UploadIcon } from 'lucide-react';
+import { PropertyListView, UnitListView } from '../../../components/properties';
+import { PropertyFilter } from './-components';
 
-export const Route = createLazyFileRoute("/managers/properties/")({
+export const Route = createLazyFileRoute('/managers/properties/')({
   component: PropertyListPage,
 });
 
@@ -15,12 +15,12 @@ function PropertyListPage() {
   const navigate = useNavigate();
 
   const { data } = useList<PropertyResDto>({
-    resource: "properties",
+    resource: 'properties',
     params: search,
   });
 
   return (
-    <Stack p={"lg"}>
+    <Stack p={'lg'}>
       <Group justify="end">
         <Button variant="outline" leftSection={<UploadIcon size={16} />}>
           Tải lên
@@ -30,7 +30,7 @@ function PropertyListPage() {
           <Button leftSection={<PlusIcon size={16} />}>Thêm tòa nhà</Button>
         </Link>
       </Group>
-      {search.view === "properties" ? (
+      {search.view === 'properties' ? (
         <PropertyListView items={data?.data || []} />
       ) : (
         <UnitListView properties={data?.data || []} />

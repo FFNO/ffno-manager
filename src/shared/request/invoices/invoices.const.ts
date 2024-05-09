@@ -1,12 +1,12 @@
-import { getOptionListFromRecord } from "@/libs";
-import { CreateInvoiceSchema } from "./invoices.schema";
+import { getOptionListFromRecord } from '@/shared';
+import { CreateInvoiceSchema } from './invoices.schema';
 
 export enum InvoiceCategory {
   UNIT_CHARGE,
 }
 
 export const invoiceCategoryRecord: Record<InvoiceCategory, string> = {
-  [InvoiceCategory.UNIT_CHARGE]: "Tiền phòng",
+  [InvoiceCategory.UNIT_CHARGE]: 'Tiền phòng',
 };
 
 export const invoiceCategories = getOptionListFromRecord(invoiceCategoryRecord);

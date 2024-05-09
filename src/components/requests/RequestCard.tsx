@@ -1,5 +1,5 @@
-import { useUpdate } from "@/api";
-import { RequestResDto, RequestStatus, requestCategoryRecord } from "@/libs";
+import { useUpdate } from '@/api';
+import { RequestResDto, RequestStatus, requestCategoryRecord } from '@/shared';
 import {
   Avatar,
   Badge,
@@ -11,9 +11,9 @@ import {
   Text,
   Title,
   Tooltip,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { Link, useRouter } from "@tanstack/react-router";
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { Link, useRouter } from '@tanstack/react-router';
 
 interface Props extends RequestResDto {
   type?: string;
@@ -30,7 +30,7 @@ export function RequestCard(props: Props) {
 
   const confirmApprove = () =>
     modals.openConfirmModal({
-      title: "Đồng ý duyệt yêu cầu",
+      title: 'Đồng ý duyệt yêu cầu',
       children: (
         <Text size="sm">Bạn có chắc chắn đồng ý với yêu cầu này không</Text>
       ),
@@ -39,7 +39,7 @@ export function RequestCard(props: Props) {
 
   const confirmReject = () =>
     modals.openConfirmModal({
-      title: "Đồng ý từ chối yêu cầu",
+      title: 'Đồng ý từ chối yêu cầu',
       children: (
         <Text size="sm">Bạn có chắc chắn từ chối yêu cầu này không</Text>
       ),
@@ -48,7 +48,7 @@ export function RequestCard(props: Props) {
 
   const confirmCancelRequest = () => {
     modals.openConfirmModal({
-      title: "Đồng ý hủy yêu cầu",
+      title: 'Đồng ý hủy yêu cầu',
       children: <Text size="sm">Bạn có chắc chắn hủy yêu cầu này không</Text>,
       onConfirm: () => handleRequest(RequestStatus.PENDING),
     });

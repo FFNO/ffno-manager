@@ -1,6 +1,6 @@
-import { PropertyType } from "../request/properties";
-import { MemberResDto } from "./members-res.dto";
-import { UnitResDto } from "./units-res.dto";
+import { PropertyType } from '../request/properties';
+import { MemberResDto } from './members-res.dto';
+import { UnitResDto } from './units-res.dto';
 
 export interface PropertyResDto {
   id: string;

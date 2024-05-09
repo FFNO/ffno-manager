@@ -5,11 +5,11 @@ import {
   ThemeIcon,
   UnstyledButton,
   rem,
-} from "@mantine/core";
-import { IconChevronRight } from "@tabler/icons-react";
-import { Link, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
-import classes from "./LinksGroup.module.css";
+} from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
+import { Link, useRouter } from '@tanstack/react-router';
+import { useState } from 'react';
+import classes from './LinksGroup.module.css';
 
 interface LinksGroupProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +45,7 @@ export function LinksGroup({
         className={classes.control}
       >
         <Group justify="space-between" gap={0}>
-          <Box style={{ display: "flex", alignItems: "center" }}>
+          <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
               <Icon style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
@@ -58,7 +58,7 @@ export function LinksGroup({
               style={{
                 width: rem(16),
                 height: rem(16),
-                transform: opened ? "rotate(-90deg)" : "none",
+                transform: opened ? 'rotate(-90deg)' : 'none',
               }}
             />
           )}

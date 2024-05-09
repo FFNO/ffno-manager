@@ -1,7 +1,7 @@
-export { supabase } from "./supabase";
+export { supabase } from './supabase';
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { axiosInstance, queryClient } from "./utils";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { axiosInstance, queryClient } from './utils';
 
 interface GetListResDto<T> {
   data: T[];

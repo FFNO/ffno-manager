@@ -1,23 +1,23 @@
-import { useOne } from "@/api";
-import { NumberFormatter, Paper, Table, Title } from "@mantine/core";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { useOne } from '@/api';
+import { NumberFormatter, Paper, Table, Title } from '@mantine/core';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createLazyFileRoute("/preview/invoices/$invoiceId")({
+export const Route = createLazyFileRoute('/preview/invoices/$invoiceId')({
   component: PublicInvoicePage,
 });
 
 function PublicInvoicePage() {
   const { invoiceId } = Route.useParams();
 
-  const { data } = useOne({ id: invoiceId, resource: "invoices" });
+  const { data } = useOne({ id: invoiceId, resource: 'invoices' });
 
   if (!data) {
-    return "loading";
+    return 'loading';
   }
 
   return (
-    <Paper p={"lg"}>
-      <Title tt={"uppercase"}>Hóa đơn</Title>
+    <Paper p={'lg'}>
+      <Title tt={'uppercase'}>Hóa đơn</Title>
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>

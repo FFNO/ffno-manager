@@ -1,5 +1,5 @@
-import { Gender } from "@/libs/common";
-import { z } from "zod";
+import { Gender } from '@/shared/common';
+import { z } from 'zod';
 
 export const signInSchema = z.object({
   email: z.string().email(),
