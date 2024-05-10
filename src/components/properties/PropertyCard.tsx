@@ -21,7 +21,7 @@ export const PropertyCard = (props: Props) => {
   const { id, imgUrls } = props;
   const theme = useMantineTheme();
   return (
-    <Link to={`/managers/properties/$propertyId`} params={{ propertyId: id }}>
+    <Link to={`/properties/$propertyId`} params={{ propertyId: id }}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Group>
           <AspectRatio ratio={1} style={{ flex: `0 0 ${rem(160)}` }}>

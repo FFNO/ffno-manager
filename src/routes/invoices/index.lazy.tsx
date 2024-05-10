@@ -6,7 +6,7 @@ import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, UploadIcon } from 'lucide-react';
 import { InvoiceCard, InvoiceFilter } from './-components';
 
-export const Route = createLazyFileRoute('/managers/invoices/')({
+export const Route = createLazyFileRoute('/invoices/')({
   component: () => <InvoiceListPage />,
 });
 
@@ -26,7 +26,7 @@ function InvoiceListPage() {
           Import
         </Button>
         <InvoiceFilter />
-        <Link to="/managers/invoices/create">
+        <Link to="/invoices/create">
           <Button leftSection={<PlusIcon size={16} />}>Thêm hóa đơn</Button>
         </Link>
       </Group>

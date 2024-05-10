@@ -18,7 +18,7 @@ import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { EllipsisIcon, HomeIcon, PlusIcon } from 'lucide-react';
 import { TenantTab, UnitTab } from './-components';
 
-export const Route = createLazyFileRoute('/managers/properties/$propertyId')({
+export const Route = createLazyFileRoute('/properties/$propertyId')({
   component: PropertyPage,
 });
 
@@ -54,7 +54,7 @@ function PropertyPage() {
               leftSection={<PlusIcon size={16} />}
               onClick={() =>
                 navigate({
-                  to: '/managers/properties/$propertyId/create-unit',
+                  to: '/properties/$propertyId/create-unit',
                   params: { propertyId },
                 })
               }

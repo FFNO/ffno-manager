@@ -1,13 +1,13 @@
 import { useList } from '@/api';
+import { PropertyListView, UnitListView } from '@/components/properties';
 import { IPropertyResDto } from '@/libs';
 import { calculatePage } from '@/shared';
 import { Button, Group, Pagination, Stack } from '@mantine/core';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, UploadIcon } from 'lucide-react';
-import { PropertyListView, UnitListView } from '../../../components/properties';
 import { PropertyFilter } from './-components';
 
-export const Route = createLazyFileRoute('/managers/properties/')({
+export const Route = createLazyFileRoute('/properties/')({
   component: PropertyListPage,
 });
 
@@ -27,7 +27,7 @@ function PropertyListPage() {
           Tải lên
         </Button>
         <PropertyFilter />
-        <Link to="/managers/properties/create">
+        <Link to="/properties/create">
           <Button leftSection={<PlusIcon size={16} />}>Thêm tòa nhà</Button>
         </Link>
       </Group>

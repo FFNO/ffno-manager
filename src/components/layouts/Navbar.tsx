@@ -27,30 +27,30 @@ import classes from './MainLayout.module.css';
 import { IMemberResDto, memberRoleRecord } from '@/libs';
 
 const navItems = [
-  { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/managers' },
+  { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/' },
   {
     label: 'Bất động sản',
     icon: BuildingIcon,
     initiallyOpened: true,
     links: [
-      { label: 'Tòa nhà', link: '/managers/properties' },
-      { label: 'Căn hộ', link: '/managers/properties?view=units' },
-      { label: 'Thiết bị & nội thất', link: '/managers/' },
+      { label: 'Tòa nhà', link: '/properties' },
+      { label: 'Căn hộ', link: '/properties?view=units' },
+      { label: 'Thiết bị & nội thất', link: '/' },
     ],
   },
   {
     label: 'Giao dịch',
     icon: ReceiptIcon,
     initiallyOpened: true,
-    links: [{ label: 'Hóa đơn', link: '/managers/invoices' }],
+    links: [{ label: 'Hóa đơn', link: '/invoices' }],
   },
   {
     label: 'Liên lạc',
     icon: ContactIcon,
     initiallyOpened: true,
     links: [
-      { label: 'Người thuê nhà', link: '/managers/contacts?type=0' },
-      { label: 'Dịch vụ chuyên nghiệp', link: '/managers/contacts?type=1' },
+      { label: 'Người thuê nhà', link: '/contacts?type=0' },
+      { label: 'Dịch vụ chuyên nghiệp', link: '/contacts?type=1' },
     ],
   },
   {

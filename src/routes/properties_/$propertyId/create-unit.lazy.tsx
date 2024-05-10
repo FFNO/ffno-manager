@@ -24,11 +24,9 @@ import {
 import { useForm, zodResolver } from '@mantine/form';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 
-export const Route = createLazyFileRoute(
-  '/managers/properties/$propertyId/create-unit',
-)({
-  component: CreateUnitPage,
-});
+export const Route = createLazyFileRoute('/properties/$propertyId/create-unit')(
+  { component: CreateUnitPage },
+);
 
 function CreateUnitPage() {
   const { propertyId } = Route.useParams();
@@ -57,7 +55,7 @@ function CreateUnitPage() {
       message: 'Thêm phòng thành công',
     });
     navigate({
-      to: '/managers/units/$unitId',
+      to: '/units/$unitId',
       params: { unitId: mutate.data! },
     });
   }

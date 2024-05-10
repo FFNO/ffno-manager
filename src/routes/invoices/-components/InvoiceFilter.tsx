@@ -1,6 +1,5 @@
 import { useList } from '@/api';
 import { IPropertyResDto, invoiceCategories } from '@/libs';
-import { Route } from '@/routes/managers/invoices/index';
 import {
   Button,
   Drawer,
@@ -12,11 +11,11 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { SearchIcon } from 'lucide-react';
 
 export function InvoiceFilter() {
-  const search = Route.useSearch();
+  const search = useSearch({ from: '/invoices/' });
   const navigate = useNavigate();
   const { data: propertyList } = useList<IPropertyResDto>({
     resource: 'properties/simple-list',

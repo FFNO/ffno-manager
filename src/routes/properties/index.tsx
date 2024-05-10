@@ -9,7 +9,7 @@ interface SearchParams {
   amenities?: string[];
 }
 
-export const Route = createFileRoute('/managers/properties/')({
+export const Route = createFileRoute('/properties/')({
   validateSearch: (search?: SearchParams) => {
     return {
       ...search,

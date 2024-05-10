@@ -15,7 +15,7 @@ import { useForm } from '@mantine/form';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, SearchIcon } from 'lucide-react';
 
-export const Route = createLazyFileRoute('/managers/contacts/')({
+export const Route = createLazyFileRoute('/contacts/')({
   component: ContactListPage,
 });
 
@@ -94,7 +94,7 @@ function ContactListPage() {
             </form>
           </Popover.Dropdown>
         </Popover>
-        <Link to="/managers/contacts/create">
+        <Link to="/contacts/create">
           <Button leftSection={<PlusIcon size={16} />}>
             {addButtonText()}
           </Button>

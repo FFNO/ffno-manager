@@ -1,5 +1,5 @@
 import { dataProvider } from '@/api';
-import { IUnitResDto } from '@/libs';
+import { IUnitResDto, UnitStatus } from '@/libs';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
@@ -97,8 +97,12 @@ function UnitPage() {
                   </Text>
                   <Text>
                     Tình trạng:{' '}
-                    <Badge color={data.status === 0 ? 'green' : 'red'}>
-                      {data.status === 0 ? 'Còn trống' : 'Đã thuê'}
+                    <Badge
+                      color={data.status === UnitStatus.GOOD ? 'green' : 'red'}
+                    >
+                      {data.status === UnitStatus.GOOD
+                        ? 'Còn trống'
+                        : 'Đã thuê'}
                     </Badge>
                   </Text>
                   <Divider m="md" />

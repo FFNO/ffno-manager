@@ -33,10 +33,7 @@ export const ContactCard = (props: Props) => {
       </Stack>
       <Card.Section>
         <Divider mt={'lg'} />
-        <Link
-          to={'/managers/contacts/$contactId'}
-          params={{ contactId: props.id }}
-        >
+        <Link to={'/contacts/$contactId'} params={{ contactId: props.id }}>
           <Button variant="subtle" fullWidth size="lg">
             View profile
           </Button>

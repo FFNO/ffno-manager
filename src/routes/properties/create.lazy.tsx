@@ -27,7 +27,7 @@ import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { CopyIcon, XIcon } from 'lucide-react';
 import { useEffect } from 'react';
 
-export const Route = createLazyFileRoute('/managers/properties/create')({
+export const Route = createLazyFileRoute('/properties/create')({
   component: PropertyCreatePage,
 });
 
@@ -64,7 +64,7 @@ function PropertyCreatePage() {
       message: 'Thêm tòa nhà thành công',
     });
     navigate({
-      to: '/managers/properties/$propertyId',
+      to: '/properties/$propertyId',
       params: { propertyId: mutate.data! },
     });
   }

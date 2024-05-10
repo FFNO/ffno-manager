@@ -22,7 +22,7 @@ import { useForm, zodResolver } from '@mantine/form';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
-export const Route = createLazyFileRoute('/managers/invoices/create')({
+export const Route = createLazyFileRoute('/invoices/create')({
   component: InvoiceCreate,
 });
 
@@ -34,7 +34,7 @@ function InvoiceCreate() {
     resource: 'units/simple-list',
     onSuccess() {
       showSuccessNotification({ message: 'Thêm hóa đơn thành công' });
-      navigate({ to: '/managers/invoices', search: true, params: true });
+      navigate({ to: '/invoices', search: true, params: true });
     },
   });
 

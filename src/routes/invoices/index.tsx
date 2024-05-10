@@ -7,7 +7,7 @@ interface SearchParams {
   categories?: number[];
 }
 
-export const Route = createFileRoute('/managers/invoices/')({
+export const Route = createFileRoute('/invoices/')({
   validateSearch: (search?: SearchParams) => {
     return {
       ...search,

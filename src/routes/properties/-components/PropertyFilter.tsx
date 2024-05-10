@@ -5,7 +5,6 @@ import {
   Drawer,
   Group,
   MultiSelect,
-  NativeSelect,
   Select,
   Stack,
   Text,
@@ -87,9 +86,10 @@ export const PropertyFilter = () => {
               placeholder="Nhập tên tòa nhà"
               {...form.getInputProps('name')}
             />
-            <NativeSelect
+            <Select
               size="sm"
               label="Kiểu nhà"
+              placeholder="Select property type"
               data={propertyTypes}
               {...form.getInputProps('type')}
             />

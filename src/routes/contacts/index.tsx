@@ -5,7 +5,7 @@ interface QueryDto {
   keyword?: string;
 }
 
-export const Route = createFileRoute('/managers/contacts/')({
+export const Route = createFileRoute('/contacts/')({
   validateSearch: (search: Record<string, string>): QueryDto => ({
     type: search.type || String(0),
     keyword: search.keyword,

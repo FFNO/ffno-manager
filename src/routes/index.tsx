@@ -15,7 +15,7 @@ import { Link, createFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { CalendarIcon } from 'lucide-react';
 
-export const Route = createFileRoute('/managers/')({
+export const Route = createFileRoute('/')({
   component: Index,
 });
 
