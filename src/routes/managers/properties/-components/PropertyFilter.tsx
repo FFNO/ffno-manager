@@ -1,5 +1,5 @@
 import { useSimpleList } from '@/api';
-import { propertyTypes } from '@/shared';
+import { propertyTypes } from '@/libs';
 import {
   Button,
   Drawer,

@@ -1,10 +1,5 @@
-import { UnitStatus, propertyTypeRecord, unitStatusRecord } from '@/libs';
-import { getOptionListFromRecord } from '@/shared';
+import { UnitStatus } from '@/libs';
 import { CreatePropertySchema, CreateUnitSchema } from './properties.schema';
-
-export const propertyTypes = getOptionListFromRecord(propertyTypeRecord);
-
-export const unitStatuses = getOptionListFromRecord(unitStatusRecord);
 
 export const createUnitInitialValues: CreateUnitSchema = {
   name: 'Phòng 1',

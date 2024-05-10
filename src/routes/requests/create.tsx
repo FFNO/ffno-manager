@@ -1,10 +1,9 @@
 import { useCreate, useSimpleList } from '@/api';
-import { RequestCategory } from '@/libs';
+import { RequestCategory, requestCategories } from '@/libs';
 import {
   CreateRequestSchema,
   createRequestInitialValues,
   createRequestSchema,
-  requestCategories,
   showSuccessNotification,
 } from '@/shared';
 import { requestFormAtom } from '@/states';

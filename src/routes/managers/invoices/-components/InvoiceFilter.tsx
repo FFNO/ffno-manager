@@ -1,7 +1,6 @@
 import { useList } from '@/api';
-import { IPropertyResDto } from '@/libs';
+import { IPropertyResDto, invoiceCategories } from '@/libs';
 import { Route } from '@/routes/managers/invoices/index';
-import { invoiceCategories } from '@/shared';
 import {
   Button,
   Drawer,

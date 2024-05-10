@@ -1,12 +1,11 @@
 import { useCreate, useList, useSimpleList } from '@/api';
 import { ImageUpload } from '@/components/common';
-import { IPropertyResDto } from '@/libs';
+import { IPropertyResDto, unitStatuses } from '@/libs';
 import {
   CreateUnitSchema,
   createUnitInitialValues,
   createUnitSchema,
   showSuccessNotification,
-  unitStatuses,
 } from '@/shared';
 import {
   Button,

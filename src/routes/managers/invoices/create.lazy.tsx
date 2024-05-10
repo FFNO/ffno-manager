@@ -1,10 +1,9 @@
 import { useCreate, useList } from '@/api';
-import { IUnitResDto } from '@/libs';
+import { IUnitResDto, invoiceCategories } from '@/libs';
 import {
   CreateInvoiceSchema,
   createInvoiceInitialValues,
   createInvoiceSchema,
-  invoiceCategories,
   showSuccessNotification,
 } from '@/shared';
 import {
