@@ -1,7 +1,7 @@
-import { WritableAtom, atom } from "jotai";
+import { WritableAtom, atom } from 'jotai';
 
 export function atomWithToggle(
-  initialValue?: boolean
+  initialValue?: boolean,
 ): WritableAtom<boolean, [boolean?], void> {
   const anAtom = atom(initialValue, (get, set, nextValue?: boolean) => {
     const update = nextValue ?? !get(anAtom);

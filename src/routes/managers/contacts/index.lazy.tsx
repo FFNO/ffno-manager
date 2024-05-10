@@ -1,6 +1,6 @@
-import { useList } from "@/api";
-import { ContactCard } from "@/components/contacts";
-import { MemberResDto } from "@/libs";
+import { useList } from '@/api';
+import { ContactCard } from '@/components/contacts';
+import { IMemberResDto } from '@/libs';
 import {
   Button,
   Group,
@@ -10,19 +10,19 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { Link, createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { PlusIcon, SearchIcon } from "lucide-react";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { PlusIcon, SearchIcon } from 'lucide-react';
 
-export const Route = createLazyFileRoute("/managers/contacts/")({
+export const Route = createLazyFileRoute('/managers/contacts/')({
   component: ContactListPage,
 });
 
 function ContactListPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const { data } = useList<MemberResDto>({
+  const { data } = useList<IMemberResDto>({
     resource: `members/contacts`,
     params: { ...search },
   });
@@ -33,10 +33,10 @@ function ContactListPage() {
     },
   });
 
-  const addButtonText = () => (search.type ? "Add professional" : "Add tenant");
+  const addButtonText = () => (search.type ? 'Add professional' : 'Add tenant');
 
   return (
-    <Stack p={"lg"}>
+    <Stack p={'lg'}>
       <Group justify="end">
         <Popover shadow="md">
           <Popover.Target>
@@ -66,10 +66,10 @@ function ContactListPage() {
                   size="sm"
                   leftSection={<SearchIcon size={16} />}
                   placeholder="Enter keyword"
-                  {...form.getInputProps("keyword")}
+                  {...form.getInputProps('keyword')}
                 />
               </Stack>
-              <Group justify="end" grow gap={"xs"} mt={12}>
+              <Group justify="end" grow gap={'xs'} mt={12}>
                 <Button type="submit" size="sm">
                   Apply
                 </Button>
@@ -79,7 +79,7 @@ function ContactListPage() {
                   variant="light"
                   color="red"
                   onClick={() => {
-                    form.setValues({ keyword: "" });
+                    form.setValues({ keyword: '' });
                     navigate({
                       search: {
                         ...search,

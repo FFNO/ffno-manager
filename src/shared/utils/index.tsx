@@ -1,0 +1,24 @@
+import { NotificationData, notifications } from '@mantine/notifications';
+import { CheckIcon, XIcon } from 'lucide-react';
+
+export function calculatePage(total?: number) {
+  return Math.ceil((total ?? 10) / 10);
+}
+
+export const showSuccessNotification = (data: Partial<NotificationData>) =>
+  notifications.show({
+    icon: <CheckIcon />,
+    color: 'green',
+    title: 'Thành công',
+    message: 'Thành công',
+    ...data,
+  });
+
+export const showErrorNotification = (data: Partial<NotificationData>) =>
+  notifications.show({
+    icon: <XIcon />,
+    color: 'red',
+    title: 'Error',
+    message: 'Error',
+    ...data,
+  });

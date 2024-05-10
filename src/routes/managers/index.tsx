@@ -10,12 +10,12 @@ import {
   Title,
   Tooltip,
   useMantineTheme,
-} from "@mantine/core";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import dayjs from "dayjs";
-import { CalendarIcon } from "lucide-react";
+} from '@mantine/core';
+import { Link, createFileRoute } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { CalendarIcon } from 'lucide-react';
 
-export const Route = createFileRoute("/managers/")({
+export const Route = createFileRoute('/managers/')({
   component: Index,
 });
 
@@ -31,15 +31,15 @@ function Index() {
               <Group>
                 <CalendarIcon size={32} />
                 <Stack gap={0}>
-                  <Title order={5} tt="capitalize" fw={"bold"}>
-                    {dayjs().format("dddd, DD/MM/YYYY")}
+                  <Title order={5} tt="capitalize" fw={'bold'}>
+                    {dayjs().format('dddd, DD/MM/YYYY')}
                   </Title>
                   <Group gap={4}>
-                    <Text c={"gray"}>
-                      Không có thông báo cho ngày hôm nay.{" "}
+                    <Text c={'gray'}>
+                      Không có thông báo cho ngày hôm nay.{' '}
                     </Text>
                     <Link to="/">
-                      <Text c={theme.primaryColor} fw={"500"}>
+                      <Text c={theme.primaryColor} fw={'500'}>
                         Xem tất cả
                       </Text>
                     </Link>
@@ -48,7 +48,7 @@ function Index() {
               </Group>
             </Card>
             <Card shadow="sm">
-              <Title order={5} mb={"md"}>
+              <Title order={5} mb={'md'}>
                 Tòa nhà và phòng
               </Title>
               <Progress.Root size={40}>
@@ -60,7 +60,7 @@ function Index() {
                 </Tooltip>
               </Progress.Root>
               <Card.Section>
-                <Divider mt={"lg"} />
+                <Divider mt={'lg'} />
                 <Group justify="end">
                   <Button variant="white">Xem tất cả</Button>
                 </Group>

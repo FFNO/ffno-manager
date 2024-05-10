@@ -1,12 +1,6 @@
-import { useUpdate } from "@/api";
-import {
-  MemberRole,
-  RequestCategory,
-  UnitResDto,
-  UnitStatus,
-  showSuccessNotification,
-} from "@/libs";
-import { requestFormAtom } from "@/states";
+import { useUpdate } from '@/api';
+import { IUnitResDto, UnitStatus } from '@/libs';
+import { showSuccessNotification } from '@/shared';
 import {
   AspectRatio,
   Badge,
@@ -21,23 +15,19 @@ import {
   StyleProp,
   Text,
   Title,
-} from "@mantine/core";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useSetAtom } from "jotai";
-import { useState } from "react";
+} from '@mantine/core';
+import { Link } from '@tanstack/react-router';
+import { useState } from 'react';
 
-interface Props extends UnitResDto {
-  memberRole: MemberRole;
+interface Props extends IUnitResDto {
   ml?: StyleProp<MantineSpacing> | undefined;
 }
 
 export function UnitCard(props: Props) {
-  const setRequestForm = useSetAtom(requestFormAtom);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(props.isListing);
 
   const openMutation = useUpdate({
-    resource: "units/open",
+    resource: 'units/open',
     onSuccess: () => {
       showSuccessNotification({
         message: `Tiếp nhận yêu cầu thuê phòng ${props.name} thành công`,
@@ -47,7 +37,7 @@ export function UnitCard(props: Props) {
   });
 
   const closeMutation = useUpdate({
-    resource: "units/close",
+    resource: 'units/close',
     onSuccess: () => {
       showSuccessNotification({
         message: `Dừng nhận yêu cầu thuê phòng ${props.name} thành công`,
@@ -69,7 +59,7 @@ export function UnitCard(props: Props) {
       <Group>
         <AspectRatio ratio={1} w={120}>
           <Image
-            radius={"md"}
+            radius={'md'}
             src={props.imgUrls[0]}
             alt="Norway"
             fallbackSrc="/fallback.png"
@@ -79,30 +69,24 @@ export function UnitCard(props: Props) {
           <Group>
             <Title order={4}>{props.name}</Title>
             {props.tenants?.length ? (
-              <Badge color={"green"}>Đã cho thuê</Badge>
+              <Badge color={'green'}>Đã cho thuê</Badge>
             ) : (
-              <Badge color={"yellow"}>Phòng trống</Badge>
+              <Badge color={'yellow'}>Phòng trống</Badge>
             )}
           </Group>
           <Group>
-            <Text fz={"lg"}>{props.area} m²</Text>
+            <Text fz={'lg'}>{props.area} m²</Text>
             {renderStatus(props.status)}
           </Group>
           <Group>
-            {props.memberRole === MemberRole.TENANT ? (
-              <Button onClick={() => handleRequestLease()}>Yêu cầu thuê</Button>
+            {isOpen ? (
+              <Button color={'red'} onClick={() => handleCloseUnit()}>
+                Dừng nhận yêu cầu cho thuê
+              </Button>
             ) : (
-              <>
-                {isOpen ? (
-                  <Button color={"red"} onClick={() => handleCloseUnit()}>
-                    Dừng nhận yêu cầu cho thuê
-                  </Button>
-                ) : (
-                  <Button color={"green"} onClick={() => handleOpenUnit()}>
-                    Tiếp nhận yêu cầu cho thuê
-                  </Button>
-                )}
-              </>
+              <Button color={'green'} onClick={() => handleOpenUnit()}>
+                Tiếp nhận yêu cầu cho thuê
+              </Button>
             )}
             <NumberFormatter
               suffix=" ₫"
@@ -112,29 +96,13 @@ export function UnitCard(props: Props) {
           </Group>
         </Stack>
         <Box flex={1} />
-        {props.memberRole == MemberRole.TENANT ? (
-          <Link to="/units/$unitId" params={{ unitId: props.id }}>
-            <Button variant="outline">Xem chi tiết</Button>
-          </Link>
-        ) : (
-          <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
-            <Button variant="outline">Xem chi tiết</Button>
-          </Link>
-        )}
+
+        <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
+          <Button variant="outline">Xem chi tiết</Button>
+        </Link>
       </Group>
     </Card>
   );
-
-  function handleRequestLease() {
-    setRequestForm({
-      name: `Yêu cầu thuê phòng ${props.name}`,
-      details: "",
-      category: RequestCategory.UNIT_LEASE,
-      unitId: props.id,
-      propertyId: props.propertyId,
-    });
-    navigate({ to: "/requests/create" });
-  }
 }
 
 function renderStatus(status: UnitStatus) {

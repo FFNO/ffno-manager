@@ -1,5 +1,5 @@
-import { notifications } from "@mantine/notifications";
-import axios from "axios";
+import { notifications } from '@mantine/notifications';
+import axios from 'axios';
 
 export interface ValidationErrors {
   [field: string]:
@@ -34,11 +34,11 @@ axiosInstance.interceptors.response.use(
     notifications.show({
       title: customError.statusCode,
       message: customError.message,
-      color: "red",
+      color: 'red',
     });
 
     return Promise.reject(customError);
-  }
+  },
 );
 
 export { axiosInstance };

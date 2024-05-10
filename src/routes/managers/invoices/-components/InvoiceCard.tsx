@@ -1,7 +1,7 @@
-import { InvoiceResDto } from "@/libs";
-import { Code } from "@mantine/core";
+import { IInvoiceResDto } from '@/libs';
+import { Code } from '@mantine/core';
 
-interface Props extends InvoiceResDto {}
+interface Props extends IInvoiceResDto {}
 
 export const InvoiceCard = (props: Props) => {
   return (

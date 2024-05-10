@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
 
 interface SearchParams {
   page?: number;
@@ -7,7 +7,7 @@ interface SearchParams {
   categories?: number[];
 }
 
-export const Route = createFileRoute("/managers/invoices/")({
+export const Route = createFileRoute('/managers/invoices/')({
   validateSearch: (search?: SearchParams) => {
     return {
       ...search,

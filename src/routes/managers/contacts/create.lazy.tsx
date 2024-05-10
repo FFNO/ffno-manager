@@ -1,5 +1,5 @@
-import { useCreate } from "@/api";
-import { LinkTenantSchema, linkTenantSchema } from "@/libs";
+import { useCreate } from '@/api';
+import { LinkTenantSchema, linkTenantSchema } from '@/shared';
 import {
   Button,
   Divider,
@@ -7,19 +7,19 @@ import {
   Grid,
   Group,
   TextInput,
-} from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import { createLazyFileRoute } from "@tanstack/react-router";
+} from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createLazyFileRoute("/managers/contacts/create")({
+export const Route = createLazyFileRoute('/managers/contacts/create')({
   component: ContactCreatePage,
 });
 
 function ContactCreatePage() {
-  const mutate = useCreate({ resource: "members/create-tenant" });
+  const mutate = useCreate({ resource: 'members/create-tenant' });
 
   const form = useForm<LinkTenantSchema>({
-    initialValues: { keyword: "", email: "", phone: "" },
+    initialValues: { keyword: '', email: '', phone: '' },
     validate: zodResolver(linkTenantSchema),
   });
 
@@ -37,13 +37,13 @@ function ContactCreatePage() {
                 label="Tenant's email"
                 placeholder="Enter tenant's email"
                 withAsterisk
-                {...form.getInputProps("email")}
+                {...form.getInputProps('email')}
               />
             </Grid.Col>
           </Grid>
         </Fieldset>
 
-        <Divider mt={"lg"} pb={"lg"} />
+        <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
           <Button type="submit">Submit</Button>

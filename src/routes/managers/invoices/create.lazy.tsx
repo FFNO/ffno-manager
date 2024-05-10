@@ -1,12 +1,11 @@
-import { useCreate, useList } from "@/api";
+import { useCreate, useList } from '@/api';
+import { IUnitResDto, invoiceCategories } from '@/libs';
 import {
   CreateInvoiceSchema,
-  UnitResDto,
   createInvoiceInitialValues,
   createInvoiceSchema,
-  invoiceCategories,
   showSuccessNotification,
-} from "@/libs";
+} from '@/shared';
 import {
   Button,
   Divider,
@@ -17,25 +16,25 @@ import {
   Select,
   Stack,
   Textarea,
-} from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
-import { useForm, zodResolver } from "@mantine/form";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import { useForm, zodResolver } from '@mantine/form';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
-export const Route = createLazyFileRoute("/managers/invoices/create")({
+export const Route = createLazyFileRoute('/managers/invoices/create')({
   component: InvoiceCreate,
 });
 
 function InvoiceCreate() {
-  const mutate = useCreate({ resource: "invoices" });
+  const mutate = useCreate({ resource: 'invoices' });
   const navigate = useNavigate();
 
-  const { data } = useList<UnitResDto>({
-    resource: "units/simple-list",
+  const { data } = useList<IUnitResDto>({
+    resource: 'units/simple-list',
     onSuccess() {
-      showSuccessNotification({ message: "Thêm hóa đơn thành công" });
-      navigate({ to: "/managers/invoices", search: true, params: true });
+      showSuccessNotification({ message: 'Thêm hóa đơn thành công' });
+      navigate({ to: '/managers/invoices', search: true, params: true });
     },
   });
 
@@ -54,11 +53,11 @@ function InvoiceCreate() {
   }, [form.values.unitId]);
 
   return (
-    <Stack p={"lg"} pos={"relative"}>
+    <Stack p={'lg'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <form onSubmit={handleSubmit}>
         <Grid columns={12}>
@@ -82,7 +81,7 @@ function InvoiceCreate() {
           </Grid.Col>
           <Grid.Col span={4}>
             <NumberInput
-              leftSection={"₫"}
+              leftSection={'₫'}
               label="Số tiền"
               placeholder="Nhập số tiền"
               thousandSeparator=","
@@ -127,12 +126,12 @@ function InvoiceCreate() {
               label="Nội dung hóa đơn"
               placeholder="Nhập nội dung"
               rows={4}
-              {...form.getInputProps("details")}
+              {...form.getInputProps('details')}
             />
           </Grid.Col>
         </Grid>
 
-        <Divider mt={"lg"} pb={"lg"} />
+        <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
           <Button type="submit">Tạo</Button>

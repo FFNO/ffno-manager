@@ -1,5 +1,5 @@
-import { PropertyType } from "@/libs";
-import { createFileRoute } from "@tanstack/react-router";
+import { PropertyType } from '@/libs';
+import { createFileRoute } from '@tanstack/react-router';
 
 interface SearchParams {
   page?: number;
@@ -9,11 +9,11 @@ interface SearchParams {
   amenities?: string[];
 }
 
-export const Route = createFileRoute("/managers/properties/")({
+export const Route = createFileRoute('/managers/properties/')({
   validateSearch: (search?: SearchParams) => {
     return {
       ...search,
-      view: search?.view ?? "properties",
+      view: search?.view ?? 'properties',
       page: +(search?.page ?? 1),
     };
   },

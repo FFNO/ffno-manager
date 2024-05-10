@@ -1,5 +1,5 @@
-import { useSimpleList } from "@/api";
-import { propertyTypes } from "@/libs";
+import { useSimpleList } from '@/api';
+import { propertyTypes } from '@/libs';
 import {
   Button,
   Drawer,
@@ -10,12 +10,12 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
-import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { Route } from "../index";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Route } from '../index';
 
 export const PropertyFilter = () => {
   const search = Route.useSearch();
@@ -25,7 +25,7 @@ export const PropertyFilter = () => {
 
   const form = useForm({
     initialValues: {
-      name: "",
+      name: '',
       type: search.type || null,
       province: null,
       district: null,
@@ -34,14 +34,14 @@ export const PropertyFilter = () => {
     },
   });
 
-  const { data: amenities } = useSimpleList({ resource: "amenities" });
-  const { data: provinces } = useSimpleList({ resource: "provinces" });
+  const { data: amenities } = useSimpleList({ resource: 'amenities' });
+  const { data: provinces } = useSimpleList({ resource: 'provinces' });
   const { data: districts } = useSimpleList({
-    resource: "districts",
+    resource: 'districts',
     params: { province: form.values.province },
   });
   const { data: wards } = useSimpleList({
-    resource: "wards",
+    resource: 'wards',
     params: { district: form.values.district },
   });
 
@@ -85,13 +85,13 @@ export const PropertyFilter = () => {
             <TextInput
               label="Tên tòa nhà"
               placeholder="Nhập tên tòa nhà"
-              {...form.getInputProps("name")}
+              {...form.getInputProps('name')}
             />
             <NativeSelect
               size="sm"
               label="Kiểu nhà"
               data={propertyTypes}
-              {...form.getInputProps("type")}
+              {...form.getInputProps('type')}
             />
             <Select
               searchable
@@ -99,7 +99,7 @@ export const PropertyFilter = () => {
               label="Tỉnh"
               placeholder="Chọn tỉnh"
               data={provinces ?? []}
-              {...form.getInputProps("province")}
+              {...form.getInputProps('province')}
             />
             <Select
               searchable
@@ -108,7 +108,7 @@ export const PropertyFilter = () => {
               label="Huyện"
               placeholder="Chọn huyện"
               data={districts ?? []}
-              {...form.getInputProps("district")}
+              {...form.getInputProps('district')}
             />
             <Select
               clearable
@@ -117,17 +117,17 @@ export const PropertyFilter = () => {
               label="Xã"
               placeholder="Chọn xã"
               data={wards ?? []}
-              {...form.getInputProps("ward")}
+              {...form.getInputProps('ward')}
             />
             <MultiSelect
               searchable
               label="Tiện ích"
               placeholder="Chọn tiện ích"
               data={amenities ?? []}
-              {...form.getInputProps("amenities")}
+              {...form.getInputProps('amenities')}
             />
           </Stack>
-          <Group justify="end" grow gap={"xs"} mt={12}>
+          <Group justify="end" grow gap={'xs'} mt={12}>
             <Button type="submit" size="sm" onClick={close}>
               Tìm kiếm
             </Button>

@@ -1,4 +1,4 @@
-import { PropertyResDto, PropertyType } from "@/libs";
+import { IPropertyResDto, PropertyType } from '@/libs';
 import {
   AspectRatio,
   Badge,
@@ -11,11 +11,11 @@ import {
   Title,
   rem,
   useMantineTheme,
-} from "@mantine/core";
-import { Link } from "@tanstack/react-router";
-import { MapPinnedIcon } from "lucide-react";
+} from '@mantine/core';
+import { Link } from '@tanstack/react-router';
+import { MapPinnedIcon } from 'lucide-react';
 
-interface Props extends PropertyResDto {}
+interface Props extends IPropertyResDto {}
 
 export const PropertyCard = (props: Props) => {
   const { id, imgUrls } = props;
@@ -26,21 +26,21 @@ export const PropertyCard = (props: Props) => {
         <Group>
           <AspectRatio ratio={1} style={{ flex: `0 0 ${rem(160)}` }}>
             <Image
-              radius={"md"}
+              radius={'md'}
               src={imgUrls[0]}
               alt="Norway"
               fallbackSrc="/fallback.png"
             />
           </AspectRatio>
-          <Stack flex={1} h={"100%"} justify="start" gap={"sm"}>
+          <Stack flex={1} h={'100%'} justify="start" gap={'sm'}>
             <Title order={5}>{props.name}</Title>
-            <Group gap={"xs"}>
+            <Group gap={'xs'}>
               <MapPinnedIcon size={24} color={theme.colors.gray[6]} />
               <Box>
-                <Text fz={"sm"} c={theme.colors.gray[6]}>
+                <Text fz={'sm'} c={theme.colors.gray[6]}>
                   {`${props.address}`}
                 </Text>
-                <Text fz={"sm"} c={theme.colors.gray[6]}>
+                <Text fz={'sm'} c={theme.colors.gray[6]}>
                   {`${props.ward}, ${props.district}, ${props.province}`}
                 </Text>
               </Box>
@@ -74,5 +74,5 @@ export const PropertyCard = (props: Props) => {
 };
 
 function propertyType(type: PropertyType, unitCount: number) {
-  return (type === 0 ? "Nguyên căn" : `${unitCount} phòng`).toUpperCase();
+  return (type === 0 ? 'Nguyên căn' : `${unitCount} phòng`).toUpperCase();
 }

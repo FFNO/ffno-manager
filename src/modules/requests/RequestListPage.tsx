@@ -1,5 +1,5 @@
-import { RequestCard } from "@/components/requests";
-import { calculatePage } from "@/libs";
+import { RequestCard } from '@/components/requests';
+import { calculatePage } from '@/shared';
 import {
   Button,
   Group,
@@ -7,23 +7,23 @@ import {
   SimpleGrid,
   Stack,
   Tabs,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   Link,
   useLoaderData,
   useNavigate,
   useSearch,
-} from "@tanstack/react-router";
-import { PlusIcon, UploadIcon } from "lucide-react";
+} from '@tanstack/react-router';
+import { PlusIcon, UploadIcon } from 'lucide-react';
 
 export function RequestListPage() {
-  const data = useLoaderData({ from: "/requests/" });
-  const search = useSearch({ from: "/requests/" });
+  const data = useLoaderData({ from: '/requests/' });
+  const search = useSearch({ from: '/requests/' });
   const navigate = useNavigate();
 
   return (
     <div>
-      <Stack p={"lg"}>
+      <Stack p={'lg'}>
         <Group justify="end">
           <Button variant="outline" leftSection={<UploadIcon size={16} />}>
             Tải lên
@@ -35,7 +35,7 @@ export function RequestListPage() {
         </Group>
         <Tabs
           variant="pills"
-          defaultValue={"received"}
+          defaultValue={'received'}
           onChange={(value) => navigate({ search: { type: value } })}
         >
           <Tabs.List>
