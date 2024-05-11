@@ -29,7 +29,10 @@ export const ContactCard = (props: Props) => {
         <Avatar src={props.imgUrl} size={'xl'} />
         <Title>{props.name}</Title>
         <Text>{props.phone}</Text>
-        <Text>{props.unit}</Text>
+        <Text fz={'lg'} fw={'bold'}>
+          Unit &nbsp;
+          {props.unit}
+        </Text>
       </Stack>
       <Card.Section>
         <Divider mt={'lg'} />

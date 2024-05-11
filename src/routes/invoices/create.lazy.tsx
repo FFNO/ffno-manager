@@ -81,9 +81,9 @@ function InvoiceCreate() {
           </Grid.Col>
           <Grid.Col span={4}>
             <NumberInput
-              leftSection={'₫'}
               label="Số tiền"
               placeholder="Nhập số tiền"
+              suffix={' ₫'}
               thousandSeparator=","
               step={1000}
               allowDecimal

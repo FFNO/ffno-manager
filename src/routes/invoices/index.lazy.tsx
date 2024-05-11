@@ -1,6 +1,6 @@
 import { useList } from '@/api';
 import { IInvoiceResDto } from '@/libs';
-import { calculatePage } from '@/shared';
+import { calculatePage } from '@/libs/helpers';
 import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon, UploadIcon } from 'lucide-react';

@@ -6,7 +6,7 @@ import {
   createRequestSchema,
   showSuccessNotification,
 } from '@/shared';
-import { requestFormAtom } from '@/states';
+import { requestFormAtom } from '@/app';
 import {
   Button,
   Divider,

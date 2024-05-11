@@ -1,7 +1,7 @@
 import { axiosInstance } from '@/api/utils';
+import { currentMemberAtom } from '@/app';
 import { ISignInDto, MemberRole } from '@/libs';
-import { showErrorNotification, signInSchema } from '@/shared';
-import { memberAtom } from '@/states';
+import { showErrorNotification } from '@/shared';
 import {
   Button,
   Divider,
@@ -17,40 +17,41 @@ import { createLazyFileRoute } from '@tanstack/react-router';
 import { HttpStatusCode } from 'axios';
 import { useSetAtom } from 'jotai';
 import OneSignal from 'react-onesignal';
+import { z } from 'zod';
 
 export const Route = createLazyFileRoute('/auth/sign-in')({
   component: SignInPage,
 });
 
+const signInSchema: z.ZodSchema<ISignInDto> = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must contain more than 6 characters'),
+});
+
 export function SignInPage() {
   const signInForm = useForm<ISignInDto>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
     validate: zodResolver(signInSchema),
   });
-  const setMember = useSetAtom(memberAtom);
+
+  const setMember = useSetAtom(currentMemberAtom);
 
   const handleSignIn = async (values: ISignInDto) => {
     const { data, status } = await axiosInstance.post('auth/sign-in', values);
-    if (status === HttpStatusCode.Created) {
-      if (![MemberRole.ADMIN, MemberRole.LANDLORD].includes(data.role)) {
-        showErrorNotification({ message: 'Invalid credentials' });
-        return;
-      }
-      OneSignal.User.addTag('memberId', data.id);
-      setMember(data);
+    if (status !== HttpStatusCode.Created) return;
+
+    if (![MemberRole.ADMIN, MemberRole.LANDLORD].includes(data.role)) {
+      showErrorNotification({
+        message: 'You do not have permission to access this page',
+      });
+      return;
     }
+
+    OneSignal.User.addTag('memberId', data.id);
+    setMember(data);
   };
 
   return (
-    <Paper
-      p="xl"
-      withBorder
-      miw={{ base: '100%', md: 512 }}
-      maw={{ base: '100%', md: 512 }}
-    >
+    <Paper p="xl" withBorder miw={512}>
       <Text size="lg" fw={500}>
         Welcome to {import.meta.env.VITE_APP_NAME}
       </Text>
@@ -60,28 +61,15 @@ export function SignInPage() {
       <form onSubmit={signInForm.onSubmit(handleSignIn)}>
         <Stack>
           <TextInput
-            required
             label="Email"
-            placeholder="hello@mantine.dev"
-            value={signInForm.values.email}
-            onChange={(event) =>
-              signInForm.setFieldValue('email', event.currentTarget.value)
-            }
-            error={signInForm.errors.email && 'Invalid email'}
+            placeholder="hello@world.dev"
+            {...signInForm.getInputProps('email')}
           />
 
           <PasswordInput
-            required
             label="Password"
-            placeholder="Your password"
-            value={signInForm.values.password}
-            onChange={(event) =>
-              signInForm.setFieldValue('password', event.currentTarget.value)
-            }
-            error={
-              signInForm.errors.password &&
-              'Password should include at least 6 characters'
-            }
+            placeholder="Enter your password"
+            {...signInForm.getInputProps('password')}
           />
         </Stack>
 

@@ -9,6 +9,7 @@ export const createUnitSchema = z.object({
   unitFeatures: z.array(z.string()).optional(),
   propertyId: z.string().uuid().optional(),
   status: z.coerce.string().optional(),
+  imgUrls: z.array(z.string().url()).optional(),
 });
 
 export const createPropertySchema = z.object({

@@ -23,14 +23,14 @@ import {
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 
-export const Route = createFileRoute('/units/$unitId')({
+export const Route = createFileRoute('/units/$id')({
   component: UnitPage,
-  loader: ({ params: { unitId } }) =>
-    dataProvider.getOne<IUnitResDto>({ resource: 'units', id: unitId }),
+  loader: ({ params: { id } }) =>
+    dataProvider.getOne<IUnitResDto>({ resource: 'units', id }),
 });
 
 function UnitPage() {
-  const data = useLoaderData({ from: '/units/$unitId' });
+  const data = useLoaderData({ from: '/units/$id' });
 
   return (
     <Paper p={'lg'}>

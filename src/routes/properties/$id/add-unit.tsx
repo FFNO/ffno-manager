@@ -8,6 +8,7 @@ import {
   showSuccessNotification,
 } from '@/shared';
 import {
+  Breadcrumbs,
   Button,
   Divider,
   Fieldset,
@@ -15,23 +16,23 @@ import {
   Group,
   LoadingOverlay,
   MultiSelect,
-  NativeSelect,
   NumberInput,
   Select,
   Stack,
   TextInput,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 
-export const Route = createLazyFileRoute('/properties/$propertyId/create-unit')(
-  { component: CreateUnitPage },
-);
+export const Route = createFileRoute('/properties/$id/add-unit')({
+  component: Page,
+});
 
-function CreateUnitPage() {
-  const { propertyId } = Route.useParams();
+function Page() {
+  const { id: propertyId } = Route.useParams();
   const mutate = useCreate({ resource: 'units', onSuccess: onCreateSuccess });
   const navigate = useNavigate();
+
   const form = useForm<CreateUnitSchema>({
     initialValues: {
       ...createUnitInitialValues,
@@ -49,38 +50,43 @@ function CreateUnitPage() {
     mutate.mutate(values);
   });
 
-  function onCreateSuccess() {
+  function onCreateSuccess(id: string) {
     showSuccessNotification({
-      id: 'create-unit-successfully',
-      message: 'Thêm phòng thành công',
+      id: 'add-unit-successfully',
+      message: 'Successfully added unit',
     });
-    navigate({
-      to: '/units/$unitId',
-      params: { unitId: mutate.data! },
-    });
+    navigate({ to: '/units/$id', params: { id } });
   }
 
   return (
-    <Stack p={'lg'} pos={'relative'}>
+    <Stack px={120} p={'md'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/properties">Properties</Link>
+        <Link to="/properties/$id" params={{ id: propertyId }}>
+          {propertyList?.data.find(({ id }) => id === propertyId)?.name}
+        </Link>
+        <p>Add unit</p>
+      </Breadcrumbs>
       <form onSubmit={handleSubmit}>
-        <Fieldset legend="Thông tin phòng">
+        <Fieldset legend="Unit information">
           <Grid>
             <Grid.Col span={4}>
               <TextInput
-                label="Tên phòng"
-                placeholder="Nhập tên phòng"
+                label="Unit name"
+                placeholder="Enter unit name"
                 withAsterisk
                 {...form.getInputProps(`name`)}
               />
             </Grid.Col>
             <Grid.Col span={4}>
-              <NativeSelect
-                label="Trạng thái"
+              <Select
+                label="Status"
                 withAsterisk
                 data={unitStatuses}
                 {...form.getInputProps(`status`)}
@@ -88,8 +94,8 @@ function CreateUnitPage() {
             </Grid.Col>
             <Grid.Col span={4}>
               <Select
-                label="Tòa nhà"
-                placeholder="Chọn tòa nhà"
+                label="Property"
+                placeholder="Select property"
                 withAsterisk
                 disabled={!!propertyId}
                 data={propertyList?.data.map((item) => ({
@@ -101,20 +107,19 @@ function CreateUnitPage() {
             </Grid.Col>
             <Grid.Col span={4}>
               <NumberInput
-                label="Diện tích"
-                placeholder="Nhập diện tích"
+                label="Area"
                 withAsterisk
+                min={0}
                 suffix=" m²"
                 {...form.getInputProps(`area`)}
               />
             </Grid.Col>
             <Grid.Col span={4}>
               <NumberInput
-                label="Giá thuê"
-                placeholder="Nhập giá thuê"
+                label="Price"
                 withAsterisk
                 min={0}
-                prefix="₫ "
+                suffix=" ₫"
                 thousandSeparator=","
                 step={1000}
                 {...form.getInputProps(`price`)}
@@ -122,11 +127,10 @@ function CreateUnitPage() {
             </Grid.Col>
             <Grid.Col span={4}>
               <NumberInput
-                label="Giá cọc"
-                placeholder="Nhập giá cọc"
+                label="Deposit"
                 withAsterisk
                 min={0}
-                prefix="₫ "
+                suffix=" ₫"
                 thousandSeparator=","
                 step={1000}
                 {...form.getInputProps(`deposit`)}
@@ -137,9 +141,9 @@ function CreateUnitPage() {
 
         <Divider mt={'lg'} pb={'lg'} />
 
-        <Fieldset legend="Tiện nghi">
+        <Fieldset legend="Features">
           <MultiSelect
-            placeholder="Chọn tiện nghi"
+            placeholder="Select features"
             data={
               unitFeatures?.map((item) => ({ value: item, label: item })) ?? []
             }
@@ -147,17 +151,25 @@ function CreateUnitPage() {
           />
         </Fieldset>
 
-        <ImageUpload setUrls={(urls) => form.setFieldValue('imgUrls', urls)} />
+        <Divider mt={'lg'} pb={'lg'} />
+
+        <Fieldset legend="Images">
+          <ImageUpload
+            setUrls={(urls) => form.setFieldValue('imgUrls', urls)}
+          />
+        </Fieldset>
+
+        <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
-          <Button type="submit">Tạo</Button>
+          <Button type="submit">Create</Button>
           <Button
             variant="outline"
             color="red"
             type="button"
             onClick={() => form.reset()}
           >
-            Hủy
+            Cancel
           </Button>
         </Group>
       </form>

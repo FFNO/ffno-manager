@@ -1,6 +1,6 @@
 import { useList } from '@/api';
+import { channelRecordAtom } from '@/app/';
 import { IChannelDto } from '@/libs';
-import { channelRecordAtom } from '@/states/chat';
 import {
   Accordion,
   ActionIcon,

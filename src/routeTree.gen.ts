@@ -20,25 +20,24 @@ import { Route as RequestsIndexImport } from './routes/requests/index'
 import { Route as PropertiesIndexImport } from './routes/properties/index'
 import { Route as InvoicesIndexImport } from './routes/invoices/index'
 import { Route as ContactsIndexImport } from './routes/contacts/index'
-import { Route as UnitsUnitIdImport } from './routes/units/$unitId'
+import { Route as UnitsCreateImport } from './routes/units/create'
+import { Route as UnitsIdImport } from './routes/units/$id'
 import { Route as RequestsCreateImport } from './routes/requests/create'
-import { Route as RequestsRequestIdImport } from './routes/requests/$requestId'
+import { Route as RequestsIdImport } from './routes/requests/$id'
+import { Route as PropertiesCreateImport } from './routes/properties/create'
 import { Route as MembersMeImport } from './routes/members/me'
+import { Route as MembersIdImport } from './routes/members/$id'
 import { Route as ChatChannelIdImport } from './routes/chat/$channelId'
+import { Route as PropertiesIdIndexImport } from './routes/properties/$id/index'
+import { Route as PropertiesIdUpdateImport } from './routes/properties/$id/update'
+import { Route as PropertiesIdAddUnitImport } from './routes/properties/$id/add-unit'
 
 // Create Virtual Routes
 
-const PropertiesCreateLazyImport = createFileRoute('/properties/create')()
-const PropertiesPropertyIdLazyImport = createFileRoute(
-  '/properties/$propertyId',
-)()
 const InvoicesCreateLazyImport = createFileRoute('/invoices/create')()
 const ContactsCreateLazyImport = createFileRoute('/contacts/create')()
 const ContactsContactIdLazyImport = createFileRoute('/contacts/$contactId')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
-const PropertiesPropertyIdCreateUnitLazyImport = createFileRoute(
-  '/properties/$propertyId/create-unit',
-)()
 
 // Create/Update Routes
 
@@ -65,9 +64,7 @@ const RequestsIndexRoute = RequestsIndexImport.update({
 const PropertiesIndexRoute = PropertiesIndexImport.update({
   path: '/properties/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/index.lazy').then((d) => d.Route),
-)
+} as any)
 
 const InvoicesIndexRoute = InvoicesIndexImport.update({
   path: '/invoices/',
@@ -81,20 +78,6 @@ const ContactsIndexRoute = ContactsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/contacts/index.lazy').then((d) => d.Route),
-)
-
-const PropertiesCreateLazyRoute = PropertiesCreateLazyImport.update({
-  path: '/properties/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/create.lazy').then((d) => d.Route),
-)
-
-const PropertiesPropertyIdLazyRoute = PropertiesPropertyIdLazyImport.update({
-  path: '/properties/$propertyId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/properties/$propertyId.lazy').then((d) => d.Route),
 )
 
 const InvoicesCreateLazyRoute = InvoicesCreateLazyImport.update({
@@ -123,8 +106,13 @@ const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
 
-const UnitsUnitIdRoute = UnitsUnitIdImport.update({
-  path: '/units/$unitId',
+const UnitsCreateRoute = UnitsCreateImport.update({
+  path: '/units/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UnitsIdRoute = UnitsIdImport.update({
+  path: '/units/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -133,8 +121,13 @@ const RequestsCreateRoute = RequestsCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const RequestsRequestIdRoute = RequestsRequestIdImport.update({
-  path: '/requests/$requestId',
+const RequestsIdRoute = RequestsIdImport.update({
+  path: '/requests/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PropertiesCreateRoute = PropertiesCreateImport.update({
+  path: '/properties/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -143,20 +136,30 @@ const MembersMeRoute = MembersMeImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MembersIdRoute = MembersIdImport.update({
+  path: '/members/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ChatChannelIdRoute = ChatChannelIdImport.update({
   path: '/$channelId',
   getParentRoute: () => ChatRoute,
 } as any)
 
-const PropertiesPropertyIdCreateUnitLazyRoute =
-  PropertiesPropertyIdCreateUnitLazyImport.update({
-    path: '/properties/$propertyId/create-unit',
-    getParentRoute: () => rootRoute,
-  } as any).lazy(() =>
-    import('./routes/properties_/$propertyId/create-unit.lazy').then(
-      (d) => d.Route,
-    ),
-  )
+const PropertiesIdIndexRoute = PropertiesIdIndexImport.update({
+  path: '/properties/$id/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PropertiesIdUpdateRoute = PropertiesIdUpdateImport.update({
+  path: '/properties/$id/update',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PropertiesIdAddUnitRoute = PropertiesIdAddUnitImport.update({
+  path: '/properties/$id/add-unit',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -174,20 +177,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatChannelIdImport
       parentRoute: typeof ChatImport
     }
+    '/members/$id': {
+      preLoaderRoute: typeof MembersIdImport
+      parentRoute: typeof rootRoute
+    }
     '/members/me': {
       preLoaderRoute: typeof MembersMeImport
       parentRoute: typeof rootRoute
     }
-    '/requests/$requestId': {
-      preLoaderRoute: typeof RequestsRequestIdImport
+    '/properties/create': {
+      preLoaderRoute: typeof PropertiesCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/requests/$id': {
+      preLoaderRoute: typeof RequestsIdImport
       parentRoute: typeof rootRoute
     }
     '/requests/create': {
       preLoaderRoute: typeof RequestsCreateImport
       parentRoute: typeof rootRoute
     }
-    '/units/$unitId': {
-      preLoaderRoute: typeof UnitsUnitIdImport
+    '/units/$id': {
+      preLoaderRoute: typeof UnitsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/units/create': {
+      preLoaderRoute: typeof UnitsCreateImport
       parentRoute: typeof rootRoute
     }
     '/auth/sign-in': {
@@ -204,14 +219,6 @@ declare module '@tanstack/react-router' {
     }
     '/invoices/create': {
       preLoaderRoute: typeof InvoicesCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/properties/$propertyId': {
-      preLoaderRoute: typeof PropertiesPropertyIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/properties/create': {
-      preLoaderRoute: typeof PropertiesCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/contacts/': {
@@ -234,8 +241,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/properties/$propertyId/create-unit': {
-      preLoaderRoute: typeof PropertiesPropertyIdCreateUnitLazyImport
+    '/properties/$id/add-unit': {
+      preLoaderRoute: typeof PropertiesIdAddUnitImport
+      parentRoute: typeof rootRoute
+    }
+    '/properties/$id/update': {
+      preLoaderRoute: typeof PropertiesIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
+    '/properties/$id/': {
+      preLoaderRoute: typeof PropertiesIdIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -246,22 +261,25 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatRoute.addChildren([ChatChannelIdRoute]),
+  MembersIdRoute,
   MembersMeRoute,
-  RequestsRequestIdRoute,
+  PropertiesCreateRoute,
+  RequestsIdRoute,
   RequestsCreateRoute,
-  UnitsUnitIdRoute,
+  UnitsIdRoute,
+  UnitsCreateRoute,
   AuthSignInLazyRoute,
   ContactsContactIdLazyRoute,
   ContactsCreateLazyRoute,
   InvoicesCreateLazyRoute,
-  PropertiesPropertyIdLazyRoute,
-  PropertiesCreateLazyRoute,
   ContactsIndexRoute,
   InvoicesIndexRoute,
   PropertiesIndexRoute,
   RequestsIndexRoute,
   UnitsIndexRoute,
-  PropertiesPropertyIdCreateUnitLazyRoute,
+  PropertiesIdAddUnitRoute,
+  PropertiesIdUpdateRoute,
+  PropertiesIdIndexRoute,
 ])
 
 /* prettier-ignore-end */

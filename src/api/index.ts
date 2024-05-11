@@ -12,7 +12,7 @@ interface Props {
   resource: string;
   enabled?: boolean;
   params?: Record<string, unknown>;
-  onSuccess?: () => void;
+  onSuccess?: (data: string, variables: unknown, context: unknown) => unknown;
 }
 
 interface PropsWithId extends Props {

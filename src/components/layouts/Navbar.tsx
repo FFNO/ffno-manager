@@ -1,5 +1,6 @@
 import { axiosInstance } from '@/api/utils';
-import { memberAtom } from '@/states';
+import { IMemberResDto, memberRoleRecord } from '@/libs';
+import { currentMemberAtom } from '@/app';
 import {
   Avatar,
   Button,
@@ -24,17 +25,16 @@ import {
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
-import { IMemberResDto, memberRoleRecord } from '@/libs';
 
 const navItems = [
-  { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/' },
+  { label: 'Overview', icon: CircleGaugeIcon, link: '/' },
   {
-    label: 'Bất động sản',
+    label: 'Properties',
     icon: BuildingIcon,
     initiallyOpened: true,
     links: [
-      { label: 'Tòa nhà', link: '/properties' },
-      { label: 'Căn hộ', link: '/properties?view=units' },
+      { label: 'Properties', link: '/properties' },
+      { label: 'Units', link: '/units' },
       { label: 'Thiết bị & nội thất', link: '/' },
     ],
   },
@@ -68,7 +68,7 @@ const navItems = [
 export function Navbar() {
   const theme = useMantineTheme();
 
-  const [member, setMember] = useAtom(memberAtom);
+  const [member, setMember] = useAtom(currentMemberAtom);
 
   const links = navItems.map((item) => (
     <LinksGroup {...item} key={item.label} />

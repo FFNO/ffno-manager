@@ -1,4 +1,5 @@
 import { useCreate, useSimpleList } from '@/api';
+import { PropertyType } from '@/libs';
 import {
   CreatePropertySchema,
   createPropertyFormInitialValues,
@@ -7,6 +8,7 @@ import {
   showSuccessNotification,
 } from '@/shared';
 import {
+  Breadcrumbs,
   Button,
   Chip,
   Divider,
@@ -23,17 +25,18 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import { CopyIcon, XIcon } from 'lucide-react';
 import { useEffect } from 'react';
 
-export const Route = createLazyFileRoute('/properties/create')({
-  component: PropertyCreatePage,
+export const Route = createFileRoute('/properties/create')({
+  component: Page,
 });
 
-function PropertyCreatePage() {
+function Page() {
   const navigate = useNavigate();
   const theme = useMantineTheme();
+
   const mutate = useCreate({
     resource: 'properties',
     onSuccess: onCreateSuccess,
@@ -59,14 +62,9 @@ function PropertyCreatePage() {
     mutate.mutate(values);
   });
 
-  function onCreateSuccess() {
-    showSuccessNotification({
-      message: 'Thêm tòa nhà thành công',
-    });
-    navigate({
-      to: '/properties/$propertyId',
-      params: { propertyId: mutate.data! },
-    });
+  function onCreateSuccess(id: string) {
+    showSuccessNotification({ message: 'Successfully add property' });
+    navigate({ to: '/properties/$id', params: { id } });
   }
 
   useEffect(() => {
@@ -85,27 +83,32 @@ function PropertyCreatePage() {
   }, [form.values.district]);
 
   return (
-    <Stack p={'lg'} pos={'relative'}>
+    <Stack px={120} py={'md'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/properties">Properties</Link>
+        <p>Add property</p>
+      </Breadcrumbs>
       <form onSubmit={handleSubmit}>
-        <Fieldset legend="Thông tin cơ bản">
+        <Fieldset legend="Basic information">
           <Grid>
             <Grid.Col span={6}>
               <TextInput
-                label="Tên tòa nhà"
-                placeholder="Nhập tên tòa nhà"
+                label="Property name"
+                placeholder="Enter property name"
                 withAsterisk
                 {...form.getInputProps('name')}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <TextInput
-                label="Địa chỉ"
-                placeholder="Nhập địa chỉ"
+                label="Address"
+                placeholder="Enter address"
                 withAsterisk
                 {...form.getInputProps('address')}
               />
@@ -115,8 +118,8 @@ function PropertyCreatePage() {
                 searchable
                 clearable
                 withAsterisk
-                label="Tỉnh"
-                placeholder="Chọn tỉnh"
+                label="Province"
+                placeholder="Select province"
                 data={provinces ?? []}
                 {...form.getInputProps('province')}
               />
@@ -127,8 +130,8 @@ function PropertyCreatePage() {
                 searchable
                 clearable
                 disabled={!form.values.province}
-                label="Huyện"
-                placeholder="Chọn huyện"
+                label="District"
+                placeholder="Select district"
                 data={districts ?? []}
                 {...form.getInputProps('district')}
               />
@@ -139,8 +142,8 @@ function PropertyCreatePage() {
                 clearable
                 searchable
                 disabled={!form.values.province || !form.values.district}
-                label="Xã"
-                placeholder="Chọn xã"
+                label="Ward"
+                placeholder="Select ward"
                 data={wards ?? []}
                 {...form.getInputProps('ward')}
               />
@@ -150,43 +153,36 @@ function PropertyCreatePage() {
 
         <Divider mt={'lg'} pb={'lg'} />
 
-        <Fieldset legend="Kiểu tòa nhà">
+        <Fieldset legend="Property type">
           <SegmentedControl
             fullWidth
             withItemsBorders={false}
             color={theme.primaryColor}
             data={[
               {
-                value: '0',
+                value: PropertyType.SINGLE_UNIT,
                 label: (
-                  <Stack p={'lg'}>
-                    <Title order={5}>
-                      {'Nhà cho thuê nguyên căn'.toUpperCase()}
-                    </Title>
-                    <span
-                      style={{
-                        fontWeight: '400',
-                        fontSize: theme.fontSizes.sm,
-                      }}
-                    >
-                      <span style={{ fontWeight: 'bold' }}>
-                        Không thể thêm nhiều phòng
-                      </span>
+                  <Stack p={'lg'} h={'100%'}>
+                    <Title order={5}>{'Single Unit'.toUpperCase()}</Title>
+                    <span className="font-normal text-sm text-wrap min-h-24">
+                      A standalone residential dwelling, such as a detached
+                      house or condominium unit, designed to accommodate one
+                      household.
                     </span>
                   </Stack>
                 ),
               },
               {
-                value: '1',
+                value: PropertyType.MULTIPLE_UNIT,
                 label: (
                   <Stack p={'lg'}>
-                    <Title order={5}>{'Nhiều phòng'.toUpperCase()}</Title>
-                    <span
-                      style={{
-                        fontWeight: '400',
-                        fontSize: theme.fontSizes.sm,
-                      }}
-                    ></span>
+                    <Title order={5}>{'Multiple unit'.toUpperCase()}</Title>
+                    <span className="font-normal text-sm text-wrap min-h-24">
+                      A residential or commercial property containing more than
+                      one individual living or working space, such as apartment
+                      buildings, condominium complexes, or office buildings with
+                      multiple tenants.
+                    </span>
                   </Stack>
                 ),
               },
@@ -197,7 +193,7 @@ function PropertyCreatePage() {
 
         <Divider mt={'lg'} pb={'lg'} />
 
-        <Fieldset legend="Thông tin các phòng">
+        <Fieldset legend="Unit information">
           {form.values.units?.map((unit, index) => (
             <Fieldset key={index} legend={unit.name} mb={'md'}>
               <Grid columns={10}>
@@ -209,7 +205,7 @@ function PropertyCreatePage() {
                       onClick={() =>
                         form.insertListItem('units', {
                           ...unit,
-                          name: `Phòng ${1 + (form.values.units?.length ?? 0)}`,
+                          name: `${1 + (form.values.units?.length ?? 0)}`,
                         })
                       }
                     >
@@ -220,22 +216,22 @@ function PropertyCreatePage() {
                       leftSection={<XIcon size={16} />}
                       onClick={() => form.removeListItem('units', index)}
                     >
-                      Xóa
+                      Clear
                     </Button>
                   </Group>
                 </Grid.Col>
                 <Grid.Col span={2}>
                   <TextInput
-                    label="Tên phòng"
-                    placeholder="Nhập tên phòng"
+                    label="Unit name"
+                    placeholder="Enter unit name"
                     withAsterisk
                     {...form.getInputProps(`units.${index}.name`)}
                   />
                 </Grid.Col>
                 <Grid.Col span={2}>
                   <NumberInput
-                    label="Diện tích"
-                    placeholder="Nhập diện tích"
+                    label="Area"
+                    placeholder="Enter area"
                     withAsterisk
                     suffix=" m²"
                     {...form.getInputProps(`units.${index}.area`)}
@@ -243,8 +239,8 @@ function PropertyCreatePage() {
                 </Grid.Col>
                 <Grid.Col span={2}>
                   <NumberInput
-                    label="Giá thuê"
-                    placeholder="Nhập giá thuê"
+                    label="Price"
+                    placeholder="Enter price"
                     withAsterisk
                     min={0}
                     prefix="₫ "
@@ -255,8 +251,8 @@ function PropertyCreatePage() {
                 </Grid.Col>
                 <Grid.Col span={2}>
                   <NumberInput
-                    label="Giá cọc"
-                    placeholder="Nhập giá cọc"
+                    label="Deposit"
+                    placeholder="Enter deposit"
                     withAsterisk
                     min={0}
                     prefix="₫ "
@@ -272,17 +268,17 @@ function PropertyCreatePage() {
             onClick={() =>
               form.insertListItem('units', {
                 ...createUnitInitialValues,
-                name: `Phòng ${1 + (form.values.units?.length ?? 0)}`,
+                name: `${1 + (form.values.units?.length ?? 0)}`,
               })
             }
           >
-            Thêm phòng
+            Add unit
           </Button>
         </Fieldset>
 
         <Divider mt={'lg'} pb={'lg'} />
 
-        <Fieldset legend="Tiện nghi">
+        <Fieldset legend="Amenities">
           <Chip.Group multiple {...form.getInputProps('amenities')}>
             <Group justify="start">
               {amenities?.map((amenity) => (
@@ -297,14 +293,14 @@ function PropertyCreatePage() {
         <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
-          <Button type="submit">Tạo</Button>
+          <Button type="submit">Create</Button>
           <Button
             variant="outline"
             color="red"
             type="button"
             onClick={() => form.reset()}
           >
-            Hủy
+            Cancel
           </Button>
         </Group>
       </form>

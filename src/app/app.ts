@@ -1,4 +1,6 @@
+import { IMemberResDto } from '@/libs';
 import { WritableAtom, atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 
 export function atomWithToggle(
   initialValue?: boolean,
@@ -12,3 +14,8 @@ export function atomWithToggle(
 }
 
 export const isOpenBurgerAtom = atomWithToggle(true);
+
+export const currentMemberAtom = atomWithStorage(
+  'currentMember',
+  JSON.parse(localStorage.getItem('currentMember') || '{}') as IMemberResDto,
+);

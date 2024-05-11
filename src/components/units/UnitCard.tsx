@@ -1,5 +1,5 @@
 import { useUpdate } from '@/api';
-import { IUnitResDto, UnitStatus } from '@/libs';
+import { IUnitResDto, unitStatusColorRecord, unitStatusRecord } from '@/libs';
 import { showSuccessNotification } from '@/shared';
 import {
   AspectRatio,
@@ -9,28 +9,34 @@ import {
   Card,
   Group,
   Image,
-  MantineSpacing,
   NumberFormatter,
   Stack,
-  StyleProp,
   Text,
   Title,
 } from '@mantine/core';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-interface Props extends IUnitResDto {
-  ml?: StyleProp<MantineSpacing> | undefined;
-}
+interface Props extends IUnitResDto {}
 
-export function UnitCard(props: Props) {
-  const [isOpen, setIsOpen] = useState(props.isListing);
+export function UnitCard({
+  id,
+  name,
+  area,
+  price,
+  isListing,
+  status,
+  imgUrls,
+  tenants,
+}: Props) {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(isListing);
 
   const openMutation = useUpdate({
     resource: 'units/open',
     onSuccess: () => {
       showSuccessNotification({
-        message: `Tiếp nhận yêu cầu thuê phòng ${props.name} thành công`,
+        message: `Successfully allowed to receive lease requests for unit ${name}`,
       });
       setIsOpen(true);
     },
@@ -40,77 +46,68 @@ export function UnitCard(props: Props) {
     resource: 'units/close',
     onSuccess: () => {
       showSuccessNotification({
-        message: `Dừng nhận yêu cầu thuê phòng ${props.name} thành công`,
+        message: `Successfully stopped receiving lease requests for unit ${name}`,
       });
       setIsOpen(false);
     },
   });
 
   function handleOpenUnit() {
-    openMutation.mutate({ unitIds: [props.id] });
+    openMutation.mutate({ unitIds: [id] });
   }
 
   function handleCloseUnit() {
-    closeMutation.mutate({ unitIds: [props.id] });
+    closeMutation.mutate({ unitIds: [id] });
   }
 
   return (
-    <Card ml={props.ml} shadow="none">
+    <Card
+      shadow="none"
+      onClick={() => navigate({ to: '/units/$id', params: { id } })}
+    >
       <Group>
         <AspectRatio ratio={1} w={120}>
           <Image
             radius={'md'}
-            src={props.imgUrls[0]}
+            src={imgUrls[0]}
             alt="Norway"
             fallbackSrc="/fallback.png"
           />
         </AspectRatio>
         <Stack h={120} justify="space-between">
           <Group>
-            <Title order={4}>{props.name}</Title>
-            {props.tenants?.length ? (
-              <Badge color={'green'}>Đã cho thuê</Badge>
+            <Title order={4}>{name}</Title>
+            {tenants?.length ? (
+              <Badge color={'green'}>Occupied</Badge>
             ) : (
-              <Badge color={'yellow'}>Phòng trống</Badge>
+              <Badge color={'yellow'}>Vacant</Badge>
             )}
           </Group>
           <Group>
-            <Text fz={'lg'}>{props.area} m²</Text>
-            {renderStatus(props.status)}
+            <Text fz={'lg'}>{area} m²</Text>
+            <Badge color={unitStatusColorRecord[status]}>
+              {unitStatusRecord[status]}
+            </Badge>
           </Group>
           <Group>
             {isOpen ? (
               <Button color={'red'} onClick={() => handleCloseUnit()}>
-                Dừng nhận yêu cầu cho thuê
+                Stop allow rental requests
               </Button>
             ) : (
               <Button color={'green'} onClick={() => handleOpenUnit()}>
-                Tiếp nhận yêu cầu cho thuê
+                Allow rental requests
               </Button>
             )}
-            <NumberFormatter
-              suffix=" ₫"
-              value={props.price}
-              thousandSeparator
-            />
+            <NumberFormatter suffix=" ₫" value={price} thousandSeparator />
           </Group>
         </Stack>
         <Box flex={1} />
 
-        <Link to="/units/$unitId" params={{ unitId: props.id }}>
-          <Button variant="outline">Xem chi tiết</Button>
+        <Link to="/units/$id" params={{ id: id }}>
+          <Button variant="outline">View details</Button>
         </Link>
       </Group>
     </Card>
-  );
-}
-
-function renderStatus(status: UnitStatus) {
-  return status === UnitStatus.MAINTAINING ? (
-    <Badge color="orange">Đang bảo trì</Badge>
-  ) : status == UnitStatus.GOOD ? (
-    <Badge color="green">Tốt</Badge>
-  ) : (
-    <Badge color="red">Có vấn đề</Badge>
   );
 }

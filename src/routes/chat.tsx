@@ -1,6 +1,6 @@
 import ChatSidebar from '@/components/chat/ChatSidebar';
 import { socketService } from '@/services/socket';
-import { memberAtom } from '@/states';
+import { currentMemberAtom } from '@/app';
 import { Divider, Group } from '@mantine/core';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { useAtomValue } from 'jotai';
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/chat')({
 });
 
 function ChatLayout() {
-  const member = useAtomValue(memberAtom);
+  const member = useAtomValue(currentMemberAtom);
 
   useEffect(() => {
     socketService.connect();
