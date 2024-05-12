@@ -7,6 +7,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Breadcrumbs,
   Button,
   Card,
   Divider,
@@ -14,30 +15,49 @@ import {
   Group,
   Image,
   NumberFormatter,
-  Paper,
+  Stack,
   Table,
   Tabs,
   Text,
   Title,
 } from '@mantine/core';
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
+import {
+  Link,
+  createFileRoute,
+  useLoaderData,
+  useNavigate,
+} from '@tanstack/react-router';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 
-export const Route = createFileRoute('/units/$id')({
+export const Route = createFileRoute('/units/$id/')({
   component: UnitPage,
   loader: ({ params: { id } }) =>
     dataProvider.getOne<IUnitResDto>({ resource: 'units', id }),
 });
 
 function UnitPage() {
-  const data = useLoaderData({ from: '/units/$id' });
+  const data = useLoaderData({ from: '/units/$id/' });
 
+  const navigate = useNavigate();
   return (
-    <Paper p={'lg'}>
+    <Stack px={120} py={'md'}>
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/units">Units</Link>
+        <Link to="/units/$id" params={{ id: data.id }}>
+          {data.name} - {data.property.name}
+        </Link>
+      </Breadcrumbs>
       <Group>
-        <Title>{`Phong ${data.name} toa nha ${data.propertyId}`}</Title>
+        <Title>{`Unit ${data.name} - ${data.property.name}`}</Title>
         <Box flex={1} />
-        <Button>Yeu cau thue nha</Button>
+        <Button
+          onClick={() =>
+            navigate({ to: '/units/$id/update', params: { id: data.id } })
+          }
+        >
+          Update
+        </Button>
       </Group>
       <Grid gutter="lg">
         <Grid.Col span={6}>
@@ -73,14 +93,14 @@ function UnitPage() {
           <Card shadow="sm" padding="md">
             <Tabs variant="outline" defaultValue="basic-info">
               <Tabs.List>
-                <Tabs.Tab value="basic-info">Thông tin cơ bản</Tabs.Tab>
-                <Tabs.Tab value="tenants">Người thuê</Tabs.Tab>
+                <Tabs.Tab value="basic-info">Basic information</Tabs.Tab>
+                <Tabs.Tab value="tenants">Tenants</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value="basic-info">
                 <div>
-                  <Text>Khu vực: {data.area} m2</Text>
+                  <Text>Area: {data.area} m2</Text>
                   <Text>
-                    Giá:
+                    Price:
                     <NumberFormatter
                       prefix="₫ "
                       thousandSeparator
@@ -88,7 +108,7 @@ function UnitPage() {
                     />
                   </Text>
                   <Text>
-                    Đặt cọc:
+                    Deposit:
                     <NumberFormatter
                       prefix="₫ "
                       thousandSeparator
@@ -96,13 +116,11 @@ function UnitPage() {
                     />
                   </Text>
                   <Text>
-                    Tình trạng:{' '}
+                    Status:{' '}
                     <Badge
                       color={data.status === UnitStatus.GOOD ? 'green' : 'red'}
                     >
-                      {data.status === UnitStatus.GOOD
-                        ? 'Còn trống'
-                        : 'Đã thuê'}
+                      {data.status === UnitStatus.GOOD ? 'Vacant' : 'Occupied'}
                     </Badge>
                   </Text>
                   <Divider m="md" />
@@ -113,9 +131,9 @@ function UnitPage() {
                 <Table>
                   <Table.Thead>
                     <Table.Tr>
-                      <Table.Th>Người thuê</Table.Th>
+                      <Table.Th>Tenant</Table.Th>
                       <Table.Th>Email</Table.Th>
-                      <Table.Th>Số điện thoại</Table.Th>
+                      <Table.Th>Phone number</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
@@ -139,6 +157,6 @@ function UnitPage() {
           </Card>
         </Grid.Col>
       </Grid>
-    </Paper>
+    </Stack>
   );
 }

@@ -1,17 +1,46 @@
-import { createFileRoute } from '@tanstack/react-router';
-
-interface SearchParams {
-  page?: number;
-  propertyId?: string;
-  unitId?: string;
-  categories?: number[];
-}
+import { useList } from '@/api';
+import { IInvoiceResDto } from '@/libs';
+import { calculatePage } from '@/libs/helpers';
+import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { PlusIcon, UploadIcon } from 'lucide-react';
+import { InvoiceCard, InvoiceFilter } from './-components';
 
 export const Route = createFileRoute('/invoices/')({
-  validateSearch: (search?: SearchParams) => {
-    return {
-      ...search,
-      page: +(search?.page ?? 1),
-    };
-  },
+  component: Page,
 });
+
+function Page() {
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+
+  const { data } = useList<IInvoiceResDto>({
+    resource: 'invoices',
+    params: search,
+  });
+
+  return (
+    <Stack p={'lg'}>
+      <Group justify="end">
+        <Button variant="outline" leftSection={<UploadIcon size={16} />}>
+          Import
+        </Button>
+        <InvoiceFilter />
+        <Link to="/invoices/create">
+          <Button leftSection={<PlusIcon size={16} />}>Thêm hóa đơn</Button>
+        </Link>
+      </Group>
+      <SimpleGrid cols={2} px={32} py={24}>
+        {data?.data.map((invoice) => (
+          <InvoiceCard key={invoice.id} {...invoice} />
+        ))}
+      </SimpleGrid>
+      <Pagination
+        withEdges
+        total={calculatePage(data?.total)}
+        value={search.page}
+        onChange={(page) => navigate({ search: (prev) => ({ ...prev, page }) })}
+      />
+    </Stack>
+  );
+}

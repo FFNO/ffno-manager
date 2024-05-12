@@ -1,7 +1,9 @@
-import { useUpdate } from '@/api';
+import { useDeleteOne, useUpdate } from '@/api';
+import { unitSearchAtom } from '@/app';
 import { IUnitResDto, unitStatusColorRecord, unitStatusRecord } from '@/libs';
 import { showSuccessNotification } from '@/shared';
 import {
+  ActionIcon,
   AspectRatio,
   Badge,
   Box,
@@ -14,7 +16,10 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { modals } from '@mantine/modals';
+import { useNavigate } from '@tanstack/react-router';
+import { Delete02Icon, PencilEdit01Icon, ViewIcon } from 'hugeicons-react';
+import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 
 interface Props extends IUnitResDto {}
@@ -29,6 +34,7 @@ export function UnitCard({
   imgUrls,
   tenants,
 }: Props) {
+  const setSearch = useSetAtom(unitSearchAtom);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(isListing);
 
@@ -52,6 +58,17 @@ export function UnitCard({
     },
   });
 
+  const deleteUnitMutation = useDeleteOne({
+    id,
+    resource: 'units',
+    onSuccess: () => {
+      showSuccessNotification({
+        message: `Successfully deleted unit ${name}`,
+      });
+      setSearch((prev) => ({ ...prev, reload: !prev.reload }));
+    },
+  });
+
   function handleOpenUnit() {
     openMutation.mutate({ unitIds: [id] });
   }
@@ -60,11 +77,15 @@ export function UnitCard({
     closeMutation.mutate({ unitIds: [id] });
   }
 
+  function handleDeleteUnit() {
+    modals.openConfirmModal({
+      children: 'Are you sure you want to delete this unit?',
+      onConfirm: () => deleteUnitMutation.mutate({}),
+    });
+  }
+
   return (
-    <Card
-      shadow="none"
-      onClick={() => navigate({ to: '/units/$id', params: { id } })}
-    >
+    <Card shadow="none">
       <Group>
         <AspectRatio ratio={1} w={120}>
           <Image
@@ -104,9 +125,26 @@ export function UnitCard({
         </Stack>
         <Box flex={1} />
 
-        <Link to="/units/$id" params={{ id: id }}>
-          <Button variant="outline">View details</Button>
-        </Link>
+        <Group gap={'xs'}>
+          <ActionIcon
+            size={40}
+            onClick={() => navigate({ to: '/units/$id', params: { id } })}
+          >
+            <ViewIcon />
+          </ActionIcon>
+          <ActionIcon
+            size={40}
+            color="green"
+            onClick={() =>
+              navigate({ to: '/units/$id/update', params: { id } })
+            }
+          >
+            <PencilEdit01Icon />
+          </ActionIcon>
+          <ActionIcon size={40} color="red" onClick={() => handleDeleteUnit()}>
+            <Delete02Icon />
+          </ActionIcon>
+        </Group>
       </Group>
     </Card>
   );

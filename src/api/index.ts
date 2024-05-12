@@ -58,6 +58,12 @@ export const dataProvider = {
 
     return data;
   },
+
+  deleteOne: async (resource: string, id: string) => {
+    const { data } = await axiosInstance.delete<string>(`${resource}/${id}`);
+
+    return data;
+  },
 };
 
 export const useList = <T>({ resource, params, enabled = true }: Props) => {
@@ -108,6 +114,16 @@ export const useUpdate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.update(resource, data),
+    onSuccess,
+  });
+
+  return mutation;
+};
+
+export const useDeleteOne = ({ id, resource, onSuccess }: PropsWithId) => {
+  const mutation = useMutation({
+    mutationKey: [resource],
+    mutationFn: () => dataProvider.deleteOne(resource, id),
     onSuccess,
   });
 

@@ -21,14 +21,15 @@ import { Route as PropertiesIndexImport } from './routes/properties/index'
 import { Route as InvoicesIndexImport } from './routes/invoices/index'
 import { Route as ContactsIndexImport } from './routes/contacts/index'
 import { Route as UnitsCreateImport } from './routes/units/create'
-import { Route as UnitsIdImport } from './routes/units/$id'
 import { Route as RequestsCreateImport } from './routes/requests/create'
 import { Route as RequestsIdImport } from './routes/requests/$id'
 import { Route as PropertiesCreateImport } from './routes/properties/create'
 import { Route as MembersMeImport } from './routes/members/me'
 import { Route as MembersIdImport } from './routes/members/$id'
-import { Route as ChatChannelIdImport } from './routes/chat/$channelId'
+import { Route as ChatIdImport } from './routes/chat/$id'
+import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
 import { Route as PropertiesIdIndexImport } from './routes/properties/$id/index'
+import { Route as UnitsIdUpdateImport } from './routes/units/$id/update'
 import { Route as PropertiesIdUpdateImport } from './routes/properties/$id/update'
 import { Route as PropertiesIdAddUnitImport } from './routes/properties/$id/add-unit'
 
@@ -69,9 +70,7 @@ const PropertiesIndexRoute = PropertiesIndexImport.update({
 const InvoicesIndexRoute = InvoicesIndexImport.update({
   path: '/invoices/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/invoices/index.lazy').then((d) => d.Route),
-)
+} as any)
 
 const ContactsIndexRoute = ContactsIndexImport.update({
   path: '/contacts/',
@@ -111,11 +110,6 @@ const UnitsCreateRoute = UnitsCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const UnitsIdRoute = UnitsIdImport.update({
-  path: '/units/$id',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const RequestsCreateRoute = RequestsCreateImport.update({
   path: '/requests/create',
   getParentRoute: () => rootRoute,
@@ -141,13 +135,23 @@ const MembersIdRoute = MembersIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ChatChannelIdRoute = ChatChannelIdImport.update({
-  path: '/$channelId',
+const ChatIdRoute = ChatIdImport.update({
+  path: '/$id',
   getParentRoute: () => ChatRoute,
+} as any)
+
+const UnitsIdIndexRoute = UnitsIdIndexImport.update({
+  path: '/units/$id/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const PropertiesIdIndexRoute = PropertiesIdIndexImport.update({
   path: '/properties/$id/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UnitsIdUpdateRoute = UnitsIdUpdateImport.update({
+  path: '/units/$id/update',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -173,8 +177,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatImport
       parentRoute: typeof rootRoute
     }
-    '/chat/$channelId': {
-      preLoaderRoute: typeof ChatChannelIdImport
+    '/chat/$id': {
+      preLoaderRoute: typeof ChatIdImport
       parentRoute: typeof ChatImport
     }
     '/members/$id': {
@@ -195,10 +199,6 @@ declare module '@tanstack/react-router' {
     }
     '/requests/create': {
       preLoaderRoute: typeof RequestsCreateImport
-      parentRoute: typeof rootRoute
-    }
-    '/units/$id': {
-      preLoaderRoute: typeof UnitsIdImport
       parentRoute: typeof rootRoute
     }
     '/units/create': {
@@ -249,8 +249,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIdUpdateImport
       parentRoute: typeof rootRoute
     }
+    '/units/$id/update': {
+      preLoaderRoute: typeof UnitsIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
     '/properties/$id/': {
       preLoaderRoute: typeof PropertiesIdIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/units/$id/': {
+      preLoaderRoute: typeof UnitsIdIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -260,13 +268,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  ChatRoute.addChildren([ChatChannelIdRoute]),
+  ChatRoute.addChildren([ChatIdRoute]),
   MembersIdRoute,
   MembersMeRoute,
   PropertiesCreateRoute,
   RequestsIdRoute,
   RequestsCreateRoute,
-  UnitsIdRoute,
   UnitsCreateRoute,
   AuthSignInLazyRoute,
   ContactsContactIdLazyRoute,
@@ -279,7 +286,9 @@ export const routeTree = rootRoute.addChildren([
   UnitsIndexRoute,
   PropertiesIdAddUnitRoute,
   PropertiesIdUpdateRoute,
+  UnitsIdUpdateRoute,
   PropertiesIdIndexRoute,
+  UnitsIdIndexRoute,
 ])
 
 /* prettier-ignore-end */
