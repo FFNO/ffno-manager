@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { CalendarIcon } from 'lucide-react';
+import { Calendar01Icon } from 'hugeicons-react';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -26,10 +26,10 @@ function Index() {
       <Group>
         <Paper>
           <Stack>
-            Tổng quan
+            Overview
             <Card shadow="sm">
               <Group>
-                <CalendarIcon size={32} />
+                <Calendar01Icon size={32} />
                 <Stack gap={0}>
                   <Title order={5} tt="capitalize" fw={'bold'}>
                     {dayjs().format('dddd, DD/MM/YYYY')}

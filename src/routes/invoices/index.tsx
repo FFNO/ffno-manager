@@ -1,18 +1,19 @@
 import { useList } from '@/api';
+import { invoiceSearchAtom } from '@/app';
+import { InvoiceCard, InvoiceSearch } from '@/components/invoices';
 import { IInvoiceResDto } from '@/libs';
 import { calculatePage } from '@/libs/helpers';
 import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { PlusIcon, UploadIcon } from 'lucide-react';
-import { InvoiceCard, InvoiceFilter } from './-components';
+import { Link, createFileRoute } from '@tanstack/react-router';
+import { PlusSignIcon, Upload04Icon } from 'hugeicons-react';
+import { useAtom } from 'jotai';
 
 export const Route = createFileRoute('/invoices/')({
   component: Page,
 });
 
 function Page() {
-  const search = Route.useSearch();
-  const navigate = useNavigate();
+  const [search, setSearch] = useAtom(invoiceSearchAtom);
 
   const { data } = useList<IInvoiceResDto>({
     resource: 'invoices',
@@ -22,12 +23,12 @@ function Page() {
   return (
     <Stack p={'lg'}>
       <Group justify="end">
-        <Button variant="outline" leftSection={<UploadIcon size={16} />}>
+        <Button variant="outline" leftSection={<Upload04Icon size={16} />}>
           Import
         </Button>
-        <InvoiceFilter />
+        <InvoiceSearch />
         <Link to="/invoices/create">
-          <Button leftSection={<PlusIcon size={16} />}>Thêm hóa đơn</Button>
+          <Button leftSection={<PlusSignIcon size={16} />}>Add invoice</Button>
         </Link>
       </Group>
       <SimpleGrid cols={2} px={32} py={24}>
@@ -38,8 +39,8 @@ function Page() {
       <Pagination
         withEdges
         total={calculatePage(data?.total)}
-        value={search.page}
-        onChange={(page) => navigate({ search: (prev) => ({ ...prev, page }) })}
+        value={search.page ?? 1}
+        onChange={(page) => setSearch((prev) => ({ ...prev, page }))}
       />
     </Stack>
   );

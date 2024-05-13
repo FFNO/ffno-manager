@@ -1,9 +1,8 @@
 import { axiosInstance } from '@/api/utils';
-import { IMemberResDto, memberRoleRecord } from '@/libs';
 import { currentMemberAtom } from '@/app';
+import { IMemberResDto, memberRoleRecord } from '@/libs';
 import {
   Avatar,
-  Button,
   Divider,
   Group,
   ScrollArea,
@@ -12,25 +11,26 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { useAtom } from 'jotai';
 import {
-  BuildingIcon,
-  CircleGaugeIcon,
-  ClipboardListIcon,
-  ContactIcon,
-  LogOutIcon,
-  MessageCircleIcon,
-  ReceiptIcon,
-} from 'lucide-react';
+  Building02Icon,
+  Contact02Icon,
+  DashboardSpeed02Icon,
+  Invoice01Icon,
+  Invoice04Icon,
+  Logout05Icon,
+  Message01Icon,
+} from 'hugeicons-react';
+import { useAtom } from 'jotai';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
+import { Button } from '@nextui-org/react';
 
 const navItems = [
-  { label: 'Overview', icon: CircleGaugeIcon, link: '/' },
+  { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
   {
     label: 'Properties',
-    icon: BuildingIcon,
+    icon: Building02Icon,
     initiallyOpened: true,
     links: [
       { label: 'Properties', link: '/properties' },
@@ -39,28 +39,28 @@ const navItems = [
     ],
   },
   {
-    label: 'Giao dịch',
-    icon: ReceiptIcon,
+    label: 'Invoices',
+    icon: Invoice01Icon,
     initiallyOpened: true,
-    links: [{ label: 'Hóa đơn', link: '/invoices' }],
+    links: [{ label: 'Invoices', link: '/invoices' }],
   },
   {
-    label: 'Liên lạc',
-    icon: ContactIcon,
+    label: 'Contacts',
+    icon: Contact02Icon,
     initiallyOpened: true,
     links: [
-      { label: 'Người thuê nhà', link: '/contacts?type=0' },
-      { label: 'Dịch vụ chuyên nghiệp', link: '/contacts?type=1' },
+      { label: 'Tenants', link: '/contacts?type=0' },
+      { label: 'Service pros', link: '/contacts?type=1' },
     ],
   },
   {
-    label: 'Yêu cầu',
-    icon: ClipboardListIcon,
+    label: 'Requests',
+    icon: Invoice04Icon,
     link: '/requests',
   },
   {
     label: 'Chat',
-    icon: MessageCircleIcon,
+    icon: Message01Icon,
     link: '/chat',
   },
 ];
@@ -99,19 +99,16 @@ export function Navbar() {
           </Group>
         </Link>
         <Button
-          radius={0}
-          mx={-16}
-          px={'md'}
-          variant="subtle"
-          justify="start"
-          leftSection={<LogOutIcon strokeWidth={1.5} />}
+          variant="bordered"
+          color="danger"
+          startContent={<Logout05Icon strokeWidth={1.5} />}
           onClick={async () => {
             setMember({} as IMemberResDto);
             OneSignal.User.removeTag('memberId');
             await axiosInstance.delete('/auth/sign-out');
           }}
         >
-          <span>Đăng xuất</span>
+          <span>Logout</span>
         </Button>
       </Stack>
     </nav>

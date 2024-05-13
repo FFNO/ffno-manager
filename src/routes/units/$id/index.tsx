@@ -27,7 +27,7 @@ import {
   useLoaderData,
   useNavigate,
 } from '@tanstack/react-router';
-import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
+import { ArrowLeft02Icon, ArrowRight02Icon } from 'hugeicons-react';
 
 export const Route = createFileRoute('/units/$id/')({
   component: UnitPage,
@@ -70,12 +70,12 @@ function UnitPage() {
               height={300}
               nextControlIcon={
                 <ActionIcon radius={'xl'}>
-                  <ArrowRightIcon />
+                  <ArrowRight02Icon />
                 </ActionIcon>
               }
               previousControlIcon={
                 <ActionIcon radius={'xl'}>
-                  <ArrowLeftIcon />
+                  <ArrowLeft02Icon />
                 </ActionIcon>
               }
             >

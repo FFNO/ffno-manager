@@ -17,9 +17,12 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { PlusSignIcon, Upload04Icon } from 'hugeicons-react';
+import {
+  MapsLocation01Icon,
+  PlusSignIcon,
+  Upload04Icon,
+} from 'hugeicons-react';
 import { useAtom } from 'jotai';
-import { MapPinnedIcon } from 'lucide-react';
 import { Fragment } from 'react/jsx-runtime';
 
 export const Route = createFileRoute('/units/')({ component: Page });
@@ -63,7 +66,7 @@ function Page() {
                 <Stack h={100} justify="start" gap={'xs'}>
                   <Title order={5}>{property.name}</Title>
                   <Group gap={'xs'}>
-                    <MapPinnedIcon
+                    <MapsLocation01Icon
                       size={20}
                       strokeWidth={1.5}
                       color={theme.colors.gray[7]}

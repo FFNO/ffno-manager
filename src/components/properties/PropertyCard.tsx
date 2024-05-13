@@ -13,7 +13,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { MapPinnedIcon } from 'lucide-react';
+import { MapsLocation01Icon } from 'hugeicons-react';
 
 interface Props extends IPropertyResDto {}
 
@@ -47,7 +47,7 @@ export const PropertyCard = ({
           <Stack flex={1} h={'100%'} justify="start" gap={'sm'}>
             <Title order={5}>{name}</Title>
             <Group gap={'xs'}>
-              <MapPinnedIcon size={24} color={theme.colors.gray[6]} />
+              <MapsLocation01Icon size={24} color={theme.colors.gray[6]} />
               <Box>
                 <Text fz={'sm'} c={theme.colors.gray[6]}>
                   {`${address}`}

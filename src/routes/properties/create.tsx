@@ -26,7 +26,7 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { CopyIcon, XIcon } from 'lucide-react';
+import { Cancel01Icon, Copy01Icon } from 'hugeicons-react';
 import { useEffect } from 'react';
 
 export const Route = createFileRoute('/properties/create')({
@@ -201,7 +201,7 @@ function Page() {
                   <Group justify="end">
                     <Button
                       variant="subtle"
-                      leftSection={<CopyIcon size={16} />}
+                      leftSection={<Copy01Icon size={16} />}
                       onClick={() =>
                         form.insertListItem('units', {
                           ...unit,
@@ -213,7 +213,7 @@ function Page() {
                     </Button>
                     <Button
                       variant="subtle"
-                      leftSection={<XIcon size={16} />}
+                      leftSection={<Cancel01Icon size={16} />}
                       onClick={() => form.removeListItem('units', index)}
                     >
                       Clear
