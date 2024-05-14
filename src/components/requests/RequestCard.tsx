@@ -70,7 +70,7 @@ export function RequestCard(props: Props) {
           {props.unit && <Kbd>{props.unit.name}</Kbd>}
           {renderStatus(props.status)}
           <Box flex={1} />
-          <Link to="/requests/$requestId" params={{ requestId: props.id }}>
+          <Link to="/requests/$id" params={{ id: props.id }}>
             <Button variant="subtle">Xem chi tiết</Button>
           </Link>
         </Group>

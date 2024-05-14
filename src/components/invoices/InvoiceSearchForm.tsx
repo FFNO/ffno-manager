@@ -2,14 +2,7 @@ import { useSimpleList } from '@/api';
 import { initialInvoiceSearchValues, invoiceSearchAtom } from '@/app';
 import { IGetListInvoiceDto, invoiceCategories, invoiceStatuses } from '@/libs';
 import { replaceNullsWithUndefined } from '@/libs/helpers';
-import {
-  Button,
-  Group,
-  MultiSelect,
-  Select,
-  Stack,
-  TextInput,
-} from '@mantine/core';
+import { Button, Group, MultiSelect, Select, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';

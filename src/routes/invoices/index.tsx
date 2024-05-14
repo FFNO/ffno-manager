@@ -3,7 +3,15 @@ import { invoiceSearchAtom } from '@/app';
 import { InvoiceCard, InvoiceSearch } from '@/components/invoices';
 import { IInvoiceResDto } from '@/libs';
 import { calculatePage } from '@/libs/helpers';
-import { Button, Group, Pagination, SimpleGrid, Stack } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Group,
+  Pagination,
+  SimpleGrid,
+  Stack,
+  Title,
+} from '@mantine/core';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { PlusSignIcon, Upload04Icon } from 'hugeicons-react';
 import { useAtom } from 'jotai';
@@ -22,7 +30,9 @@ function Page() {
 
   return (
     <Stack p={'lg'}>
-      <Group justify="end">
+      <Group justify="space-between" px={32}>
+        <Title>Invoices</Title>
+        <Box flex={1} />
         <Button variant="outline" leftSection={<Upload04Icon size={16} />}>
           Import
         </Button>
@@ -31,7 +41,7 @@ function Page() {
           <Button leftSection={<PlusSignIcon size={16} />}>Add invoice</Button>
         </Link>
       </Group>
-      <SimpleGrid cols={2} px={32} py={24}>
+      <SimpleGrid cols={1} px={32} py={24}>
         {data?.data.map((invoice) => (
           <InvoiceCard key={invoice.id} {...invoice} />
         ))}
