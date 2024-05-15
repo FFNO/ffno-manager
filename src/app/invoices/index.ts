@@ -13,3 +13,5 @@ export const initialInvoiceSearchValues: NullableObject<IGetListInvoiceDto> = {
 export const invoiceSearchAtom = atom<NullableObject<IGetListInvoiceDto>>(
   initialInvoiceSearchValues,
 );
+
+export const selectToMergeInvoices = atom<Record<string, boolean>>({});

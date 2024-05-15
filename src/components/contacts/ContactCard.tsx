@@ -12,7 +12,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { CableIcon, EllipsisIcon } from 'lucide-react';
+import { ConnectIcon, More01Icon } from 'hugeicons-react';
 
 interface Props extends IMemberResDto {}
 
@@ -21,9 +21,9 @@ export const ContactCard = (props: Props) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder h={400}>
       <Group mb={'md'}>
-        <CableIcon color={theme.colors.green[6]} />
+        <ConnectIcon color={theme.colors.green[6]} />
         <Box flex={1}></Box>
-        <EllipsisIcon />
+        <More01Icon />
       </Group>
       <Stack align="center" flex={1}>
         <Avatar src={props.imgUrl} size={'xl'} />

@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
-import { PlusIcon, SearchIcon } from 'lucide-react';
+import { PlusSignIcon, Search01Icon } from 'hugeicons-react';
 
 export const Route = createLazyFileRoute('/contacts/')({
   component: ContactListPage,
@@ -64,7 +64,7 @@ function ContactListPage() {
               <Stack>
                 <Input
                   size="sm"
-                  leftSection={<SearchIcon size={16} />}
+                  leftSection={<Search01Icon size={16} />}
                   placeholder="Enter keyword"
                   {...form.getInputProps('keyword')}
                 />
@@ -95,7 +95,7 @@ function ContactListPage() {
           </Popover.Dropdown>
         </Popover>
         <Link to="/contacts/create">
-          <Button leftSection={<PlusIcon size={16} />}>
+          <Button leftSection={<PlusSignIcon size={16} />}>
             {addButtonText()}
           </Button>
         </Link>

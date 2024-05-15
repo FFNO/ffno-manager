@@ -9,7 +9,6 @@ import {
   Badge,
   Box,
   Button,
-  Card,
   Divider,
   Grid,
   Group,
@@ -40,6 +39,7 @@ function Page() {
           {invoiceStatusRecord[data.status]}
         </Badge>
         <Box flex={1}></Box>
+        <Button>Edit invoice</Button>
         <Button>Print Invoice</Button>
       </Group>
       <Divider mb="lg" />

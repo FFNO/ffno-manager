@@ -3,7 +3,7 @@ import { SignInPage } from '@/routes/auth/sign-in.lazy';
 import { AppShell, Center } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { PropsWithChildren } from 'react';
-import { Navbar } from './Navbar';
+import { AppNavbar } from './Navbar';
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   const member = useAtomValue(currentMemberAtom);
@@ -15,7 +15,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   ) : (
     <AppShell navbar={{ width: 300, breakpoint: 'sm' }}>
       <AppShell.Navbar>
-        <Navbar />
+        <AppNavbar />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>

@@ -10,6 +10,7 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core';
+import { Button } from '@nextui-org/react';
 import { Link } from '@tanstack/react-router';
 import {
   Building02Icon,
@@ -18,13 +19,12 @@ import {
   Invoice01Icon,
   Invoice04Icon,
   Logout05Icon,
-  Message01Icon,
+  Mailbox01Icon,
 } from 'hugeicons-react';
 import { useAtom } from 'jotai';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
-import { Button } from '@nextui-org/react';
 
 const navItems = [
   { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
@@ -35,22 +35,25 @@ const navItems = [
     links: [
       { label: 'Properties', link: '/properties' },
       { label: 'Units', link: '/units' },
-      { label: 'Thiết bị & nội thất', link: '/' },
+      { label: 'Equipments', link: '/equipments' },
     ],
   },
   {
-    label: 'Invoices',
+    label: 'Contracts & Invoices',
     icon: Invoice01Icon,
     initiallyOpened: true,
-    links: [{ label: 'Invoices', link: '/invoices' }],
+    links: [
+      { label: 'Contracts', link: '/contracts' },
+      { label: 'Invoices', link: '/invoices' },
+    ],
   },
   {
     label: 'Contacts',
     icon: Contact02Icon,
     initiallyOpened: true,
     links: [
-      { label: 'Tenants', link: '/contacts?type=0' },
-      { label: 'Service pros', link: '/contacts?type=1' },
+      { label: 'Tenants', link: '/members/tenants' },
+      { label: 'Service workers', link: '/members/service-workers' },
     ],
   },
   {
@@ -59,13 +62,16 @@ const navItems = [
     link: '/requests',
   },
   {
-    label: 'Chat',
-    icon: Message01Icon,
-    link: '/chat',
+    label: 'Chat & Notifications',
+    icon: Mailbox01Icon,
+    links: [
+      { label: 'Chat', link: '/chat' },
+      { label: 'Notifications', link: '/notifications' },
+    ],
   },
 ];
 
-export function Navbar() {
+export function AppNavbar() {
   const theme = useMantineTheme();
 
   const [member, setMember] = useAtom(currentMemberAtom);
