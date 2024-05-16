@@ -31,14 +31,17 @@ import { Route as MembersTenantsImport } from './routes/members/tenants'
 import { Route as MembersServiceWorkersImport } from './routes/members/service-workers'
 import { Route as MembersMeImport } from './routes/members/me'
 import { Route as MembersIdImport } from './routes/members/$id'
+import { Route as ContractsCreateImport } from './routes/contracts/create'
 import { Route as ChatIdImport } from './routes/chat/$id'
 import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
 import { Route as PropertiesIdIndexImport } from './routes/properties/$id/index'
 import { Route as InvoicesIdIndexImport } from './routes/invoices/$id/index'
+import { Route as ContractsIdIndexImport } from './routes/contracts/$id/index'
 import { Route as UnitsIdUpdateImport } from './routes/units/$id/update'
 import { Route as PropertiesIdUpdateImport } from './routes/properties/$id/update'
 import { Route as PropertiesIdAddUnitImport } from './routes/properties/$id/add-unit'
 import { Route as InvoicesIdMergeImport } from './routes/invoices/$id/merge'
+import { Route as ContractsIdUpdateImport } from './routes/contracts/$id/update'
 
 // Create Virtual Routes
 
@@ -167,6 +170,11 @@ const MembersIdRoute = MembersIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ContractsCreateRoute = ContractsCreateImport.update({
+  path: '/contracts/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ChatIdRoute = ChatIdImport.update({
   path: '/$id',
   getParentRoute: () => ChatRoute,
@@ -184,6 +192,11 @@ const PropertiesIdIndexRoute = PropertiesIdIndexImport.update({
 
 const InvoicesIdIndexRoute = InvoicesIdIndexImport.update({
   path: '/invoices/$id/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ContractsIdIndexRoute = ContractsIdIndexImport.update({
+  path: '/contracts/$id/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -207,6 +220,11 @@ const InvoicesIdMergeRoute = InvoicesIdMergeImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ContractsIdUpdateRoute = ContractsIdUpdateImport.update({
+  path: '/contracts/$id/update',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -222,6 +240,10 @@ declare module '@tanstack/react-router' {
     '/chat/$id': {
       preLoaderRoute: typeof ChatIdImport
       parentRoute: typeof ChatImport
+    }
+    '/contracts/create': {
+      preLoaderRoute: typeof ContractsCreateImport
+      parentRoute: typeof rootRoute
     }
     '/members/$id': {
       preLoaderRoute: typeof MembersIdImport
@@ -303,6 +325,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/contracts/$id/update': {
+      preLoaderRoute: typeof ContractsIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
     '/invoices/$id/merge': {
       preLoaderRoute: typeof InvoicesIdMergeImport
       parentRoute: typeof rootRoute
@@ -317,6 +343,10 @@ declare module '@tanstack/react-router' {
     }
     '/units/$id/update': {
       preLoaderRoute: typeof UnitsIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
+    '/contracts/$id/': {
+      preLoaderRoute: typeof ContractsIdIndexImport
       parentRoute: typeof rootRoute
     }
     '/invoices/$id/': {
@@ -339,6 +369,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatRoute.addChildren([ChatIdRoute]),
+  ContractsCreateRoute,
   MembersIdRoute,
   MembersMeRoute,
   MembersServiceWorkersRoute,
@@ -359,10 +390,12 @@ export const routeTree = rootRoute.addChildren([
   PropertiesIndexRoute,
   RequestsIndexRoute,
   UnitsIndexRoute,
+  ContractsIdUpdateRoute,
   InvoicesIdMergeRoute,
   PropertiesIdAddUnitRoute,
   PropertiesIdUpdateRoute,
   UnitsIdUpdateRoute,
+  ContractsIdIndexRoute,
   InvoicesIdIndexRoute,
   PropertiesIdIndexRoute,
   UnitsIdIndexRoute,

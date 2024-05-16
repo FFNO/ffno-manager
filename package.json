@@ -10,7 +10,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "preview": "vite preview",
     "libs:build": "meta git update && meta git checkout master --include-only src/libs && meta git pull --include-only src/libs",
-    "knip": "knip"
+    "knip": "knip",
+    "postinstall": "npm run libs:build"
   },
   "dependencies": {
     "@mantine/carousel": "^7.8.0",

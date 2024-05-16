@@ -1,5 +1,6 @@
 import { selectToMergeInvoices } from '@/app';
 import {
+  DATE_FORMAT,
   IInvoiceResDto,
   invoiceCategoryRecord,
   invoiceStatusColorRecord,
@@ -27,7 +28,7 @@ export const InvoiceCard = ({
   id,
   unit,
   category,
-  details,
+  description,
   dueDate,
   member,
   status,
@@ -47,8 +48,8 @@ export const InvoiceCard = ({
           <Text w={240}>
             {unit.name} - {unit.property.name}
           </Text>
-          <Text>{details}</Text>
-          <Text>{dayjs(dueDate).format('DD/MM/YY')}</Text>
+          <Text>{description}</Text>
+          <Text>{dayjs(dueDate).format(DATE_FORMAT)}</Text>
           <Text>{vndFormatter.format(total)}</Text>
           <Badge size="lg" color={invoiceStatusColorRecord[status]}>
             {status}
