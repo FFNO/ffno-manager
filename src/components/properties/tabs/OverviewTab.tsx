@@ -57,7 +57,7 @@ export function OverviewTab(data: IPropertyResDto) {
             </Grid.Col>
             <Grid.Col span={12}>
               <Input.Wrapper label="Description">
-                <Text>{data.details}</Text>
+                <Text>{data.description}</Text>
               </Input.Wrapper>
             </Grid.Col>
           </Grid>

@@ -124,7 +124,7 @@ function UnitPage() {
                     </Badge>
                   </Text>
                   <Divider m="md" />
-                  <Text>{data.details}</Text>
+                  <Text>{data.description}</Text>
                 </div>
               </Tabs.Panel>
               <Tabs.Panel value="tenants">

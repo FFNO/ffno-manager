@@ -75,7 +75,7 @@ function Page() {
           <Text>requested</Text>
           <Text fw={'bold'}>{requestCategoryRecord[data.category]}</Text>
         </Group>
-        <Text>{data.details}</Text>
+        <Text>{data.description}</Text>
 
         <Fieldset legend={'Receivers'}>
           <Stack>
