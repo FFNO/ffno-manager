@@ -126,7 +126,7 @@ function InvoiceCreate() {
               label="Nội dung hóa đơn"
               placeholder="Nhập nội dung"
               rows={4}
-              {...form.getInputProps('details')}
+              {...form.getInputProps('description')}
             />
           </Grid.Col>
         </Grid>

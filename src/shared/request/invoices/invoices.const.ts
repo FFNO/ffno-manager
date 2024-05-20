@@ -6,5 +6,5 @@ export const createInvoiceInitialValues: NullableObject<CreateInvoiceSchema> = {
   dueDate: null,
   memberId: null,
   unitId: null,
-  details: null,
+  description: null,
 };

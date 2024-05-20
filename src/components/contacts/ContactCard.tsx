@@ -12,7 +12,12 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { ConnectIcon, More01Icon } from 'hugeicons-react';
+import {
+  Building02Icon,
+  ConnectIcon,
+  Contact02Icon,
+  More01Icon,
+} from 'hugeicons-react';
 
 interface Props extends IMemberResDto {}
 
@@ -28,15 +33,21 @@ export const ContactCard = (props: Props) => {
       <Stack align="center" flex={1}>
         <Avatar src={props.imgUrl} size={'xl'} />
         <Title>{props.name}</Title>
-        <Text>{props.phone}</Text>
-        <Text fz={'lg'} fw={'bold'}>
-          Unit &nbsp;
-          {props.unit}
-        </Text>
+        <Group gap={4}>
+          <Contact02Icon />
+          <Text>{props.phone}</Text>
+        </Group>
+        <Group gap={4}>
+          <Building02Icon />
+          <Text fz={'lg'} fw={'bold'}>
+            Unit &nbsp;
+            {props.unit}
+          </Text>
+        </Group>
       </Stack>
       <Card.Section>
         <Divider mt={'lg'} />
-        <Link to={'/contacts/$contactId'} params={{ contactId: props.id }}>
+        <Link to={'/members/$id'} params={{ id: props.id }}>
           <Button variant="subtle" fullWidth size="lg">
             View profile
           </Button>

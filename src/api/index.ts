@@ -33,8 +33,8 @@ export const dataProvider = {
     };
   },
 
-  getSimpleList: async ({ resource, params }: Props) => {
-    const { data } = await axiosInstance.get<string[]>(`/common/${resource}`, {
+  getSimpleList: async <T = string>({ resource, params }: Props) => {
+    const { data } = await axiosInstance.get<T[]>(`/common/${resource}`, {
       params,
     });
 

@@ -6,7 +6,7 @@ export const createUnitInitialValues: CreateUnitSchema = {
   area: 0,
   deposit: 0,
   price: 0,
-  details: '',
+  description: '',
   status: UnitStatus.GOOD,
 };
 

@@ -3,7 +3,7 @@ import { CreateRequestSchema } from './requests.schema';
 
 export const createRequestInitialValues: NullableObject<CreateRequestSchema> = {
   name: '',
-  details: '',
+  description: '',
   category: RequestCategory.UNIT_LEASE,
   receiverIds: [],
 };

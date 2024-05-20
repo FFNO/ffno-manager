@@ -11,6 +11,7 @@ import {
   SimpleGrid,
   Stack,
 } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
@@ -116,6 +117,16 @@ function Page() {
               })) ?? []
             }
             {...form.getInputProps('tenantId')}
+          />
+          <DatePickerInput
+            label={'Start date'}
+            placeholder="Enter start date"
+            {...form.getInputProps('startDate')}
+          />
+          <DatePickerInput
+            label={'End date'}
+            placeholder="Enter end date"
+            {...form.getInputProps('endDate')}
           />
         </SimpleGrid>
 

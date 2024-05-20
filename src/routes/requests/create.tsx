@@ -1,4 +1,5 @@
 import { useCreate, useSimpleList } from '@/api';
+import { requestFormAtom } from '@/app';
 import { RequestCategory, requestCategories } from '@/libs';
 import {
   CreateRequestSchema,
@@ -6,22 +7,21 @@ import {
   createRequestSchema,
   showSuccessNotification,
 } from '@/shared';
-import { requestFormAtom } from '@/app';
 import {
+  Breadcrumbs,
   Button,
   Divider,
   Fieldset,
   Grid,
   Group,
   LoadingOverlay,
-  NativeSelect,
   Select,
   Stack,
   TextInput,
   Textarea,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
@@ -74,7 +74,7 @@ function RequestCreatePage() {
   }, [form.values.propertyId]);
 
   function onCreateSuccess() {
-    showSuccessNotification({ message: 'Thêm yêu cầu thành công' });
+    showSuccessNotification({ message: 'Add request successfully' });
     navigate({
       to: '/requests',
       search: { page: 1, type: 'send' },
@@ -82,28 +82,35 @@ function RequestCreatePage() {
   }
 
   return (
-    <Stack p={'lg'} pos={'relative'}>
+    <Stack px={120} py={'lg'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/requests/" search={{ page: 1, type: 'received' }}>
+          Requests
+        </Link>
+        <p>Add request</p>
+      </Breadcrumbs>
       <form onSubmit={handleSubmit}>
         <Fieldset legend="Basic information">
           <Grid>
             <Grid.Col span={6}>
               <TextInput
-                label="Yêu cầu"
-                placeholder="Nhập tiêu đề cho yêu cầu"
+                label="Request"
+                placeholder="Enter request name"
                 withAsterisk
                 {...form.getInputProps('name')}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <NativeSelect
+              <Select
                 withAsterisk
-                label="Loại yêu cầu"
+                label="Category"
                 data={requestCategories}
                 {...form.getInputProps('category')}
               />
@@ -116,8 +123,8 @@ function RequestCreatePage() {
                     withAsterisk
                     clearable
                     searchable
-                    label="Tòa nhà"
-                    placeholder="Chọn tòa nhà"
+                    label="Property"
+                    placeholder="Select property"
                     data={properties}
                     {...form.getInputProps('propertyId')}
                   />
@@ -128,8 +135,8 @@ function RequestCreatePage() {
                     withAsterisk
                     clearable
                     searchable
-                    label="Phòng"
-                    placeholder="Chọn phòng"
+                    label="Unit"
+                    placeholder="Select unit"
                     data={units}
                     {...form.getInputProps('unitId')}
                   />
@@ -139,11 +146,11 @@ function RequestCreatePage() {
 
             <Grid.Col span={12}>
               <Textarea
-                label="Chi tiết"
-                placeholder="Nhập chi tiết yêu cầu"
+                label="Description"
+                placeholder="Enter description"
                 withAsterisk
                 rows={4}
-                {...form.getInputProps('details')}
+                {...form.getInputProps('description')}
               />
             </Grid.Col>
           </Grid>
@@ -152,14 +159,14 @@ function RequestCreatePage() {
         <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
-          <Button type="submit">Gửi</Button>
+          <Button type="submit">Submit</Button>
           <Button
             variant="outline"
             color="red"
             type="button"
             onClick={() => form.reset()}
           >
-            Đặt lại
+            Reset
           </Button>
         </Group>
       </form>

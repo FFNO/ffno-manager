@@ -11,7 +11,9 @@ import {
   requestStatusRecord,
 } from '@/libs';
 import { vndFormatter } from '@/libs/helpers';
+import { Carousel } from '@mantine/carousel';
 import {
+  ActionIcon,
   Avatar,
   Badge,
   Box,
@@ -19,6 +21,7 @@ import {
   Card,
   Fieldset,
   Group,
+  Image,
   Paper,
   SimpleGrid,
   Stack,
@@ -27,12 +30,13 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import {
+  Link,
   createFileRoute,
   useLoaderData,
   useRouter,
 } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { Cancel01Icon, Tick01Icon } from 'hugeicons-react';
+import { Cancel01Icon, Link02Icon, Tick01Icon } from 'hugeicons-react';
 import { useAtomValue } from 'jotai';
 
 export const Route = createFileRoute('/contracts/$id/')({
@@ -78,11 +82,19 @@ function Page() {
   return (
     <Paper px={120} py={'lg'}>
       <Stack gap={'md'}>
-        <Title order={3}>Unit lease contract</Title>
-        <Group gap={4}>
-          <Badge color={contractStatusColorRecord[status]}>
-            {contractStatusRecord[status]}
-          </Badge>
+        <Group>
+          <Title order={3}>Unit lease contract</Title>
+          <Group gap={4}>
+            <Badge color={contractStatusColorRecord[status]}>
+              {contractStatusRecord[status]}
+            </Badge>
+          </Group>
+          <Box flex={1} />
+          {/* {status === ContractStatus.PENDING && (
+            <Link to="/contracts/$id/update" params={{ id: id.toString() }}>
+              <Button>Edit contract</Button>
+            </Link>
+          )} */}
         </Group>
         <Fieldset legend={'Information'}>
           <Stack>
@@ -114,9 +126,21 @@ function Page() {
                 <p>{vndFormatter.format(unit.deposit)}/month</p>
               </Group>
             </Group>
+            <Group>
+              <Group>
+                <p>Unit: </p>
+                <p>
+                  {unit.name} - {unit.property.name}
+                </p>
+                <Link to="/units/$id" params={{ id: unit.id }}>
+                  <ActionIcon variant="subtle">
+                    <Link02Icon size={16} />
+                  </ActionIcon>
+                </Link>
+              </Group>
+            </Group>
           </Stack>
         </Fieldset>
-        {/* <Text>{description}</Text> */}
         <SimpleGrid cols={2}>
           <Fieldset legend={'Landlord'}>
             <MemberCard {...landlord} status={landlordStatus} />
@@ -125,6 +149,22 @@ function Page() {
             <MemberCard {...tenant} status={tenantStatus} />
           </Fieldset>
         </SimpleGrid>
+        <Fieldset legend={'Images'}>
+          <Carousel
+            slideSize="70%"
+            height={200}
+            slideGap="md"
+            loop
+            dragFree
+            withIndicators
+          >
+            {imgUrls.map((imgUrl) => (
+              <Carousel.Slide key={imgUrl}>
+                <Image src={imgUrl} />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </Fieldset>
       </Stack>
     </Paper>
   );

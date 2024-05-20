@@ -33,7 +33,7 @@ const updateSchema = z.object({
   deposit: z.coerce.number().optional(),
   status: z.nativeEnum(UnitStatus).optional(),
   imgUrls: z.array(z.string()).optional(),
-  details: z.string().optional(),
+  description: z.string().optional(),
   unitFeatures: z.array(z.string()).optional(),
 });
 

@@ -1,14 +1,24 @@
 import { dataProvider } from '@/api';
-import { RequestCard } from '@/components/requests';
-import { IRequestResDto } from '@/libs';
+import {
+  IRequestResDto,
+  requestCategoryRecord,
+  requestStatusColorRecord,
+  requestStatusRecord,
+} from '@/libs';
 import { calculatePage } from '@/libs/helpers';
 import {
+  ActionIcon,
+  Avatar,
+  Badge,
   Button,
+  Center,
   Group,
   Pagination,
   SimpleGrid,
   Stack,
+  Table,
   Tabs,
+  Tooltip,
 } from '@mantine/core';
 import {
   Link,
@@ -17,11 +27,16 @@ import {
   useNavigate,
   useSearch,
 } from '@tanstack/react-router';
-import { PlusSignIcon } from 'hugeicons-react';
+import {
+  Building02Icon,
+  Invoice01Icon,
+  PlusSignIcon,
+  SearchSquareIcon,
+} from 'hugeicons-react';
 import { z } from 'zod';
 
 const searchSchema = z.object({
-  type: z.string().default('received'),
+  type: z.string().optional().default('received'),
   page: z.coerce.number().default(1),
 });
 
@@ -43,7 +58,7 @@ function Page() {
 
   return (
     <div>
-      <Stack p={'lg'}>
+      <Stack p={'lg'} px={32}>
         <Group justify="end">
           {/* <InvoiceFilter /> */}
           <Link to="/requests/create">
@@ -55,6 +70,7 @@ function Page() {
         <Tabs
           variant="pills"
           defaultValue={'received'}
+          value={search.type}
           onChange={(value) => navigate({ search: { type: value } })}
         >
           <Tabs.List>
@@ -62,10 +78,77 @@ function Page() {
             <Tabs.Tab value="sent">Sent request</Tabs.Tab>
           </Tabs.List>
         </Tabs>
-        <SimpleGrid cols={1} px={32} py={24}>
-          {data?.data.map((request) => (
-            <RequestCard key={request.id} {...request} type={search.type} />
-          ))}
+        <SimpleGrid cols={1} py={24}>
+          <Table striped highlightOnHover withTableBorder withColumnBorders>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Category</Table.Th>
+                <Table.Th>Sender</Table.Th>
+                <Table.Th>Unit</Table.Th>
+                <Table.Th>Property</Table.Th>
+                <Table.Th ta={'center'}>Status</Table.Th>
+                <Table.Th ta={'center'}>Actions</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {data.total ? (
+                data.data.map((request) => (
+                  <Table.Tr key={request.id}>
+                    <Table.Td>
+                      {requestCategoryRecord[request.category]}
+                    </Table.Td>
+                    <Table.Td>
+                      <Group>
+                        <Avatar size={'sm'} src={request.sender.imgUrl} />
+                        <p>{request.sender.name}</p>
+                      </Group>
+                    </Table.Td>
+                    <Table.Td>{request.unit.name}</Table.Td>
+                    <Table.Td>{request.unit.property.name}</Table.Td>
+                    <Table.Td ta={'center'}>
+                      <Badge color={requestStatusColorRecord[request.status]}>
+                        {requestStatusRecord[request.status]}
+                      </Badge>
+                    </Table.Td>
+                    <Table.Td>
+                      <Group justify="center">
+                        <Link to="/requests/$id" params={{ id: request.id }}>
+                          <Tooltip label={'View request detail'}>
+                            <ActionIcon variant="light">
+                              <Invoice01Icon size={16} />
+                            </ActionIcon>
+                          </Tooltip>
+                        </Link>
+                        <Link to="/units/$id" params={{ id: request.unit.id }}>
+                          <Tooltip label={'View unit detail'}>
+                            <ActionIcon variant="light" color="cyan">
+                              <SearchSquareIcon size={16} />
+                            </ActionIcon>
+                          </Tooltip>
+                        </Link>
+                        <Link
+                          to="/properties/$id"
+                          params={{ id: request.unit.propertyId }}
+                        >
+                          <Tooltip label={'View property detail'}>
+                            <ActionIcon variant="light" color="grape">
+                              <Building02Icon size={16} />
+                            </ActionIcon>
+                          </Tooltip>
+                        </Link>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                ))
+              ) : (
+                <Table.Tr>
+                  <Table.Td colSpan={6}>
+                    <Center h={425}>No data to display</Center>
+                  </Table.Td>
+                </Table.Tr>
+              )}
+            </Table.Tbody>
+          </Table>
         </SimpleGrid>
         <Pagination
           withEdges
