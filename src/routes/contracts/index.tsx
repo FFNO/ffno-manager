@@ -49,19 +49,6 @@ function Page() {
         </Link>
       </Group>
       <SimpleGrid cols={1} py={24}>
-        {/* <Card withBorder className="text-base font-semibold">
-          <Group justify="space-between">
-            <p className="w-12">ID</p>
-            <p className="w-[200px]">Tenant</p>
-            <p className="w-60">Unit</p>
-            <p className="w-24">Start date</p>
-            <p className="w-24">End date</p>
-            <p className="w-24">Term. date</p>
-            <p className="w-24">Status</p>
-            <p className="w-24">Actions</p>
-          </Group>
-        </Card>
-        {data?.data.map((item) => <ContractCard {...item} key={item.id} />)} */}
         <Table striped highlightOnHover withTableBorder withColumnBorders>
           <Table.Thead>
             <Table.Tr>

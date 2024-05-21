@@ -111,7 +111,10 @@ function RequestCreatePage() {
               <Select
                 withAsterisk
                 label="Category"
-                data={requestCategories}
+                data={requestCategories.filter(
+                  ({ value }) =>
+                    ![RequestCategory.TERMINATE_CONTRACT].includes(value),
+                )}
                 {...form.getInputProps('category')}
               />
             </Grid.Col>

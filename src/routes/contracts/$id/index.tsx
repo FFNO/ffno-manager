@@ -1,9 +1,11 @@
-import { dataProvider, useUpdate } from '@/api';
+import { dataProvider, useCreate, useUpdate } from '@/api';
 import { currentMemberAtom } from '@/app';
 import {
+  ContractStatus,
   DATE_FORMAT,
   IContractResDto,
   IMemberResDto,
+  RequestCategory,
   RequestStatus,
   contractStatusColorRecord,
   contractStatusRecord,
@@ -11,6 +13,7 @@ import {
   requestStatusRecord,
 } from '@/libs';
 import { vndFormatter } from '@/libs/helpers';
+import { showSuccessNotification } from '@/shared';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
@@ -51,6 +54,8 @@ function Page() {
   const currentMember = useAtomValue(currentMemberAtom);
   const {
     id,
+    price,
+    deposit,
     status,
     startDate,
     endDate,
@@ -61,22 +66,48 @@ function Page() {
     tenant,
     tenantStatus,
     unit,
+    requests,
   } = useLoaderData({ from: '/contracts/$id/' });
-  const mutate = useUpdate({
+  const mutateContract = useUpdate({
     resource: `contracts/${id}`,
     onSuccess: () => router.invalidate(),
+  });
+
+  const mutateRequest = useCreate({
+    resource: `requests`,
+    onSuccess: () => {
+      showSuccessNotification({
+        message:
+          'Request sent. This contract will be terminated when tenant accepted',
+      });
+      router.invalidate();
+    },
   });
 
   const confirmApprove = () =>
     modals.openConfirmModal({
       children: 'Are you sure you want to approve this contract?',
-      onConfirm: () => mutate.mutate({ status: RequestStatus.ACCEPTED }),
+      onConfirm: () =>
+        mutateContract.mutate({ status: RequestStatus.ACCEPTED }),
     });
 
   const rejectApprove = () =>
     modals.openConfirmModal({
       children: 'Are you sure you want to reject this contract?',
-      onConfirm: () => mutate.mutate({ status: RequestStatus.REJECTED }),
+      onConfirm: () =>
+        mutateContract.mutate({ status: RequestStatus.REJECTED }),
+    });
+
+  const terminateContract = () =>
+    modals.openConfirmModal({
+      children: 'Are you sure you want to terminate this contract?',
+      onConfirm: () =>
+        mutateRequest.mutate({
+          name: `Terminate contract #${id}`,
+          description: `${currentMember.name} requested to terminate contract #${id}`,
+          contractId: id,
+          category: RequestCategory.TERMINATE_CONTRACT,
+        }),
     });
 
   return (
@@ -90,11 +121,15 @@ function Page() {
             </Badge>
           </Group>
           <Box flex={1} />
-          {/* {status === ContractStatus.PENDING && (
-            <Link to="/contracts/$id/update" params={{ id: id.toString() }}>
-              <Button>Edit contract</Button>
-            </Link>
-          )} */}
+          {status === ContractStatus.ACTIVE && (
+            <Button
+              disabled={!!requests.length}
+              color="red"
+              onClick={() => terminateContract()}
+            >
+              Terminate contract
+            </Button>
+          )}
         </Group>
         <Fieldset legend={'Information'}>
           <Stack>
@@ -119,11 +154,11 @@ function Page() {
             <Group justify="space-between">
               <Group>
                 <p>Price:</p>
-                <p>{vndFormatter.format(unit.price)}/month</p>
+                <p>{vndFormatter.format(price)}/month</p>
               </Group>
               <Group>
                 <p>Deposit:</p>
-                <p>{vndFormatter.format(unit.deposit)}/month</p>
+                <p>{vndFormatter.format(deposit)}/month</p>
               </Group>
             </Group>
             <Group>

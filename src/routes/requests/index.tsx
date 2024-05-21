@@ -86,6 +86,7 @@ function Page() {
                 <Table.Th>Sender</Table.Th>
                 <Table.Th>Unit</Table.Th>
                 <Table.Th>Property</Table.Th>
+                <Table.Th>Contract</Table.Th>
                 <Table.Th ta={'center'}>Status</Table.Th>
                 <Table.Th ta={'center'}>Actions</Table.Th>
               </Table.Tr>
@@ -103,8 +104,21 @@ function Page() {
                         <p>{request.sender.name}</p>
                       </Group>
                     </Table.Td>
-                    <Table.Td>{request.unit.name}</Table.Td>
-                    <Table.Td>{request.unit.property.name}</Table.Td>
+                    <Table.Td>{request.unit?.name ?? '-'}</Table.Td>
+                    <Table.Td>{request.unit?.property?.name ?? '-'}</Table.Td>
+                    <Table.Td>
+                      {request.contract ? (
+                        <Link
+                          to="/contracts/$id"
+                          params={{ id: request.contract.id.toString() }}
+                          className="text-primary hover:underline"
+                        >
+                          #{request.contract.id}
+                        </Link>
+                      ) : (
+                        '-'
+                      )}
+                    </Table.Td>
                     <Table.Td ta={'center'}>
                       <Badge color={requestStatusColorRecord[request.status]}>
                         {requestStatusRecord[request.status]}
@@ -119,30 +133,37 @@ function Page() {
                             </ActionIcon>
                           </Tooltip>
                         </Link>
-                        <Link to="/units/$id" params={{ id: request.unit.id }}>
-                          <Tooltip label={'View unit detail'}>
-                            <ActionIcon variant="light" color="cyan">
-                              <SearchSquareIcon size={16} />
-                            </ActionIcon>
-                          </Tooltip>
-                        </Link>
-                        <Link
-                          to="/properties/$id"
-                          params={{ id: request.unit.propertyId }}
-                        >
-                          <Tooltip label={'View property detail'}>
-                            <ActionIcon variant="light" color="grape">
-                              <Building02Icon size={16} />
-                            </ActionIcon>
-                          </Tooltip>
-                        </Link>
+                        {request.unit && (
+                          <>
+                            <Link
+                              to="/units/$id"
+                              params={{ id: request.unit.id }}
+                            >
+                              <Tooltip label={'View unit detail'}>
+                                <ActionIcon variant="light" color="cyan">
+                                  <SearchSquareIcon size={16} />
+                                </ActionIcon>
+                              </Tooltip>
+                            </Link>
+                            <Link
+                              to="/properties/$id"
+                              params={{ id: request.unit.propertyId }}
+                            >
+                              <Tooltip label={'View property detail'}>
+                                <ActionIcon variant="light" color="grape">
+                                  <Building02Icon size={16} />
+                                </ActionIcon>
+                              </Tooltip>
+                            </Link>
+                          </>
+                        )}
                       </Group>
                     </Table.Td>
                   </Table.Tr>
                 ))
               ) : (
                 <Table.Tr>
-                  <Table.Td colSpan={6}>
+                  <Table.Td colSpan={7}>
                     <Center h={425}>No data to display</Center>
                   </Table.Td>
                 </Table.Tr>

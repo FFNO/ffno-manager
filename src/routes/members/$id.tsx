@@ -21,7 +21,7 @@ import {
 } from '@mantine/core';
 import { Link, createFileRoute, useLoaderData } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { PencilEdit02Icon, ViewIcon } from 'hugeicons-react';
+import { Building02Icon, Invoice01Icon } from 'hugeicons-react';
 
 export const Route = createFileRoute('/members/$id')({
   component: Page,
@@ -47,21 +47,37 @@ function Page() {
             <Title>{data.name}</Title>
             <Avatar size={'xl'} src={data.imgUrl} />
           </Stack>
-          <Fieldset legend="Information">
+          <Fieldset legend="Information" mt={'lg'}>
             <Group>
-              <p>Gender:</p>
+              <p className="font-semibold">Email:</p>
+              <p>{data.email}</p>
+            </Group>
+            <Group>
+              <p className="font-semibold">Phone:</p>
+              <p>{data.phone}</p>
+            </Group>
+            <Group>
+              <p className="font-semibold">Gender:</p>
               <p>{genderRecord[data.gender]}</p>
+            </Group>
+            <Group>
+              <p className="font-semibold">Address:</p>
+              <p>{data.address}</p>
+            </Group>
+            <Group>
+              <p className="font-semibold">Date of birth:</p>
+              <p>{dayjs(data.dateOfBirth).format(DATE_FORMAT)}</p>
             </Group>
           </Fieldset>
         </Grid.Col>
         <Grid.Col span={8}>
           <Stack>
             <Group>
-              <p>Unit: </p>
+              <p className="font-semibold">Unit: </p>
               <p>{data.unit ? data.unit : 'None'}</p>
             </Group>
             <Group>
-              <p>Contracts:</p>
+              <p className="font-semibold">Contracts:</p>
               <Table striped highlightOnHover withTableBorder withColumnBorders>
                 <Table.Thead>
                   <Table.Tr>
@@ -105,7 +121,7 @@ function Page() {
                           >
                             <Tooltip label={'View contract detail'}>
                               <ActionIcon variant="light">
-                                <ViewIcon size={16} />
+                                <Invoice01Icon size={16} />
                               </ActionIcon>
                             </Tooltip>
                           </Link>
@@ -115,7 +131,7 @@ function Page() {
                           >
                             <Tooltip label={'View property detail'}>
                               <ActionIcon variant="light" color="grape">
-                                <PencilEdit02Icon size={16} />
+                                <Building02Icon size={16} />
                               </ActionIcon>
                             </Tooltip>
                           </Link>
