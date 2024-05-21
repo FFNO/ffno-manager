@@ -1,7 +1,6 @@
-import ChatSidebar from '@/components/chat/ChatSidebar';
-import { socketService } from '@/services/socket';
 import { currentMemberAtom } from '@/app';
-import { Divider, Group } from '@mantine/core';
+import { ChatSidebar } from '@/components/chat/ChatSidebar';
+import { socketService } from '@/services/socket';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { useAtomValue } from 'jotai';
 import { useEffect } from 'react';
@@ -18,11 +17,18 @@ function ChatLayout() {
     return () => socketService.disconnect();
   }, [member.id]);
 
+  useEffect(() => {
+    const i = setInterval(() => {
+      socketService.ping();
+    }, 5000);
+
+    return () => clearInterval(i);
+  }, []);
+
   return (
-    <Group>
+    <div className="flex flex-row h-[calc(100vh-121px)]">
       <ChatSidebar />
-      <Divider orientation="vertical" />
       <Outlet />
-    </Group>
+    </div>
   );
 }

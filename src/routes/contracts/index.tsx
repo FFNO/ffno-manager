@@ -111,7 +111,7 @@ function Page() {
                         to="/contracts/$id"
                         params={{ id: contract.id.toString() }}
                       >
-                        <Tooltip label={'View request detail'}>
+                        <Tooltip label={'View contract detail'}>
                           <ActionIcon variant="light">
                             <ViewIcon size={16} />
                           </ActionIcon>

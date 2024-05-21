@@ -19,3 +19,5 @@ export const currentMemberAtom = atomWithStorage(
   'currentMember',
   JSON.parse(localStorage.getItem('currentMember') || '{}') as IMemberResDto,
 );
+
+export const contactRecordAtom = atom<Record<string, IMemberResDto>>({});
