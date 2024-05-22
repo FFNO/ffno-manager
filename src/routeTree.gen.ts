@@ -22,7 +22,6 @@ import { Route as NotificationsIndexImport } from './routes/notifications/index'
 import { Route as InvoicesIndexImport } from './routes/invoices/index'
 import { Route as EquipmentsIndexImport } from './routes/equipments/index'
 import { Route as ContractsIndexImport } from './routes/contracts/index'
-import { Route as ContactsIndexImport } from './routes/contacts/index'
 import { Route as ChatIndexImport } from './routes/chat/index'
 import { Route as UnitsCreateImport } from './routes/units/create'
 import { Route as RequestsCreateImport } from './routes/requests/create'
@@ -47,8 +46,6 @@ import { Route as ContractsIdUpdateImport } from './routes/contracts/$id/update'
 // Create Virtual Routes
 
 const InvoicesCreateLazyImport = createFileRoute('/invoices/create')()
-const ContactsCreateLazyImport = createFileRoute('/contacts/create')()
-const ContactsContactIdLazyImport = createFileRoute('/contacts/$contactId')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
 
 // Create/Update Routes
@@ -98,13 +95,6 @@ const ContractsIndexRoute = ContractsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ContactsIndexRoute = ContactsIndexImport.update({
-  path: '/contacts/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/index.lazy').then((d) => d.Route),
-)
-
 const ChatIndexRoute = ChatIndexImport.update({
   path: '/',
   getParentRoute: () => ChatRoute,
@@ -115,20 +105,6 @@ const InvoicesCreateLazyRoute = InvoicesCreateLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/invoices/create.lazy').then((d) => d.Route),
-)
-
-const ContactsCreateLazyRoute = ContactsCreateLazyImport.update({
-  path: '/contacts/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/create.lazy').then((d) => d.Route),
-)
-
-const ContactsContactIdLazyRoute = ContactsContactIdLazyImport.update({
-  path: '/contacts/$contactId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/contacts/$contactId.lazy').then((d) => d.Route),
 )
 
 const AuthSignInLazyRoute = AuthSignInLazyImport.update({
@@ -287,14 +263,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInLazyImport
       parentRoute: typeof rootRoute
     }
-    '/contacts/$contactId': {
-      preLoaderRoute: typeof ContactsContactIdLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/contacts/create': {
-      preLoaderRoute: typeof ContactsCreateLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/invoices/create': {
       preLoaderRoute: typeof InvoicesCreateLazyImport
       parentRoute: typeof rootRoute
@@ -302,10 +270,6 @@ declare module '@tanstack/react-router' {
     '/chat/': {
       preLoaderRoute: typeof ChatIndexImport
       parentRoute: typeof ChatImport
-    }
-    '/contacts/': {
-      preLoaderRoute: typeof ContactsIndexImport
-      parentRoute: typeof rootRoute
     }
     '/contracts/': {
       preLoaderRoute: typeof ContractsIndexImport
@@ -389,10 +353,7 @@ export const routeTree = rootRoute.addChildren([
   RequestsCreateRoute,
   UnitsCreateRoute,
   AuthSignInLazyRoute,
-  ContactsContactIdLazyRoute,
-  ContactsCreateLazyRoute,
   InvoicesCreateLazyRoute,
-  ContactsIndexRoute,
   ContractsIndexRoute,
   EquipmentsIndexRoute,
   InvoicesIndexRoute,
