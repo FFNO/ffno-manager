@@ -1,7 +1,8 @@
 import { dataProvider, useUpdate } from '@/api';
-import { currentMemberAtom } from '@/app';
+import { contractFormAtom, currentMemberAtom } from '@/app';
 import {
   IRequestResDto,
+  RequestCategory,
   RequestStatus,
   requestCategoryRecord,
   requestStatusColorRecord,
@@ -22,13 +23,15 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import {
+  Link,
   createFileRoute,
   useLoaderData,
+  useNavigate,
   useRouter,
 } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { Cancel01Icon, Tick01Icon } from 'hugeicons-react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 export const Route = createFileRoute('/requests/$id')({
   component: Page,
@@ -38,8 +41,10 @@ export const Route = createFileRoute('/requests/$id')({
 
 function Page() {
   const router = useRouter();
+  const navigate = useNavigate();
 
   const currentMember = useAtomValue(currentMemberAtom);
+  const setContractForm = useSetAtom(contractFormAtom);
   const data = useLoaderData({ from: '/requests/$id' });
   const mutate = useUpdate({
     resource: `requests/${data.id}`,
@@ -61,6 +66,21 @@ function Page() {
       ),
       onConfirm: () => mutate.mutate({ status: RequestStatus.REJECTED }),
     });
+
+  const showCreateContract =
+    data.status === RequestStatus.ACCEPTED &&
+    data.category === RequestCategory.UNIT_LEASE;
+
+  const handleCreateContract = () => {
+    setContractForm((prev) => ({
+      ...prev,
+      landlordId: currentMember.id,
+      tenantId: data.sender.id,
+      unitId: data.unit.id,
+      propertyId: data.unit.propertyId,
+    }));
+    navigate({ to: '/contracts/create' });
+  };
 
   return (
     <Paper p={'lg'}>
@@ -116,6 +136,15 @@ function Page() {
             ))}
           </Stack>
         </Fieldset>
+        <Group justify="end">
+          {showCreateContract && (
+            <Link to="/contracts/create">
+              <Button onClick={() => handleCreateContract()}>
+                Create contract
+              </Button>
+            </Link>
+          )}
+        </Group>
       </Stack>
     </Paper>
   );

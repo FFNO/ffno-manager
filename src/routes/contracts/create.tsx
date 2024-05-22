@@ -1,4 +1,5 @@
 import { useCreate, useList, useSimpleList } from '@/api';
+import { contractFormAtom } from '@/app';
 import { ICreateContractDto, IMemberResDto, MemberRole } from '@/libs';
 import { showSuccessNotification } from '@/shared';
 import {
@@ -14,6 +15,7 @@ import {
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/contracts/create')({
@@ -21,9 +23,12 @@ export const Route = createFileRoute('/contracts/create')({
 });
 
 function Page() {
-  const [propertyId, setPropertyId] = useState<Nullable<string>>(null);
-
+  const contractForm = useAtomValue(contractFormAtom);
   const navigate = useNavigate();
+
+  const [propertyId, setPropertyId] = useState<Nullable<string>>(
+    contractForm.propertyId ?? null,
+  );
 
   const mutate = useCreate({
     resource: 'contracts',
@@ -31,17 +36,7 @@ function Page() {
   });
 
   const form = useForm<NullableObject<ICreateContractDto>>({
-    initialValues: {
-      unitId: null,
-      tenantId: null,
-      landlordId: null,
-      startDate: null,
-      endDate: null,
-      terminationDate: null,
-      imgUrls: [],
-      template: 'basic',
-    },
-    // validate: zodResolver(),
+    initialValues: contractForm,
   });
 
   const { data: properties } = useSimpleList({
@@ -55,7 +50,7 @@ function Page() {
 
   const { data: tenants } = useList<IMemberResDto>({
     resource: `members/contacts`,
-    params: { type: MemberRole.TENANT },
+    params: { type: MemberRole.TENANT, pageSize: 10000 },
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
@@ -73,6 +68,11 @@ function Page() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propertyId]);
+
+  useEffect(() => {
+    contractForm.propertyId && setPropertyId(contractForm.propertyId);
+    form.setValues(contractForm);
+  }, [contractForm]);
 
   return (
     <Stack px={120} py={'md'} pos={'relative'}>
