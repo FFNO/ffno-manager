@@ -31,6 +31,7 @@ import { Route as MembersTenantsImport } from './routes/members/tenants'
 import { Route as MembersServiceWorkersImport } from './routes/members/service-workers'
 import { Route as MembersMeImport } from './routes/members/me'
 import { Route as MembersIdImport } from './routes/members/$id'
+import { Route as InvoicesCreateImport } from './routes/invoices/create'
 import { Route as ContractsCreateImport } from './routes/contracts/create'
 import { Route as ChatIdImport } from './routes/chat/$id'
 import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
@@ -45,7 +46,6 @@ import { Route as ContractsIdUpdateImport } from './routes/contracts/$id/update'
 
 // Create Virtual Routes
 
-const InvoicesCreateLazyImport = createFileRoute('/invoices/create')()
 const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
 
 // Create/Update Routes
@@ -100,13 +100,6 @@ const ChatIndexRoute = ChatIndexImport.update({
   getParentRoute: () => ChatRoute,
 } as any)
 
-const InvoicesCreateLazyRoute = InvoicesCreateLazyImport.update({
-  path: '/invoices/create',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/invoices/create.lazy').then((d) => d.Route),
-)
-
 const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRoute,
@@ -149,6 +142,11 @@ const MembersMeRoute = MembersMeImport.update({
 
 const MembersIdRoute = MembersIdImport.update({
   path: '/members/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const InvoicesCreateRoute = InvoicesCreateImport.update({
+  path: '/invoices/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -227,6 +225,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContractsCreateImport
       parentRoute: typeof rootRoute
     }
+    '/invoices/create': {
+      preLoaderRoute: typeof InvoicesCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/members/$id': {
       preLoaderRoute: typeof MembersIdImport
       parentRoute: typeof rootRoute
@@ -261,10 +263,6 @@ declare module '@tanstack/react-router' {
     }
     '/auth/sign-in': {
       preLoaderRoute: typeof AuthSignInLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoices/create': {
-      preLoaderRoute: typeof InvoicesCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/chat/': {
@@ -344,6 +342,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatRoute.addChildren([ChatIdRoute, ChatIndexRoute]),
   ContractsCreateRoute,
+  InvoicesCreateRoute,
   MembersIdRoute,
   MembersMeRoute,
   MembersServiceWorkersRoute,
@@ -353,7 +352,6 @@ export const routeTree = rootRoute.addChildren([
   RequestsCreateRoute,
   UnitsCreateRoute,
   AuthSignInLazyRoute,
-  InvoicesCreateLazyRoute,
   ContractsIndexRoute,
   EquipmentsIndexRoute,
   InvoicesIndexRoute,

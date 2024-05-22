@@ -1,4 +1,4 @@
-import { useList } from '@/api';
+import { useList, useUpdate } from '@/api';
 import { invoiceSearchAtom, selectToMergeInvoices } from '@/app';
 import { InvoiceSearch } from '@/components/invoices';
 import {
@@ -8,6 +8,7 @@ import {
   invoiceStatusRecord,
 } from '@/libs';
 import { calculatePage, vndFormatter } from '@/libs/helpers';
+import { showSuccessNotification } from '@/shared';
 import {
   ActionIcon,
   Avatar,
@@ -47,6 +48,15 @@ function Page() {
     params: search,
   });
 
+  const mutateMergeInvoice = useUpdate({
+    resource: '/invoices/merge',
+    onSuccess: () => {
+      showSuccessNotification({
+        message: 'Merged invoices successfully',
+      });
+    },
+  });
+
   const selectedCount = useMemo(
     () => Object.values(selected).filter(Boolean).length,
     [selected],
@@ -71,9 +81,29 @@ function Page() {
             <p className="text-lg font-medium">
               {selectedCount} invoices selected
             </p>
-            <Button color="grape" onClick={() => {}}>
-              Merge invoices
-            </Button>
+            <Group>
+              <Button
+                color="red"
+                variant="outline"
+                onClick={() => {
+                  setSelected({});
+                }}
+              >
+                Unselect all
+              </Button>
+              <Button
+                color="grape"
+                onClick={() => {
+                  const ids = Object.entries(selected)
+                    .filter(([, value]) => !!value)
+                    .map(([key]) => key);
+
+                  mutateMergeInvoice.mutate({ ids });
+                }}
+              >
+                Merge invoices
+              </Button>
+            </Group>
           </>
         )}
       </Group>

@@ -1,5 +1,5 @@
-import { useCreate, useList } from '@/api';
-import { IUnitResDto, invoiceCategories } from '@/libs';
+import { useCreate, useList, useSimpleList } from '@/api';
+import { DATE_FORMAT, IUnitResDto, invoiceCategories } from '@/libs';
 import {
   CreateInvoiceSchema,
   createInvoiceInitialValues,
@@ -7,6 +7,7 @@ import {
   showSuccessNotification,
 } from '@/shared';
 import {
+  Breadcrumbs,
   Button,
   Divider,
   Grid,
@@ -19,23 +20,33 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
-export const Route = createLazyFileRoute('/invoices/create')({
+export const Route = createFileRoute('/invoices/create')({
   component: InvoiceCreate,
 });
 
 function InvoiceCreate() {
-  const mutate = useCreate({ resource: 'invoices' });
-  const navigate = useNavigate();
+  const [propertyId, setPropertyId] = useState<Nullable<string>>(null);
 
-  const { data } = useList<IUnitResDto>({
-    resource: 'units/simple-list',
+  const mutate = useCreate({
+    resource: 'invoices',
+
     onSuccess() {
-      showSuccessNotification({ message: 'Thêm hóa đơn thành công' });
+      showSuccessNotification({ message: 'Add invoice successfully' });
       navigate({ to: '/invoices', search: true, params: true });
     },
+  });
+  const navigate = useNavigate();
+
+  const { data: units } = useList<IUnitResDto>({
+    resource: 'units/simple-list',
+    params: { propertyId },
+  });
+
+  const { data: properties } = useSimpleList({
+    resource: 'properties',
   });
 
   const form = useForm<NullableObject<CreateInvoiceSchema>>({
@@ -53,36 +64,41 @@ function InvoiceCreate() {
   }, [form.values.unitId]);
 
   return (
-    <Stack p={'lg'} pos={'relative'}>
+    <Stack px={120} py={'lg'} pos={'relative'}>
       <LoadingOverlay
         visible={mutate.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/invoices">Invoices</Link>
+        <p>Add invoice</p>
+      </Breadcrumbs>
       <form onSubmit={handleSubmit}>
         <Grid columns={12}>
           <Grid.Col span={4}>
             <Select
               searchable
-              label="Loại hóa đơn"
+              label="Category"
               data={invoiceCategories}
-              placeholder="Chọn loại hóa đơn"
+              placeholder="Select invoice category"
               {...form.getInputProps(`category`)}
             />
           </Grid.Col>
           <Grid.Col span={4}>
             <DatePickerInput
-              label="Ngày đáo hạn"
-              placeholder="Chọn ngày đáo hạn"
-              valueFormat="DD/MM/YYYY"
+              label="Due date"
+              placeholder="Select due date"
+              valueFormat={DATE_FORMAT}
               minDate={new Date()}
               {...form.getInputProps(`dueDate`)}
             />
           </Grid.Col>
           <Grid.Col span={4}>
             <NumberInput
-              label="Số tiền"
-              placeholder="Nhập số tiền"
+              label="Amount"
+              placeholder="Input amount"
               suffix={' ₫'}
               thousandSeparator=","
               step={1000}
@@ -93,28 +109,43 @@ function InvoiceCreate() {
             />
           </Grid.Col>
 
-          <Grid.Col span={6}>
+          <Grid.Col span={4}>
             <Select
+              clearable
               searchable
-              label="Phòng"
-              placeholder="Chọn phòng"
-              data={data?.data.map((item) => ({
-                value: item.id,
-                label: item.name,
-              }))}
-              {...form.getInputProps(`unitId`)}
+              label="Property"
+              placeholder="Select property"
+              data={properties ?? []}
+              value={propertyId}
+              onChange={(e) => setPropertyId(e)}
             />
           </Grid.Col>
 
-          <Grid.Col span={6}>
+          <Grid.Col span={4}>
+            <Select
+              clearable
+              searchable
+              label="Unit"
+              placeholder="Select unit"
+              data={
+                units?.data?.map((unit) => ({
+                  value: unit.id,
+                  label: unit.name,
+                })) ?? []
+              }
+              {...form.getInputProps('unitId')}
+            />
+          </Grid.Col>
+
+          <Grid.Col span={4}>
             <Select
               searchable
-              label="Người nộp tiền"
-              placeholder="Chọn người nộp tiền"
+              label="Payer"
+              placeholder="Select payer"
               disabled={!form.values.unitId}
-              data={data?.data
+              data={units?.data
                 .find((item) => item.id === form.values.unitId)
-                ?.tenants.map((tenant) => ({
+                ?.tenants?.map((tenant) => ({
                   value: tenant.id,
                   label: tenant.name,
                 }))}
@@ -123,8 +154,8 @@ function InvoiceCreate() {
           </Grid.Col>
           <Grid.Col span={12}>
             <Textarea
-              label="Nội dung hóa đơn"
-              placeholder="Nhập nội dung"
+              label="Description"
+              placeholder="Enter description"
               rows={4}
               {...form.getInputProps('description')}
             />
@@ -134,14 +165,14 @@ function InvoiceCreate() {
         <Divider mt={'lg'} pb={'lg'} />
 
         <Group justify="end">
-          <Button type="submit">Tạo</Button>
+          <Button type="submit">Submit</Button>
           <Button
             variant="outline"
             color="red"
             type="button"
             onClick={() => form.reset()}
           >
-            Hủy
+            Cancel
           </Button>
         </Group>
       </form>
