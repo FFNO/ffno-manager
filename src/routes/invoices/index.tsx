@@ -176,7 +176,7 @@ function Page() {
               ))
             ) : (
               <Table.Tr>
-                <Table.Td colSpan={6}>
+                <Table.Td colSpan={9}>
                   <Center h={425}>No data to display</Center>
                 </Table.Td>
               </Table.Tr>
