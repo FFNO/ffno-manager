@@ -141,9 +141,16 @@ export function UnitCard({
           >
             <PencilEdit01Icon />
           </ActionIcon>
-          <ActionIcon size={40} color="red" onClick={() => handleDeleteUnit()}>
-            <Delete02Icon />
-          </ActionIcon>
+          {/* TODO: Handle delete */}
+          <div className="hidden">
+            <ActionIcon
+              size={40}
+              color="red"
+              onClick={() => handleDeleteUnit()}
+            >
+              <Delete02Icon />
+            </ActionIcon>
+          </div>
         </Group>
       </Group>
     </Card>

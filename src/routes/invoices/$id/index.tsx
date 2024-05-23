@@ -1,6 +1,7 @@
-import { dataProvider } from '@/api';
+import { dataProvider, useUpdate } from '@/api';
 import {
   IInvoiceResDto,
+  InvoiceStatus,
   invoiceStatusColorRecord,
   invoiceStatusRecord,
 } from '@/libs';
@@ -21,6 +22,7 @@ import {
 } from '@mantine/core';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import dayjs from 'dayjs';
+import { usePDF } from 'react-to-pdf';
 
 export const Route = createFileRoute('/invoices/$id/')({
   component: Page,
@@ -30,6 +32,8 @@ export const Route = createFileRoute('/invoices/$id/')({
 
 function Page() {
   const data = useLoaderData({ from: '/invoices/$id/' });
+  const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+  const mutate = useUpdate({ resource: `invoices/${data.id}` });
 
   return (
     <Paper px={48} py={32}>
@@ -39,11 +43,19 @@ function Page() {
           {invoiceStatusRecord[data.status]}
         </Badge>
         <Box flex={1}></Box>
-        <Button>Edit invoice</Button>
-        <Button>Print Invoice</Button>
+        {data.status !== InvoiceStatus.PAID && (
+          <Button
+            onClick={() => {
+              mutate.mutate({ status: InvoiceStatus.PAID });
+            }}
+          >
+            Mark as paid
+          </Button>
+        )}
+        <Button onClick={() => toPDF()}>Print Invoice</Button>
       </Group>
       <Divider mb="lg" />
-      <Grid>
+      <Grid ref={targetRef} className="px-40 py-10">
         <Grid.Col span={12}>
           <SimpleGrid cols={2}>
             <Stack gap={0}>

@@ -67,13 +67,21 @@ function Page() {
       <Group justify="space-between">
         <Title>Invoices</Title>
         <Box flex={1} />
-        <Button variant="outline" leftSection={<Upload04Icon size={16} />}>
-          Import
-        </Button>
+        {/* TODO: */}
+        <div className="hidden">
+          <Button variant="outline" leftSection={<Upload04Icon size={16} />}>
+            Import
+          </Button>
+        </div>
         <InvoiceSearch />
-        <Link to="/invoices/create">
-          <Button leftSection={<PlusSignIcon size={16} />}>Add invoice</Button>
-        </Link>
+        {/* TODO: */}
+        <div className="hidden">
+          <Link to="/invoices/create">
+            <Button leftSection={<PlusSignIcon size={16} />}>
+              Add invoice
+            </Button>
+          </Link>
+        </div>
       </Group>
       <Group justify="space-between" mih={40}>
         {selectedCount && (

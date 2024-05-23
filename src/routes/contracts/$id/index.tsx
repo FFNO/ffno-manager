@@ -20,6 +20,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Breadcrumbs,
   Button,
   Card,
   Fieldset,
@@ -112,6 +113,13 @@ function Page() {
 
   return (
     <Paper px={120} py={'lg'}>
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/contracts">Contracts</Link>
+        <Link to="/contracts/$id" params={{ id: id.toString() }}>
+          #{id}
+        </Link>
+      </Breadcrumbs>
       <Stack gap={'md'}>
         <Group>
           <Title order={3}>Unit lease contract</Title>
@@ -130,6 +138,11 @@ function Page() {
               Terminate contract
             </Button>
           )}
+          {/* {status === ContractStatus.PENDING && (
+            <Link to="/contracts/$id/update" params={{ id: id.toString() }}>
+              <Button>Edit contract</Button>
+            </Link>
+          )} */}
         </Group>
         <Fieldset legend={'Information'}>
           <Stack>

@@ -12,6 +12,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Breadcrumbs,
   Button,
   Center,
   Group,
@@ -23,7 +24,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { PencilEdit02Icon, PlusSignIcon, ViewIcon } from 'hugeicons-react';
+import { Building02Icon, PlusSignIcon, ViewIcon } from 'hugeicons-react';
 import { useAtom } from 'jotai';
 
 export const Route = createFileRoute('/contracts/')({
@@ -39,14 +40,23 @@ function Page() {
   });
 
   return (
-    <Stack p={'lg'} px={32}>
+    <Stack p={'lg'} px={120}>
+      <Breadcrumbs className="my-4 font-semibold text-primary cursor-pointer">
+        <Link to="/">Home</Link>
+        <Link to="/contracts">Contracts</Link>
+      </Breadcrumbs>
       <Group justify="space-between">
         <Title>Contracts</Title>
         <Box flex={1} />
         <ContractSearch />
-        <Link to="/contracts/create">
-          <Button leftSection={<PlusSignIcon size={16} />}>Add contract</Button>
-        </Link>
+        {/* TODO: Handle this flow later */}
+        <div className="hidden">
+          <Link to="/contracts/create">
+            <Button leftSection={<PlusSignIcon size={16} />}>
+              Add contract
+            </Button>
+          </Link>
+        </div>
       </Group>
       <SimpleGrid cols={1} py={24}>
         <Table striped highlightOnHover withTableBorder withColumnBorders>
@@ -106,11 +116,11 @@ function Page() {
                       </Link>
                       <Link
                         to="/properties/$id"
-                        params={{ id: contract.unit.propertyId }}
+                        params={{ id: contract.unit.property.id }}
                       >
                         <Tooltip label={'View property detail'}>
                           <ActionIcon variant="light" color="grape">
-                            <PencilEdit02Icon size={16} />
+                            <Building02Icon size={16} />
                           </ActionIcon>
                         </Tooltip>
                       </Link>

@@ -23,7 +23,7 @@ export const ContractSearch = () => {
 
   const { data: tenants } = useList<IMemberResDto>({
     resource: `members/contacts`,
-    params: { type: MemberRole.TENANT },
+    params: { type: MemberRole.TENANT, pageSize: 10000 },
   });
 
   return (

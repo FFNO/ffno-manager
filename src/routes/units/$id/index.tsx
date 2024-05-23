@@ -147,7 +147,6 @@ function UnitPage() {
                         </Table.Td>
                         <Table.Td>{tenant.email}</Table.Td>
                         <Table.Td>{tenant.phone}</Table.Td>
-                        <Table.Td>{tenant.unit}</Table.Td>
                       </Table.Tr>
                     ))}
                   </Table.Tbody>

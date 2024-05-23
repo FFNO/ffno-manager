@@ -41,9 +41,12 @@ function Page() {
     <Stack p={'lg'}>
       {/* Header */}
       <Group justify="end">
-        <Button variant="outline" leftSection={<Upload04Icon size={20} />}>
-          Bulk upload
-        </Button>
+        {/* TODO: Bulk upload */}
+        <div className="hidden">
+          <Button variant="outline" leftSection={<Upload04Icon size={20} />}>
+            Bulk upload
+          </Button>
+        </div>
         <UnitSearch />
         <Link to="/units/create">
           <Button leftSection={<PlusSignIcon size={20} />}>Add unit</Button>
