@@ -6,6 +6,7 @@ import {
   invoiceStatusRecord,
 } from '@/libs';
 import { vndFormatter } from '@/libs/helpers';
+import { showSuccessNotification } from '@/shared';
 import {
   Badge,
   Box,
@@ -20,7 +21,11 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useLoaderData,
+  useRouter,
+} from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { usePDF } from 'react-to-pdf';
 
@@ -31,9 +36,18 @@ export const Route = createFileRoute('/invoices/$id/')({
 });
 
 function Page() {
+  const router = useRouter();
   const data = useLoaderData({ from: '/invoices/$id/' });
   const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
-  const mutate = useUpdate({ resource: `invoices/${data.id}` });
+  const mutate = useUpdate({
+    resource: `invoices/${data.id}`,
+    onSuccess: () => {
+      showSuccessNotification({
+        message: 'Successfully updated invoices',
+      });
+      router.invalidate();
+    },
+  });
 
   return (
     <Paper px={48} py={32}>

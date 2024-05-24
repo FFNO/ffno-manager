@@ -1,4 +1,7 @@
-import { dataProvider } from '@/api';
+import { useList } from '@/api';
+import { requestSearchAtom } from '@/app';
+import { SearchButton } from '@/components/common';
+import { RequestSearchForm } from '@/components/requests';
 import {
   IRequestResDto,
   requestCategoryRecord,
@@ -20,47 +23,33 @@ import {
   Tabs,
   Tooltip,
 } from '@mantine/core';
-import {
-  Link,
-  createFileRoute,
-  useLoaderData,
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   Building02Icon,
   Invoice01Icon,
   PlusSignIcon,
   SearchSquareIcon,
 } from 'hugeicons-react';
-import { z } from 'zod';
-
-const searchSchema = z.object({
-  type: z.string().optional().default('received'),
-  page: z.coerce.number().default(1),
-});
+import { useAtom } from 'jotai';
 
 export const Route = createFileRoute('/requests/')({
   component: Page,
-  validateSearch: searchSchema.parse,
-  loaderDeps: ({ search }) => search,
-  loader: ({ deps }) =>
-    dataProvider.getList<IRequestResDto>({
-      resource: 'requests',
-      params: deps,
-    }),
 });
 
 function Page() {
-  const data = useLoaderData({ from: '/requests/' });
-  const search = useSearch({ from: '/requests/' });
-  const navigate = useNavigate();
+  const [search, setSearch] = useAtom(requestSearchAtom);
+  const { data } = useList<IRequestResDto>({
+    resource: 'requests',
+    params: search,
+  });
 
   return (
     <div>
       <Stack p={'lg'} px={32}>
         <Group justify="end">
-          {/* <InvoiceFilter /> */}
+          <SearchButton>
+            <RequestSearchForm />
+          </SearchButton>
           <Link to="/requests/create">
             <Button leftSection={<PlusSignIcon size={16} />}>
               Add request
@@ -71,7 +60,7 @@ function Page() {
           variant="pills"
           defaultValue={'received'}
           value={search.type}
-          onChange={(value) => navigate({ search: { type: value } })}
+          onChange={(value) => setSearch({ type: value })}
         >
           <Tabs.List>
             <Tabs.Tab value="received">Received request</Tabs.Tab>
@@ -92,8 +81,8 @@ function Page() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {data.total ? (
-                data.data.map((request) => (
+              {data?.total ? (
+                data?.data.map((request) => (
                   <Table.Tr key={request.id}>
                     <Table.Td>
                       {requestCategoryRecord[request.category]}
@@ -174,10 +163,8 @@ function Page() {
         <Pagination
           withEdges
           total={calculatePage(data?.total)}
-          value={search.page}
-          onChange={(page) =>
-            navigate({ search: (prev) => ({ ...prev, page }) })
-          }
+          value={search.page ?? 1}
+          onChange={(page) => setSearch((prev) => ({ ...prev, page }))}
         />
       </Stack>
     </div>
