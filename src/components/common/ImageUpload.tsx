@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 interface Props {
+  urls?: string[];
   setUrls: (urls: string[]) => void;
 }
 
-export const ImageUpload = ({ setUrls }: Props) => {
+export const ImageUpload = ({ urls, setUrls }: Props) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -70,10 +71,11 @@ export const ImageUpload = ({ setUrls }: Props) => {
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
-        <Text ta="center">Thả ảnh vào đây</Text>
+        <Text ta="center">Drop images here</Text>
       </Dropzone>
 
       <SimpleGrid cols={{ base: 1, sm: 3 }} mt={previews.length > 0 ? 'xl' : 0}>
+        {urls?.map((url) => <Image key={url} src={url} />)}
         {previews}
       </SimpleGrid>
     </div>

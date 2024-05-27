@@ -1,8 +1,11 @@
 import { dataProvider } from '@/api';
-import { MePage } from '@/modules/members/MePage';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/members/me')({
-  component: MePage,
+  component: Page,
   loader: () => dataProvider.getOne({ resource: 'members', id: 'me' }),
 });
+
+function Page() {
+  return <></>;
+}

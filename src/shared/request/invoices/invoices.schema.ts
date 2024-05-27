@@ -6,7 +6,7 @@ export const createInvoiceSchema = z.object({
   dueDate: z.date().min(dayjs().startOf('day').toDate(), {
     message: 'Due date must be later or equal today',
   }),
-  details: z.string().optional(),
+  description: z.string().optional(),
   category: z.coerce.number(),
   unitId: z.string().uuid(),
   memberId: z.string().uuid(),

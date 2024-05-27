@@ -1,8 +1,8 @@
 import { axiosInstance } from '@/api/utils';
-import { memberAtom } from '@/states';
+import { currentMemberAtom } from '@/app';
+import { IMemberResDto, memberRoleRecord } from '@/libs';
 import {
   Avatar,
-  Button,
   Divider,
   Group,
   ScrollArea,
@@ -10,65 +10,71 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core';
+import { Button } from '@nextui-org/react';
 import { Link } from '@tanstack/react-router';
-import { useAtom } from 'jotai';
 import {
-  BuildingIcon,
-  CircleGaugeIcon,
-  ClipboardListIcon,
-  ContactIcon,
-  LogOutIcon,
-  MessageCircleIcon,
-  ReceiptIcon,
-} from 'lucide-react';
+  Building02Icon,
+  Contact02Icon,
+  DashboardSpeed02Icon,
+  Invoice01Icon,
+  Invoice04Icon,
+  Logout05Icon,
+  Mailbox01Icon,
+} from 'hugeicons-react';
+import { useAtom } from 'jotai';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
-import { IMemberResDto, memberRoleRecord } from '@/libs';
 
 const navItems = [
-  { label: 'Tổng quan', icon: CircleGaugeIcon, link: '/managers' },
+  { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
   {
-    label: 'Bất động sản',
-    icon: BuildingIcon,
+    label: 'Properties',
+    icon: Building02Icon,
     initiallyOpened: true,
     links: [
-      { label: 'Tòa nhà', link: '/managers/properties' },
-      { label: 'Căn hộ', link: '/managers/properties?view=units' },
-      { label: 'Thiết bị & nội thất', link: '/managers/' },
+      { label: 'Properties', link: '/properties' },
+      { label: 'Units', link: '/units' },
+      // { label: 'Equipments', link: '/equipments' },
     ],
   },
   {
-    label: 'Giao dịch',
-    icon: ReceiptIcon,
-    initiallyOpened: true,
-    links: [{ label: 'Hóa đơn', link: '/managers/invoices' }],
-  },
-  {
-    label: 'Liên lạc',
-    icon: ContactIcon,
+    label: 'Contracts & Invoices',
+    icon: Invoice01Icon,
     initiallyOpened: true,
     links: [
-      { label: 'Người thuê nhà', link: '/managers/contacts?type=0' },
-      { label: 'Dịch vụ chuyên nghiệp', link: '/managers/contacts?type=1' },
+      { label: 'Contracts', link: '/contracts' },
+      { label: 'Invoices', link: '/invoices' },
     ],
   },
   {
-    label: 'Yêu cầu',
-    icon: ClipboardListIcon,
+    label: 'Contacts',
+    icon: Contact02Icon,
+    initiallyOpened: true,
+    links: [
+      { label: 'Tenants', link: '/members/tenants' },
+      // { label: 'Service workers', link: '/members/service-workers' },
+    ],
+  },
+  {
+    label: 'Requests',
+    icon: Invoice04Icon,
     link: '/requests',
   },
   {
-    label: 'Chat',
-    icon: MessageCircleIcon,
-    link: '/chat',
+    label: 'Chat & Notifications',
+    icon: Mailbox01Icon,
+    links: [
+      { label: 'Chat', link: '/chat' },
+      { label: 'Notifications', link: '/notifications' },
+    ],
   },
 ];
 
-export function Navbar() {
+export function AppNavbar() {
   const theme = useMantineTheme();
 
-  const [member, setMember] = useAtom(memberAtom);
+  const [member, setMember] = useAtom(currentMemberAtom);
 
   const links = navItems.map((item) => (
     <LinksGroup {...item} key={item.label} />
@@ -99,19 +105,16 @@ export function Navbar() {
           </Group>
         </Link>
         <Button
-          radius={0}
-          mx={-16}
-          px={'md'}
-          variant="subtle"
-          justify="start"
-          leftSection={<LogOutIcon strokeWidth={1.5} />}
+          variant="bordered"
+          color="danger"
+          startContent={<Logout05Icon strokeWidth={1.5} />}
           onClick={async () => {
             setMember({} as IMemberResDto);
             OneSignal.User.removeTag('memberId');
             await axiosInstance.delete('/auth/sign-out');
           }}
         >
-          <span>Đăng xuất</span>
+          <span>Logout</span>
         </Button>
       </Stack>
     </nav>

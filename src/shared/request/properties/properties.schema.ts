@@ -5,10 +5,11 @@ export const createUnitSchema = z.object({
   area: z.coerce.number(),
   price: z.coerce.number(),
   deposit: z.coerce.number(),
-  details: z.string().optional(),
+  description: z.string().optional(),
   unitFeatures: z.array(z.string()).optional(),
   propertyId: z.string().uuid().optional(),
   status: z.coerce.string().optional(),
+  imgUrls: z.array(z.string().url()).optional(),
 });
 
 export const createPropertySchema = z.object({

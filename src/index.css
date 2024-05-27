@@ -21,6 +21,5 @@ a {
 
   ::-webkit-scrollbar-thumb {
     @apply bg-foreground
-    /* @apply border border-primary-foreground; */;
   }
 }

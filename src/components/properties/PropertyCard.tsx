@@ -13,56 +13,66 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { MapPinnedIcon } from 'lucide-react';
+import { MapsLocation01Icon } from 'hugeicons-react';
 
 interface Props extends IPropertyResDto {}
 
-export const PropertyCard = (props: Props) => {
-  const { id, imgUrls } = props;
+export const PropertyCard = ({
+  id,
+  name,
+  type,
+  address,
+  ward,
+  district,
+  province,
+  units,
+  imgUrls,
+  occupiedCount,
+  vacantCount,
+}: Props) => {
   const theme = useMantineTheme();
+
   return (
-    <Link to={`/managers/properties/$propertyId`} params={{ propertyId: id }}>
+    <Link to={`/properties/$id`} params={{ id }}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Group>
           <AspectRatio ratio={1} style={{ flex: `0 0 ${rem(160)}` }}>
             <Image
               radius={'md'}
               src={imgUrls[0]}
-              alt="Norway"
+              alt={name}
               fallbackSrc="/fallback.png"
             />
           </AspectRatio>
           <Stack flex={1} h={'100%'} justify="start" gap={'sm'}>
-            <Title order={5}>{props.name}</Title>
+            <Title order={5}>{name}</Title>
             <Group gap={'xs'}>
-              <MapPinnedIcon size={24} color={theme.colors.gray[6]} />
+              <MapsLocation01Icon size={24} color={theme.colors.gray[6]} />
               <Box>
                 <Text fz={'sm'} c={theme.colors.gray[6]}>
-                  {`${props.address}`}
+                  {`${address}`}
                 </Text>
                 <Text fz={'sm'} c={theme.colors.gray[6]}>
-                  {`${props.ward}, ${props.district}, ${props.province}`}
+                  {`${ward}, ${district}, ${province}`}
                 </Text>
               </Box>
             </Group>
             <Box flex={1} />
-            <Title order={4}>
-              {propertyType(+props.type, props.units.length)}
-            </Title>
+            <Title order={4}>{propertyType(type, units.length)}</Title>
             <Group>
-              {props.type === PropertyType.SINGLE_UNIT ? (
+              {type === PropertyType.SINGLE_UNIT ? (
                 <>
-                  {props.occupiedCount ? (
-                    <Badge color="green">Đã cho thuê</Badge>
+                  {occupiedCount ? (
+                    <Badge color="green">occupied</Badge>
                   ) : (
-                    <Badge color="yellow">Còn trống</Badge>
+                    <Badge color="yellow">vacant</Badge>
                   )}
                 </>
               ) : (
                 <>
-                  <Badge color="green">{props.occupiedCount} đã cho thuê</Badge>
+                  <Badge color="green">{occupiedCount} occupied</Badge>
                   <Box flex={1} />
-                  <Badge color="yellow">{props.vacantCount} phòng trống</Badge>
+                  <Badge color="yellow">{vacantCount} vacant</Badge>
                 </>
               )}
             </Group>
@@ -74,5 +84,7 @@ export const PropertyCard = (props: Props) => {
 };
 
 function propertyType(type: PropertyType, unitCount: number) {
-  return (type === 0 ? 'Nguyên căn' : `${unitCount} phòng`).toUpperCase();
+  return type === PropertyType.SINGLE_UNIT
+    ? 'Single unit'
+    : `${unitCount} unit(s)`;
 }

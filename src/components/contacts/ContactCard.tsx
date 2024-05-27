@@ -12,7 +12,12 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import { CableIcon, EllipsisIcon } from 'lucide-react';
+import {
+  Building02Icon,
+  ConnectIcon,
+  Contact02Icon,
+  More01Icon,
+} from 'hugeicons-react';
 
 interface Props extends IMemberResDto {}
 
@@ -21,22 +26,28 @@ export const ContactCard = (props: Props) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder h={400}>
       <Group mb={'md'}>
-        <CableIcon color={theme.colors.green[6]} />
+        <ConnectIcon color={theme.colors.green[6]} />
         <Box flex={1}></Box>
-        <EllipsisIcon />
+        <More01Icon />
       </Group>
       <Stack align="center" flex={1}>
         <Avatar src={props.imgUrl} size={'xl'} />
         <Title>{props.name}</Title>
-        <Text>{props.phone}</Text>
-        <Text>{props.unit}</Text>
+        <Group gap={4}>
+          <Contact02Icon />
+          <Text>{props.phone}</Text>
+        </Group>
+        <Group gap={4}>
+          <Building02Icon />
+          <Text fz={'lg'} fw={'bold'}>
+            Unit &nbsp;
+            {props.unit}
+          </Text>
+        </Group>
       </Stack>
       <Card.Section>
         <Divider mt={'lg'} />
-        <Link
-          to={'/managers/contacts/$contactId'}
-          params={{ contactId: props.id }}
-        >
+        <Link to={'/members/$id'} params={{ id: props.id }}>
           <Button variant="subtle" fullWidth size="lg">
             View profile
           </Button>

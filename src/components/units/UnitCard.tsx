@@ -1,7 +1,9 @@
-import { useUpdate } from '@/api';
-import { IUnitResDto, UnitStatus } from '@/libs';
+import { useDeleteOne, useUpdate } from '@/api';
+import { unitSearchAtom } from '@/app';
+import { IUnitResDto, unitStatusColorRecord, unitStatusRecord } from '@/libs';
 import { showSuccessNotification } from '@/shared';
 import {
+  ActionIcon,
   AspectRatio,
   Badge,
   Box,
@@ -9,28 +11,38 @@ import {
   Card,
   Group,
   Image,
-  MantineSpacing,
   NumberFormatter,
   Stack,
-  StyleProp,
   Text,
   Title,
 } from '@mantine/core';
-import { Link } from '@tanstack/react-router';
+import { modals } from '@mantine/modals';
+import { useNavigate } from '@tanstack/react-router';
+import { Delete02Icon, PencilEdit01Icon, ViewIcon } from 'hugeicons-react';
+import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 
-interface Props extends IUnitResDto {
-  ml?: StyleProp<MantineSpacing> | undefined;
-}
+interface Props extends IUnitResDto {}
 
-export function UnitCard(props: Props) {
-  const [isOpen, setIsOpen] = useState(props.isListing);
+export function UnitCard({
+  id,
+  name,
+  area,
+  price,
+  isListing,
+  status,
+  imgUrls,
+  tenants,
+}: Props) {
+  const setSearch = useSetAtom(unitSearchAtom);
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(isListing);
 
   const openMutation = useUpdate({
     resource: 'units/open',
     onSuccess: () => {
       showSuccessNotification({
-        message: `Tiếp nhận yêu cầu thuê phòng ${props.name} thành công`,
+        message: `Successfully allowed to receive lease requests for unit ${name}`,
       });
       setIsOpen(true);
     },
@@ -40,77 +52,107 @@ export function UnitCard(props: Props) {
     resource: 'units/close',
     onSuccess: () => {
       showSuccessNotification({
-        message: `Dừng nhận yêu cầu thuê phòng ${props.name} thành công`,
+        message: `Successfully stopped receiving lease requests for unit ${name}`,
       });
       setIsOpen(false);
     },
   });
 
+  const deleteUnitMutation = useDeleteOne({
+    id,
+    resource: 'units',
+    onSuccess: () => {
+      showSuccessNotification({
+        message: `Successfully deleted unit ${name}`,
+      });
+      setSearch((prev) => ({ ...prev, reload: !prev.reload }));
+    },
+  });
+
   function handleOpenUnit() {
-    openMutation.mutate({ unitIds: [props.id] });
+    openMutation.mutate({ unitIds: [id] });
   }
 
   function handleCloseUnit() {
-    closeMutation.mutate({ unitIds: [props.id] });
+    closeMutation.mutate({ unitIds: [id] });
+  }
+
+  function handleDeleteUnit() {
+    modals.openConfirmModal({
+      children: 'Are you sure you want to delete this unit?',
+      onConfirm: () => deleteUnitMutation.mutate({}),
+    });
   }
 
   return (
-    <Card ml={props.ml} shadow="none">
+    <Card shadow="none">
       <Group>
         <AspectRatio ratio={1} w={120}>
           <Image
             radius={'md'}
-            src={props.imgUrls[0]}
+            src={imgUrls[0]}
             alt="Norway"
             fallbackSrc="/fallback.png"
           />
         </AspectRatio>
         <Stack h={120} justify="space-between">
           <Group>
-            <Title order={4}>{props.name}</Title>
-            {props.tenants?.length ? (
-              <Badge color={'green'}>Đã cho thuê</Badge>
+            <Title order={4}>{name}</Title>
+            {tenants?.length ? (
+              <Badge color={'green'}>Occupied</Badge>
             ) : (
-              <Badge color={'yellow'}>Phòng trống</Badge>
+              <Badge color={'yellow'}>Vacant</Badge>
             )}
           </Group>
           <Group>
-            <Text fz={'lg'}>{props.area} m²</Text>
-            {renderStatus(props.status)}
+            <Text fz={'lg'}>{area} m²</Text>
+            <Badge color={unitStatusColorRecord[status]}>
+              {unitStatusRecord[status]}
+            </Badge>
           </Group>
           <Group>
             {isOpen ? (
               <Button color={'red'} onClick={() => handleCloseUnit()}>
-                Dừng nhận yêu cầu cho thuê
+                Stop allow rental requests
               </Button>
             ) : (
               <Button color={'green'} onClick={() => handleOpenUnit()}>
-                Tiếp nhận yêu cầu cho thuê
+                Allow rental requests
               </Button>
             )}
-            <NumberFormatter
-              suffix=" ₫"
-              value={props.price}
-              thousandSeparator
-            />
+            <NumberFormatter suffix=" ₫" value={price} thousandSeparator />
           </Group>
         </Stack>
         <Box flex={1} />
 
-        <Link to="/managers/units/$unitId" params={{ unitId: props.id }}>
-          <Button variant="outline">Xem chi tiết</Button>
-        </Link>
+        <Group gap={'xs'}>
+          <ActionIcon
+            size={40}
+            onClick={() => navigate({ to: '/units/$id', params: { id } })}
+          >
+            <ViewIcon />
+          </ActionIcon>
+          <ActionIcon
+            size={40}
+            color="green"
+            onClick={() =>
+              navigate({ to: '/units/$id/update', params: { id } })
+            }
+          >
+            <PencilEdit01Icon />
+          </ActionIcon>
+          {/* TODO: Handle delete */}
+          <div className="hidden">
+            <ActionIcon
+              size={40}
+              color="red"
+              onClick={() => handleDeleteUnit()}
+            >
+              <Delete02Icon />
+            </ActionIcon>
+          </div>
+        </Group>
       </Group>
     </Card>
-  );
-}
-
-function renderStatus(status: UnitStatus) {
-  return status === UnitStatus.MAINTAINING ? (
-    <Badge color="orange">Đang bảo trì</Badge>
-  ) : status == UnitStatus.GOOD ? (
-    <Badge color="green">Tốt</Badge>
-  ) : (
-    <Badge color="red">Có vấn đề</Badge>
   );
 }

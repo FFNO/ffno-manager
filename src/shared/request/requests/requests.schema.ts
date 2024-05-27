@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const createRequestSchema = z.object({
   name: z.string(),
-  details: z.string(),
+  description: z.string(),
   category: z.nativeEnum(RequestCategory),
   receiverIds: z.array(z.string().uuid()).optional(),
   unitId: z.string().uuid().optional(),

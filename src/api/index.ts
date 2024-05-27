@@ -12,7 +12,7 @@ interface Props {
   resource: string;
   enabled?: boolean;
   params?: Record<string, unknown>;
-  onSuccess?: () => void;
+  onSuccess?: (data: string, variables: unknown, context: unknown) => unknown;
 }
 
 interface PropsWithId extends Props {
@@ -33,8 +33,8 @@ export const dataProvider = {
     };
   },
 
-  getSimpleList: async ({ resource, params }: Props) => {
-    const { data } = await axiosInstance.get<string[]>(`/common/${resource}`, {
+  getSimpleList: async <T = string>({ resource, params }: Props) => {
+    const { data } = await axiosInstance.get<T[]>(`/common/${resource}`, {
       params,
     });
 
@@ -55,6 +55,12 @@ export const dataProvider = {
 
   update: async <T = unknown>(resource: string, payload: T) => {
     const { data } = await axiosInstance.patch<string>(resource, payload);
+
+    return data;
+  },
+
+  deleteOne: async (resource: string, id: string) => {
+    const { data } = await axiosInstance.delete<string>(`${resource}/${id}`);
 
     return data;
   },
@@ -108,6 +114,16 @@ export const useUpdate = ({ resource, onSuccess }: Props) => {
   const mutation = useMutation({
     mutationKey: [resource],
     mutationFn: (data: unknown) => dataProvider.update(resource, data),
+    onSuccess,
+  });
+
+  return mutation;
+};
+
+export const useDeleteOne = ({ id, resource, onSuccess }: PropsWithId) => {
+  const mutation = useMutation({
+    mutationKey: [resource],
+    mutationFn: () => dataProvider.deleteOne(resource, id),
     onSuccess,
   });
 
