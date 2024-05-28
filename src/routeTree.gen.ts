@@ -32,6 +32,7 @@ import { Route as MembersServiceWorkersImport } from './routes/members/service-w
 import { Route as MembersMeImport } from './routes/members/me'
 import { Route as MembersIdImport } from './routes/members/$id'
 import { Route as InvoicesCreateImport } from './routes/invoices/create'
+import { Route as EquipmentsCreateImport } from './routes/equipments/create'
 import { Route as ContractsCreateImport } from './routes/contracts/create'
 import { Route as ChatIdImport } from './routes/chat/$id'
 import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
@@ -150,6 +151,11 @@ const InvoicesCreateRoute = InvoicesCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EquipmentsCreateRoute = EquipmentsCreateImport.update({
+  path: '/equipments/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ContractsCreateRoute = ContractsCreateImport.update({
   path: '/contracts/create',
   getParentRoute: () => rootRoute,
@@ -223,6 +229,10 @@ declare module '@tanstack/react-router' {
     }
     '/contracts/create': {
       preLoaderRoute: typeof ContractsCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/equipments/create': {
+      preLoaderRoute: typeof EquipmentsCreateImport
       parentRoute: typeof rootRoute
     }
     '/invoices/create': {
@@ -342,6 +352,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatRoute.addChildren([ChatIdRoute, ChatIndexRoute]),
   ContractsCreateRoute,
+  EquipmentsCreateRoute,
   InvoicesCreateRoute,
   MembersIdRoute,
   MembersMeRoute,

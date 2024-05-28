@@ -35,7 +35,7 @@ const navItems = [
     links: [
       { label: 'Properties', link: '/properties' },
       { label: 'Units', link: '/units' },
-      // { label: 'Equipments', link: '/equipments' },
+      { label: 'Equipments', link: '/equipments' },
     ],
   },
   {
