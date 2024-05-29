@@ -2,13 +2,16 @@ import { useList } from '@/api';
 import { SearchButton } from '@/components/common';
 import { RequestSearchForm } from '@/components/requests';
 import {
+  DATE_FORMAT,
   IEquipmentResDto,
   IGetListEquipmentDto,
   requestCategoryRecord,
   requestStatusColorRecord,
   requestStatusRecord,
+  unitStatusColorRecord,
+  unitStatusRecord,
 } from '@/libs';
-import { calculatePage } from '@/libs/helpers';
+import { calculatePage, vndFormatter } from '@/libs/helpers';
 import {
   ActionIcon,
   Avatar,
@@ -24,6 +27,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import {
   Building02Icon,
   Invoice01Icon,
@@ -70,84 +74,49 @@ function EquipmentListPage() {
               <Table.Th ta={'center'}>Actions</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          {/* <Table.Tbody>
-        {data?.total ? (
-          data?.data.map((request) => (
-            // <Table.Tr key={request.id}>
-            //   <Table.Td>
-            //     {requestCategoryRecord[request.category]}
-            //   </Table.Td>
-            //   <Table.Td>
-            //     <Group>
-            //       <Avatar size={'sm'} src={request.sender.imgUrl} />
-            //       <p>{request.sender.name}</p>
-            //     </Group>
-            //   </Table.Td>
-            //   <Table.Td>{request.unit?.name ?? '-'}</Table.Td>
-            //   <Table.Td>{request.unit?.property?.name ?? '-'}</Table.Td>
-            //   <Table.Td>
-            //     {request.contract ? (
-            //       <Link
-            //         to="/contracts/$id"
-            //         params={{ id: request.contract.id.toString() }}
-            //         className="text-primary hover:underline"
-            //       >
-            //         #{request.contract.id}
-            //       </Link>
-            //     ) : (
-            //       '-'
-            //     )}
-            //   </Table.Td>
-            //   <Table.Td ta={'center'}>
-            //     <Badge color={requestStatusColorRecord[request.status]}>
-            //       {requestStatusRecord[request.status]}
-            //     </Badge>
-            //   </Table.Td>
-            //   <Table.Td>
-            //     <Group justify="center">
-            //       <Link to="/requests/$id" params={{ id: request.id }}>
-            //         <Tooltip label={'View request detail'}>
-            //           <ActionIcon variant="light">
-            //             <Invoice01Icon size={16} />
-            //           </ActionIcon>
-            //         </Tooltip>
-            //       </Link>
-            //       {request.unit && (
-            //         <>
-            //           <Link
-            //             to="/units/$id"
-            //             params={{ id: request.unit.id }}
-            //           >
-            //             <Tooltip label={'View unit detail'}>
-            //               <ActionIcon variant="light" color="cyan">
-            //                 <SearchSquareIcon size={16} />
-            //               </ActionIcon>
-            //             </Tooltip>
-            //           </Link>
-            //           <Link
-            //             to="/properties/$id"
-            //             params={{ id: request.unit.propertyId }}
-            //           >
-            //             <Tooltip label={'View property detail'}>
-            //               <ActionIcon variant="light" color="grape">
-            //                 <Building02Icon size={16} />
-            //               </ActionIcon>
-            //             </Tooltip>
-            //           </Link>
-            //         </>
-            //       )}
-            //     </Group>
-            //   </Table.Td>
-            // </Table.Tr>
-          ))
-        ) : (
-          <Table.Tr>
-            <Table.Td colSpan={7}>
-              <Center h={425}>No data to display</Center>
-            </Table.Td>
-          </Table.Tr>
-        )}
-      </Table.Tbody> */}
+          <Table.Tbody>
+            {data?.total ? (
+              data?.data.map((item) => (
+                <Table.Tr key={item.id}>
+                  <Table.Td>{item.name}</Table.Td>
+                  <Table.Td>{item.brand}</Table.Td>
+                  <Table.Td>{item.model}</Table.Td>
+                  <Table.Td>{item.serial}</Table.Td>
+                  <Table.Td>
+                    {item.dateOfInstallation
+                      ? dayjs(item.dateOfInstallation).format(DATE_FORMAT)
+                      : '-'}
+                  </Table.Td>
+                  <Table.Td>{item.description}</Table.Td>
+                  <Table.Td>{item.unit.name}</Table.Td>
+                  <Table.Td>{item.property.name}</Table.Td>
+                  <Table.Td>{vndFormatter.format(item.price)}</Table.Td>
+                  <Table.Td ta={'center'}>
+                    <Badge color={unitStatusColorRecord[item.maintainStatus]}>
+                      {unitStatusRecord[item.maintainStatus]}
+                    </Badge>
+                  </Table.Td>
+                  <Table.Td>
+                    <Group justify="center">
+                      <Link to="/equipments" params={{ id: item.id }}>
+                        <Tooltip label={'View equipment detail'}>
+                          <ActionIcon variant="light">
+                            <Invoice01Icon size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </Link>
+                    </Group>
+                  </Table.Td>
+                </Table.Tr>
+              ))
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={11}>
+                  <Center h={425}>No data to display</Center>
+                </Table.Td>
+              </Table.Tr>
+            )}
+          </Table.Tbody>
         </Table>
       </SimpleGrid>
       <Pagination
