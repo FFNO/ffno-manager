@@ -38,11 +38,13 @@ import { Route as ChatIdImport } from './routes/chat/$id'
 import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
 import { Route as PropertiesIdIndexImport } from './routes/properties/$id/index'
 import { Route as InvoicesIdIndexImport } from './routes/invoices/$id/index'
+import { Route as EquipmentsIdIndexImport } from './routes/equipments/$id/index'
 import { Route as ContractsIdIndexImport } from './routes/contracts/$id/index'
 import { Route as UnitsIdUpdateImport } from './routes/units/$id/update'
 import { Route as PropertiesIdUpdateImport } from './routes/properties/$id/update'
 import { Route as PropertiesIdAddUnitImport } from './routes/properties/$id/add-unit'
 import { Route as InvoicesIdMergeImport } from './routes/invoices/$id/merge'
+import { Route as EquipmentsIdUpdateImport } from './routes/equipments/$id/update'
 import { Route as ContractsIdUpdateImport } from './routes/contracts/$id/update'
 
 // Create Virtual Routes
@@ -181,6 +183,11 @@ const InvoicesIdIndexRoute = InvoicesIdIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EquipmentsIdIndexRoute = EquipmentsIdIndexImport.update({
+  path: '/equipments/$id/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ContractsIdIndexRoute = ContractsIdIndexImport.update({
   path: '/contracts/$id/',
   getParentRoute: () => rootRoute,
@@ -203,6 +210,11 @@ const PropertiesIdAddUnitRoute = PropertiesIdAddUnitImport.update({
 
 const InvoicesIdMergeRoute = InvoicesIdMergeImport.update({
   path: '/invoices/$id/merge',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EquipmentsIdUpdateRoute = EquipmentsIdUpdateImport.update({
+  path: '/equipments/$id/update',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -311,6 +323,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContractsIdUpdateImport
       parentRoute: typeof rootRoute
     }
+    '/equipments/$id/update': {
+      preLoaderRoute: typeof EquipmentsIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
     '/invoices/$id/merge': {
       preLoaderRoute: typeof InvoicesIdMergeImport
       parentRoute: typeof rootRoute
@@ -329,6 +345,10 @@ declare module '@tanstack/react-router' {
     }
     '/contracts/$id/': {
       preLoaderRoute: typeof ContractsIdIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/equipments/$id/': {
+      preLoaderRoute: typeof EquipmentsIdIndexImport
       parentRoute: typeof rootRoute
     }
     '/invoices/$id/': {
@@ -371,11 +391,13 @@ export const routeTree = rootRoute.addChildren([
   RequestsIndexRoute,
   UnitsIndexRoute,
   ContractsIdUpdateRoute,
+  EquipmentsIdUpdateRoute,
   InvoicesIdMergeRoute,
   PropertiesIdAddUnitRoute,
   PropertiesIdUpdateRoute,
   UnitsIdUpdateRoute,
   ContractsIdIndexRoute,
+  EquipmentsIdIndexRoute,
   InvoicesIdIndexRoute,
   PropertiesIdIndexRoute,
   UnitsIdIndexRoute,

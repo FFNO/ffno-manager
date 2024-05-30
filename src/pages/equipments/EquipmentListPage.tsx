@@ -5,16 +5,12 @@ import {
   DATE_FORMAT,
   IEquipmentResDto,
   IGetListEquipmentDto,
-  requestCategoryRecord,
-  requestStatusColorRecord,
-  requestStatusRecord,
   unitStatusColorRecord,
   unitStatusRecord,
 } from '@/libs';
 import { calculatePage, vndFormatter } from '@/libs/helpers';
 import {
   ActionIcon,
-  Avatar,
   Badge,
   Button,
   Center,
@@ -23,17 +19,11 @@ import {
   SimpleGrid,
   Stack,
   Table,
-  Tabs,
   Tooltip,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import {
-  Building02Icon,
-  Invoice01Icon,
-  PlusSignIcon,
-  SearchSquareIcon,
-} from 'hugeicons-react';
+import { Invoice01Icon, PlusSignIcon } from 'hugeicons-react';
 import { atom, useAtom } from 'jotai';
 
 const equipmentSearchAtom = atom<NullableObject<IGetListEquipmentDto>>({});
