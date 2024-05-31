@@ -88,6 +88,8 @@ export function OverviewTab(data: IPropertyResDto) {
           ))}
         </Group>
       </Fieldset>
+
+      {/* Comments */}
       <Fieldset
         legend={
           <Group gap={'xs'} px={'sm'}>
