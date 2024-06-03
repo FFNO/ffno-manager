@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/utils';
-import { currentMemberAtom } from '@/app';
+import { currentMemberAtom, notificationCountAtom } from '@/app';
 import { IMemberResDto, memberRoleRecord } from '@/libs';
 import {
   Avatar,
@@ -21,10 +21,11 @@ import {
   Logout05Icon,
   Mailbox01Icon,
 } from 'hugeicons-react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
+import { useMemo } from 'react';
 
 const navItems = [
   { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
@@ -53,7 +54,7 @@ const navItems = [
     initiallyOpened: true,
     links: [
       { label: 'Tenants', link: '/members/tenants' },
-      // { label: 'Service workers', link: '/members/service-workers' },
+      { label: 'Service workers', link: '/members/service-workers' },
     ],
   },
   {
@@ -61,24 +62,33 @@ const navItems = [
     icon: Invoice04Icon,
     link: '/requests',
   },
-  {
-    label: 'Chat & Notifications',
-    icon: Mailbox01Icon,
-    links: [
-      { label: 'Chat', link: '/chat' },
-      { label: 'Notifications', link: '/notifications' },
-    ],
-  },
 ];
 
 export function AppNavbar() {
   const theme = useMantineTheme();
 
+  const notificationCount = useAtomValue(notificationCountAtom);
   const [member, setMember] = useAtom(currentMemberAtom);
 
-  const links = navItems.map((item) => (
-    <LinksGroup {...item} key={item.label} />
-  ));
+  const links = useMemo(
+    () =>
+      [
+        ...navItems,
+        {
+          label: 'Chat & Notifications',
+          icon: Mailbox01Icon,
+          links: [
+            { label: 'Chat', link: '/chat' },
+            {
+              label: 'Notifications',
+              link: '/notifications',
+              badge: notificationCount,
+            },
+          ],
+        },
+      ].map((item) => <LinksGroup {...item} key={item.label} />),
+    [notificationCount],
+  );
 
   return (
     <nav className={classes.navbar}>

@@ -44,10 +44,13 @@ function RequestCreatePage() {
   const { data: properties } = useSimpleList({
     resource: 'properties',
   });
-
   const { data: units } = useSimpleList({
     resource: 'units',
     params: { propertyId: form.values.propertyId },
+  });
+  const { data: equipments } = useSimpleList({
+    resource: 'equipments',
+    params: { propertyId: form.values.propertyId, unitId: form.values.unitId },
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
@@ -142,6 +145,44 @@ function RequestCreatePage() {
                     placeholder="Select unit"
                     data={units}
                     {...form.getInputProps('unitId')}
+                  />
+                </Grid.Col>
+              </>
+            )}
+
+            {form.values.category === RequestCategory.EQUIPMENT_WARRANTY && (
+              <>
+                <Grid.Col span={4}>
+                  <Select
+                    withAsterisk
+                    clearable
+                    searchable
+                    label="Property"
+                    placeholder="Select property"
+                    data={properties}
+                    {...form.getInputProps('propertyId')}
+                  />
+                </Grid.Col>
+                <Grid.Col span={4}>
+                  <Select
+                    disabled={!form.values.propertyId}
+                    clearable
+                    searchable
+                    label="Unit"
+                    placeholder="Select unit"
+                    data={units}
+                    {...form.getInputProps('unitId')}
+                  />
+                </Grid.Col>
+                <Grid.Col span={4}>
+                  <Select
+                    disabled={!form.values.propertyId}
+                    clearable
+                    searchable
+                    label="Equipment"
+                    placeholder="Select equipment"
+                    data={equipments}
+                    {...form.getInputProps('equipmentId')}
                   />
                 </Grid.Col>
               </>

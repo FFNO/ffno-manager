@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Collapse,
   Group,
@@ -7,9 +8,9 @@ import {
   rem,
 } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
+import { ArrowRight01Icon } from 'hugeicons-react';
 import { useState } from 'react';
 import classes from './LinksGroup.module.css';
-import { ArrowRight01Icon } from 'hugeicons-react';
 
 interface LinksGroupProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,7 +18,7 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   link?: string;
-  links?: { label: string; link: string }[];
+  links?: { label: string; link: string; badge?: number }[];
 }
 
 export function LinksGroup({
@@ -33,6 +34,7 @@ export function LinksGroup({
   const items = (hasLinks ? links : []).map((link) => (
     <Link className={classes.link} to={link.link} key={link.label}>
       {link.label}
+      {link.badge && <Badge color="red">{link.badge}</Badge>}
     </Link>
   ));
 
