@@ -1,4 +1,5 @@
-import { DATE_FORMAT, unitStatusColorRecord, unitStatusRecord } from '@/libs';
+import { unitStatusColorRecord, unitStatusRecord } from '@/libs';
+import { displayDate, displayText } from '@/libs/helpers';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
@@ -7,17 +8,16 @@ import {
   Box,
   Breadcrumbs,
   Button,
-  Card,
-  Grid,
+  Fieldset,
   Group,
   Image,
   Input,
+  SimpleGrid,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
 import { Link, useLoaderData } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import { ArrowLeft02Icon, ArrowRight02Icon } from 'hugeicons-react';
 
 function EquipmentDetailPage() {
@@ -33,90 +33,82 @@ function EquipmentDetailPage() {
         </Link>
       </Breadcrumbs>
       <Group>
-        <Title>{`Unit ${data.name} - ${data.property.name}`}</Title>
+        <Title>{data.name}</Title>
         <Box flex={1} />
         <Link to="/equipments/$id/update" params={{ id: data.id }}>
           <Button>Update</Button>
         </Link>
       </Group>
-      <Grid gutter="lg">
-        <Grid.Col span={12}>
+      <Stack>
+        <SimpleGrid cols={2}>
           <Input.Wrapper label="Name">
             <Text>{data.name}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Brand">
-            <Text>{data.brand}</Text>
+            <Text>{displayText(data.brand)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Model">
-            <Text>{data.model}</Text>
+            <Text>{displayText(data.model)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Serial">
-            <Text>{data.serial}</Text>
+            <Text>{displayText(data.serial)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Install at">
-            <Text>
-              {data.dateOfInstallation
-                ? dayjs(data.dateOfInstallation).format(DATE_FORMAT)
-                : '-'}
-            </Text>
+            <Text>{displayDate(data.dateOfInstallation)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Category">
             <Text>{data.category}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Status">
-            <Badge color={unitStatusColorRecord[data.maintainStatus]}>
-              {unitStatusRecord[data.maintainStatus]}
-            </Badge>
+            <p>
+              <Badge color={unitStatusColorRecord[data.maintainStatus]}>
+                {unitStatusRecord[data.maintainStatus]}
+              </Badge>
+            </p>
           </Input.Wrapper>
           <Input.Wrapper label="Property">
-            <Text>{data.property.name}</Text>
+            <Text>{displayText(data.property?.name)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Unit">
-            <Text>{data.unit.name}</Text>
+            <Text>{displayText(data.unit?.name)}</Text>
           </Input.Wrapper>
           <Input.Wrapper label="Description">
             <Text>{data.description}</Text>
           </Input.Wrapper>
           {data.enableWarranty && (
             <Input.Wrapper label="Warranty expiration date">
-              <Text>
-                {data.warrantyExpirationDate
-                  ? dayjs(data.warrantyExpirationDate).format(DATE_FORMAT)
-                  : '-'}
-              </Text>
+              <Text>{displayDate(data.warrantyExpirationDate)}</Text>
             </Input.Wrapper>
           )}
-        </Grid.Col>
-        <Grid.Col span={12}>
-          <Card shadow="sm" padding="md">
-            <Carousel
-              loop
-              withIndicators
-              withControls
-              slideGap="md"
-              height={300}
-              nextControlIcon={
-                <ActionIcon radius={'xl'}>
-                  <ArrowRight02Icon />
-                </ActionIcon>
-              }
-              previousControlIcon={
-                <ActionIcon radius={'xl'}>
-                  <ArrowLeft02Icon />
-                </ActionIcon>
-              }
-            >
-              {data.imgUrls.map((url, index) => (
-                <Carousel.Slide key={index}>
-                  <AspectRatio h={300}>
-                    <Image src={url} alt={`Unit ${index + 1}`} />
-                  </AspectRatio>
-                </Carousel.Slide>
-              ))}
-            </Carousel>
-          </Card>
-        </Grid.Col>
-      </Grid>
+        </SimpleGrid>
+        <Fieldset legend="Images">
+          <Carousel
+            loop
+            withIndicators
+            withControls
+            slideGap="md"
+            height={300}
+            nextControlIcon={
+              <ActionIcon radius={'xl'}>
+                <ArrowRight02Icon />
+              </ActionIcon>
+            }
+            previousControlIcon={
+              <ActionIcon radius={'xl'}>
+                <ArrowLeft02Icon />
+              </ActionIcon>
+            }
+          >
+            {data.imgUrls.map((url, index) => (
+              <Carousel.Slide key={index}>
+                <AspectRatio h={300}>
+                  <Image src={url} alt={`Unit ${index + 1}`} />
+                </AspectRatio>
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </Fieldset>
+      </Stack>
     </Stack>
   );
 }
