@@ -3,7 +3,6 @@ import { displayDate, displayText } from '@/libs/helpers';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
-  AspectRatio,
   Badge,
   Box,
   Breadcrumbs,
@@ -87,7 +86,6 @@ function EquipmentDetailPage() {
             withIndicators
             withControls
             slideGap="md"
-            height={300}
             nextControlIcon={
               <ActionIcon radius={'xl'}>
                 <ArrowRight02Icon />
@@ -101,9 +99,7 @@ function EquipmentDetailPage() {
           >
             {data.imgUrls.map((url, index) => (
               <Carousel.Slide key={index}>
-                <AspectRatio h={300}>
-                  <Image src={url} alt={`Unit ${index + 1}`} />
-                </AspectRatio>
+                <Image src={url} alt={`Unit ${index + 1}`} />
               </Carousel.Slide>
             ))}
           </Carousel>

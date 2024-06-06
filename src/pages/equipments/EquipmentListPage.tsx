@@ -1,7 +1,7 @@
 import { useList } from '@/api';
 import { equipmentSearchAtom } from '@/app';
 import { SearchButton } from '@/components/common';
-import { RequestSearchForm } from '@/components/requests';
+import EquipmentSearchForm from '@/components/equipments/EquipmentSearchForm';
 import {
   IEquipmentResDto,
   unitStatusColorRecord,
@@ -35,7 +35,7 @@ function EquipmentListPage() {
     <Stack p={'lg'} px={32}>
       <Group justify="end">
         <SearchButton>
-          <RequestSearchForm />
+          <EquipmentSearchForm />
         </SearchButton>
         <Link to="/equipments/create">
           <Button leftSection={<PlusSignIcon size={16} />}>
