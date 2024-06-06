@@ -122,7 +122,10 @@ function RequestCreatePage() {
               />
             </Grid.Col>
 
-            {form.values.category === RequestCategory.UNIT_LEASE && (
+            {[
+              RequestCategory.UNIT_LEASE,
+              RequestCategory.REQUEST_EQUIPMENT,
+            ].includes(form.values.category!) && (
               <>
                 <Grid.Col span={6}>
                   <Select

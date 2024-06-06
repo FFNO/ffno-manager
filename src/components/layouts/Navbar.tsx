@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/utils';
-import { currentMemberAtom, notificationCountAtom } from '@/app';
+import { currentMemberAtom } from '@/app';
 import { IMemberResDto, memberRoleRecord } from '@/libs';
 import {
   Avatar,
@@ -21,11 +21,11 @@ import {
   Logout05Icon,
   Mailbox01Icon,
 } from 'hugeicons-react';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
+import { useMemo } from 'react';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
-import { useMemo } from 'react';
 
 const navItems = [
   { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
@@ -67,7 +67,6 @@ const navItems = [
 export function AppNavbar() {
   const theme = useMantineTheme();
 
-  const notificationCount = useAtomValue(notificationCountAtom);
   const [member, setMember] = useAtom(currentMemberAtom);
 
   const links = useMemo(
@@ -82,12 +81,11 @@ export function AppNavbar() {
             {
               label: 'Notifications',
               link: '/notifications',
-              badge: notificationCount,
             },
           ],
         },
       ].map((item) => <LinksGroup {...item} key={item.label} />),
-    [notificationCount],
+    [],
   );
 
   return (

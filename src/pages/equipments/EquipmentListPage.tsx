@@ -1,14 +1,13 @@
 import { useList } from '@/api';
+import { equipmentSearchAtom } from '@/app';
 import { SearchButton } from '@/components/common';
 import { RequestSearchForm } from '@/components/requests';
 import {
-  DATE_FORMAT,
   IEquipmentResDto,
-  IGetListEquipmentDto,
   unitStatusColorRecord,
   unitStatusRecord,
 } from '@/libs';
-import { calculatePage, vndFormatter } from '@/libs/helpers';
+import { calculatePage, displayDate, vndFormatter } from '@/libs/helpers';
 import {
   ActionIcon,
   Badge,
@@ -22,11 +21,8 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
-import dayjs from 'dayjs';
-import { Invoice01Icon, PlusSignIcon } from 'hugeicons-react';
-import { atom, useAtom } from 'jotai';
-
-const equipmentSearchAtom = atom<NullableObject<IGetListEquipmentDto>>({});
+import { PlusSignIcon, ViewIcon } from 'hugeicons-react';
+import { useAtom } from 'jotai';
 
 function EquipmentListPage() {
   const [search, setSearch] = useAtom(equipmentSearchAtom);
@@ -57,8 +53,8 @@ function EquipmentListPage() {
               <Table.Th>Serial</Table.Th>
               <Table.Th>Install at</Table.Th>
               <Table.Th>Description</Table.Th>
-              <Table.Th>Property</Table.Th>
               <Table.Th>Unit</Table.Th>
+              <Table.Th>Property</Table.Th>
               <Table.Th>Price</Table.Th>
               <Table.Th ta={'center'}>Status</Table.Th>
               <Table.Th ta={'center'}>Actions</Table.Th>
@@ -72,11 +68,7 @@ function EquipmentListPage() {
                   <Table.Td>{item.brand}</Table.Td>
                   <Table.Td>{item.model}</Table.Td>
                   <Table.Td>{item.serial}</Table.Td>
-                  <Table.Td>
-                    {item.dateOfInstallation
-                      ? dayjs(item.dateOfInstallation).format(DATE_FORMAT)
-                      : '-'}
-                  </Table.Td>
+                  <Table.Td>{displayDate(item.dateOfInstallation)}</Table.Td>
                   <Table.Td>{item.description}</Table.Td>
                   <Table.Td>{item.unit.name}</Table.Td>
                   <Table.Td>{item.property.name}</Table.Td>
@@ -88,10 +80,10 @@ function EquipmentListPage() {
                   </Table.Td>
                   <Table.Td>
                     <Group justify="center">
-                      <Link to="/equipments" params={{ id: item.id }}>
+                      <Link to="/equipments/$id" params={{ id: item.id }}>
                         <Tooltip label={'View equipment detail'}>
                           <ActionIcon variant="light">
-                            <Invoice01Icon size={16} />
+                            <ViewIcon size={16} />
                           </ActionIcon>
                         </Tooltip>
                       </Link>
