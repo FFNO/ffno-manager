@@ -198,14 +198,7 @@ function Page() {
           </Fieldset>
         </SimpleGrid>
         <Fieldset legend={'Images'}>
-          <Carousel
-            slideSize="70%"
-            height={200}
-            slideGap="md"
-            loop
-            dragFree
-            withIndicators
-          >
+          <Carousel slideSize="70%" slideGap="md" loop dragFree withIndicators>
             {imgUrls.map((imgUrl) => (
               <Carousel.Slide key={imgUrl}>
                 <Image src={imgUrl} />

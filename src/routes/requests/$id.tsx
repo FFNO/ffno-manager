@@ -94,6 +94,13 @@ function Page() {
           <Text fw={'bold'}>{data.sender.name}</Text>
           <Text>requested</Text>
           <Text fw={'bold'}>{requestCategoryRecord[data.category]}</Text>
+          {data.status === RequestStatus.HANDLING && (
+            <Button
+              onClick={() => mutate.mutate({ status: RequestStatus.DONE })}
+            >
+              Mark as done
+            </Button>
+          )}
         </Group>
         <Text>{data.description}</Text>
 

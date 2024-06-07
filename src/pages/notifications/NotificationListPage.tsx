@@ -21,7 +21,7 @@ function NotificationListPage() {
   const { data } = useList<INotificationResDto>({ resource: 'notifications' });
 
   const handleNavigate = async (data: INotificationResDto) => {
-    await axiosInstance.put(`notification/mark-as-read/${data.id}`);
+    await axiosInstance.put(`notifications/mark-as-read/${data.id}`);
 
     if (data.requestId) {
       navigate({ to: '/requests/$id', params: { id: data.requestId } });
@@ -46,9 +46,9 @@ function NotificationListPage() {
 
       <SimpleGrid cols={1} pb={24}>
         {data?.data.map((notification) => (
-          <Indicator size={16} key={notification.id}>
-            <Card>
-              <div className="inline-flex items-center">
+          <Indicator size={notification.isRead ? 0 : 16} key={notification.id}>
+            <Card withBorder>
+              <div className="inline-flex items-center gap-4">
                 <div className="flex flex-1 flex-col">
                   <p className="text-lg font-semibold">{notification.title}</p>
                   <p>{notification.content}</p>
