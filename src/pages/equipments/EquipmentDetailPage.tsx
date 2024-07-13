@@ -9,13 +9,13 @@ import {
   Button,
   Fieldset,
   Group,
-  Image,
   Input,
   SimpleGrid,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
+import { Image } from '@nextui-org/react';
 import { Link, useLoaderData } from '@tanstack/react-router';
 import { ArrowLeft02Icon, ArrowRight02Icon } from 'hugeicons-react';
 
@@ -86,6 +86,7 @@ function EquipmentDetailPage() {
             withIndicators
             withControls
             slideGap="md"
+            height={500}
             nextControlIcon={
               <ActionIcon radius={'xl'}>
                 <ArrowRight02Icon />
@@ -98,8 +99,12 @@ function EquipmentDetailPage() {
             }
           >
             {data.imgUrls.map((url, index) => (
-              <Carousel.Slide key={index}>
-                <Image src={url} alt={`Unit ${index + 1}`} />
+              <Carousel.Slide key={index} className="basis-auto">
+                <Image
+                  radius="none"
+                  src={url}
+                  className="cursor-pointer h-[500px] mb-2"
+                />
               </Carousel.Slide>
             ))}
           </Carousel>

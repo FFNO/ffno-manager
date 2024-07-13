@@ -9,9 +9,14 @@ import { ActionIcon, Badge, Group, Table, Tooltip } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
 import { ViewIcon } from 'hugeicons-react';
 
-function EquipmentTab() {
+interface Props {
+  unitId?: string;
+}
+
+function EquipmentTab({ unitId }: Props) {
   const { data } = useList<IEquipmentResDto>({
     resource: 'equipments',
+    params: { unitId },
   });
   return (
     <Table>

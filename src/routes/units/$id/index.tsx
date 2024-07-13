@@ -11,10 +11,10 @@ import {
   Breadcrumbs,
   Button,
   Card,
+  Chip,
   Divider,
   Fieldset,
   Group,
-  Image,
   NumberFormatter,
   Progress,
   Stack,
@@ -23,6 +23,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { Image } from '@nextui-org/react';
 import {
   Link,
   createFileRoute,
@@ -34,6 +35,7 @@ import {
   ArrowLeft02Icon,
   ArrowRight02Icon,
   PenTool02Icon,
+  Settings05Icon,
   StarIcon,
 } from 'hugeicons-react';
 
@@ -57,7 +59,7 @@ function UnitPage() {
         </Link>
       </Breadcrumbs>
       <Group>
-        <Title>{`Unit ${data.name} - ${data.property.name}`}</Title>
+        <Title>{`${data.name} - ${data.property.name}`}</Title>
         <Box flex={1} />
         <Button
           onClick={() =>
@@ -67,42 +69,18 @@ function UnitPage() {
           Update
         </Button>
       </Group>
-      <Fieldset legend={'Images'}>
-        <Carousel
-          loop
-          withIndicators
-          withControls
-          slideGap="md"
-          height={500}
-          nextControlIcon={
-            <ActionIcon radius={'xl'}>
-              <ArrowRight02Icon />
-            </ActionIcon>
-          }
-          previousControlIcon={
-            <ActionIcon radius={'xl'}>
-              <ArrowLeft02Icon />
-            </ActionIcon>
-          }
-        >
-          {data.imgUrls.map((url, index) => (
-            <Carousel.Slide key={index}>
-              <AspectRatio h={500}>
-                <Image src={url} alt={`Unit ${index + 1}`} />
-              </AspectRatio>
-            </Carousel.Slide>
-          ))}
-        </Carousel>
-      </Fieldset>
+
       <Fieldset legend={'Information'} className="min-h-[720px]">
         <Tabs variant="outline" defaultValue="basic-info">
           <Tabs.List>
             <Tabs.Tab value="basic-info">Basic information</Tabs.Tab>
-            <Tabs.Tab value="tenants">Tenants</Tabs.Tab>
+            <Tabs.Tab value="tenants">
+              Tenants ({data.curSlot}/{data.maxSlot})
+            </Tabs.Tab>
             <Tabs.Tab value="equipments">Equipments</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="basic-info">
-            <div>
+            <div className="flex flex-col h-full">
               <Text>Area: {data.area} m2</Text>
               <Text>
                 Price:
@@ -130,6 +108,7 @@ function UnitPage() {
               </Text>
               <Divider m="md" />
               <Text>{data.description}</Text>
+              <Divider m="md" />
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="tenants">
@@ -158,9 +137,25 @@ function UnitPage() {
             </Table>
           </Tabs.Panel>
           <Tabs.Panel value="equipments">
-            <EquipmentTab />
+            <EquipmentTab unitId={data.id} />
           </Tabs.Panel>
         </Tabs>
+      </Fieldset>
+      <Fieldset
+        legend={
+          <Group gap={'xs'} px={'sm'}>
+            <Settings05Icon size={20} />
+            <Title order={4}>Features</Title>
+          </Group>
+        }
+      >
+        <Group wrap="wrap">
+          {data.unitFeatures.map((item) => (
+            <Chip checked key={item}>
+              {item}
+            </Chip>
+          ))}
+        </Group>
       </Fieldset>
       <Fieldset
         legend={
@@ -174,7 +169,7 @@ function UnitPage() {
           <Card withBorder p={'lg'}>
             <div className="inline-flex items-center gap-2">
               <StarIcon color="yellow" fill="yellow" />
-              <p>{`${data.rating.rating}/5 (Based on ${data.reviews.length} reviews)`}</p>
+              <p>{`${data.rating.rating ?? 0}/5 (Based on ${data.reviews.length} reviews)`}</p>
             </div>
             <Card.Section p={'lg'}>
               <Stack w={400} gap={'xs'}>
@@ -221,6 +216,35 @@ function UnitPage() {
             ))}
           </div>
         </div>
+      </Fieldset>
+      <Fieldset legend={'Images'}>
+        <Carousel
+          loop
+          withIndicators
+          withControls
+          slideGap="md"
+          height={500}
+          nextControlIcon={
+            <ActionIcon radius={'xl'}>
+              <ArrowRight02Icon />
+            </ActionIcon>
+          }
+          previousControlIcon={
+            <ActionIcon radius={'xl'}>
+              <ArrowLeft02Icon />
+            </ActionIcon>
+          }
+        >
+          {data.imgUrls.map((url, index) => (
+            <Carousel.Slide key={index} className="basis-auto">
+              <Image
+                radius="none"
+                src={url}
+                className="cursor-pointer h-[500px] mb-2"
+              />
+            </Carousel.Slide>
+          ))}
+        </Carousel>
       </Fieldset>
     </Stack>
   );

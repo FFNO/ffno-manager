@@ -102,14 +102,14 @@ export function OverviewTab(data: IPropertyResDto) {
           <Card withBorder p={'lg'}>
             <div className="inline-flex items-center gap-2">
               <StarIcon color="yellow" fill="yellow" />
-              <p>{`${data.rating.rating}/5 (Based on ${data.reviews.length} reviews)`}</p>
+              <p>{`${data.rating.rating ?? 0}/5 (Based on ${data.reviews.length} reviews)`}</p>
             </div>
             <Card.Section p={'lg'}>
               <Stack w={400} gap={'xs'}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Stack key={i}>
                     <Group justify="space-between">
-                      <p>{i} stars</p>
+                      <p>{i ?? 0} stars</p>
                       <p>{data.rating.ratingMap[i]}%</p>
                     </Group>
                     <Progress value={data.rating.ratingMap[i]} />

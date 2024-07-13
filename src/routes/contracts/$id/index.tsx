@@ -25,7 +25,6 @@ import {
   Card,
   Fieldset,
   Group,
-  Image,
   Paper,
   SimpleGrid,
   Stack,
@@ -33,6 +32,7 @@ import {
   Title,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { Image } from '@nextui-org/react';
 import {
   Link,
   createFileRoute,
@@ -40,7 +40,13 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { Cancel01Icon, Link02Icon, Tick01Icon } from 'hugeicons-react';
+import {
+  ArrowLeft02Icon,
+  ArrowRight02Icon,
+  Cancel01Icon,
+  Link02Icon,
+  Tick01Icon,
+} from 'hugeicons-react';
 import { useAtomValue } from 'jotai';
 
 export const Route = createFileRoute('/contracts/$id/')({
@@ -198,10 +204,30 @@ function Page() {
           </Fieldset>
         </SimpleGrid>
         <Fieldset legend={'Images'}>
-          <Carousel slideSize="70%" slideGap="md" loop dragFree withIndicators>
-            {imgUrls.map((imgUrl) => (
-              <Carousel.Slide key={imgUrl}>
-                <Image src={imgUrl} />
+          <Carousel
+            loop
+            withIndicators
+            withControls
+            slideGap="md"
+            height={500}
+            nextControlIcon={
+              <ActionIcon radius={'xl'}>
+                <ArrowRight02Icon />
+              </ActionIcon>
+            }
+            previousControlIcon={
+              <ActionIcon radius={'xl'}>
+                <ArrowLeft02Icon />
+              </ActionIcon>
+            }
+          >
+            {imgUrls.map((url) => (
+              <Carousel.Slide key={url} className="basis-auto">
+                <Image
+                  radius="none"
+                  src={url}
+                  className="cursor-pointer h-[500px] mb-2"
+                />
               </Carousel.Slide>
             ))}
           </Carousel>

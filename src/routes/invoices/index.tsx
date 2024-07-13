@@ -75,13 +75,9 @@ function Page() {
         </div>
         <InvoiceSearch />
         {/* TODO: */}
-        <div className="hidden">
-          <Link to="/invoices/create">
-            <Button leftSection={<PlusSignIcon size={16} />}>
-              Add invoice
-            </Button>
-          </Link>
-        </div>
+        <Link to="/invoices/create">
+          <Button leftSection={<PlusSignIcon size={16} />}>Add invoice</Button>
+        </Link>
       </Group>
       <Group justify="space-between" mih={40}>
         {selectedCount && (
