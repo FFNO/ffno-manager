@@ -21,3 +21,5 @@ export const currentMemberAtom = atomWithStorage(
 );
 
 export const contactRecordAtom = atom<Record<string, IMemberResDto>>({});
+
+export const notificationCountAtom = atom<number>(0);

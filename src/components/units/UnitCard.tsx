@@ -16,6 +16,8 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
+import { useForm } from '@mantine/form';
 import { modals } from '@mantine/modals';
 import { useNavigate } from '@tanstack/react-router';
 import { Delete02Icon, PencilEdit01Icon, ViewIcon } from 'hugeicons-react';
@@ -37,6 +39,7 @@ export function UnitCard({
   const setSearch = useSetAtom(unitSearchAtom);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(isListing);
+  const form = useForm();
 
   const openMutation = useUpdate({
     resource: 'units/open',
@@ -70,7 +73,38 @@ export function UnitCard({
   });
 
   function handleOpenUnit() {
-    openMutation.mutate({ unitIds: [id] });
+    modals.open({
+      title: 'Listing unit',
+      children: (
+        <>
+          <form>
+            <DateInput
+              label="Start listing at"
+              {...form.getInputProps('startListingAt')}
+            />
+            <DateInput
+              label="Stop listing at"
+              {...form.getInputProps('endListingAt')}
+            />
+            <Button
+              fullWidth
+              onClick={() => openMutation.mutate({ unitIds: [id] })}
+              mt="md"
+            >
+              Schedule
+            </Button>
+          </form>
+          <Button
+            fullWidth
+            variant="subtle"
+            onClick={() => openMutation.mutate({ unitIds: [id] })}
+            mt="md"
+          >
+            Open now
+          </Button>
+        </>
+      ),
+    });
   }
 
   function handleCloseUnit() {

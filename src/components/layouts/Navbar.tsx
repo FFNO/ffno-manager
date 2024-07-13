@@ -22,6 +22,7 @@ import {
   Mailbox01Icon,
 } from 'hugeicons-react';
 import { useAtom } from 'jotai';
+import { useMemo } from 'react';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
@@ -35,7 +36,7 @@ const navItems = [
     links: [
       { label: 'Properties', link: '/properties' },
       { label: 'Units', link: '/units' },
-      // { label: 'Equipments', link: '/equipments' },
+      { label: 'Equipments', link: '/equipments' },
     ],
   },
   {
@@ -53,21 +54,13 @@ const navItems = [
     initiallyOpened: true,
     links: [
       { label: 'Tenants', link: '/members/tenants' },
-      // { label: 'Service workers', link: '/members/service-workers' },
+      { label: 'Service workers', link: '/members/service-workers' },
     ],
   },
   {
     label: 'Requests',
     icon: Invoice04Icon,
     link: '/requests',
-  },
-  {
-    label: 'Chat & Notifications',
-    icon: Mailbox01Icon,
-    links: [
-      { label: 'Chat', link: '/chat' },
-      { label: 'Notifications', link: '/notifications' },
-    ],
   },
 ];
 
@@ -76,9 +69,24 @@ export function AppNavbar() {
 
   const [member, setMember] = useAtom(currentMemberAtom);
 
-  const links = navItems.map((item) => (
-    <LinksGroup {...item} key={item.label} />
-  ));
+  const links = useMemo(
+    () =>
+      [
+        ...navItems,
+        {
+          label: 'Chat & Notifications',
+          icon: Mailbox01Icon,
+          links: [
+            { label: 'Chat', link: '/chat' },
+            {
+              label: 'Notifications',
+              link: '/notifications',
+            },
+          ],
+        },
+      ].map((item) => <LinksGroup {...item} key={item.label} />),
+    [],
+  );
 
   return (
     <nav className={classes.navbar}>

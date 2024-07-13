@@ -1,4 +1,5 @@
 import { dataProvider } from '@/api';
+import EquipmentTab from '@/components/units/EquipmentTab';
 import { DATE_FORMAT, IUnitResDto, UnitStatus } from '@/libs';
 import { Carousel } from '@mantine/carousel';
 import {
@@ -12,7 +13,6 @@ import {
   Card,
   Divider,
   Fieldset,
-  Grid,
   Group,
   Image,
   NumberFormatter,
@@ -67,103 +67,101 @@ function UnitPage() {
           Update
         </Button>
       </Group>
-      <Grid gutter="lg">
-        <Grid.Col span={6}>
-          <Card shadow="sm" padding="md">
-            <Carousel
-              loop
-              withIndicators
-              withControls
-              slideGap="md"
-              height={300}
-              nextControlIcon={
-                <ActionIcon radius={'xl'}>
-                  <ArrowRight02Icon />
-                </ActionIcon>
-              }
-              previousControlIcon={
-                <ActionIcon radius={'xl'}>
-                  <ArrowLeft02Icon />
-                </ActionIcon>
-              }
-            >
-              {data.imgUrls.map((url, index) => (
-                <Carousel.Slide key={index}>
-                  <AspectRatio h={300}>
-                    <Image src={url} alt={`Unit ${index + 1}`} />
-                  </AspectRatio>
-                </Carousel.Slide>
-              ))}
-            </Carousel>
-          </Card>
-        </Grid.Col>
-        <Grid.Col span={6}>
-          <Card shadow="sm" padding="md">
-            <Tabs variant="outline" defaultValue="basic-info">
-              <Tabs.List>
-                <Tabs.Tab value="basic-info">Basic information</Tabs.Tab>
-                <Tabs.Tab value="tenants">Tenants</Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel value="basic-info">
-                <div>
-                  <Text>Area: {data.area} m2</Text>
-                  <Text>
-                    Price:
-                    <NumberFormatter
-                      prefix="₫ "
-                      thousandSeparator
-                      value={data.price}
-                    />
-                  </Text>
-                  <Text>
-                    Deposit:
-                    <NumberFormatter
-                      prefix="₫ "
-                      thousandSeparator
-                      value={data.deposit}
-                    />
-                  </Text>
-                  <Text>
-                    Status:{' '}
-                    <Badge
-                      color={data.status === UnitStatus.GOOD ? 'green' : 'red'}
-                    >
-                      {data.status === UnitStatus.GOOD ? 'Vacant' : 'Occupied'}
-                    </Badge>
-                  </Text>
-                  <Divider m="md" />
-                  <Text>{data.description}</Text>
-                </div>
-              </Tabs.Panel>
-              <Tabs.Panel value="tenants">
-                <Table>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Tenant</Table.Th>
-                      <Table.Th>Email</Table.Th>
-                      <Table.Th>Phone number</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {data.tenants.map((tenant) => (
-                      <Table.Tr key={tenant.id}>
-                        <Table.Td>
-                          <Group>
-                            <Avatar size={'sm'} src={tenant.imgUrl} />
-                            {tenant.name}
-                          </Group>
-                        </Table.Td>
-                        <Table.Td>{tenant.email}</Table.Td>
-                        <Table.Td>{tenant.phone}</Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </Tabs.Panel>
-            </Tabs>
-          </Card>
-        </Grid.Col>
-      </Grid>
+      <Fieldset legend={'Images'}>
+        <Carousel
+          loop
+          withIndicators
+          withControls
+          slideGap="md"
+          height={500}
+          nextControlIcon={
+            <ActionIcon radius={'xl'}>
+              <ArrowRight02Icon />
+            </ActionIcon>
+          }
+          previousControlIcon={
+            <ActionIcon radius={'xl'}>
+              <ArrowLeft02Icon />
+            </ActionIcon>
+          }
+        >
+          {data.imgUrls.map((url, index) => (
+            <Carousel.Slide key={index}>
+              <AspectRatio h={500}>
+                <Image src={url} alt={`Unit ${index + 1}`} />
+              </AspectRatio>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+      </Fieldset>
+      <Fieldset legend={'Information'} className="min-h-[720px]">
+        <Tabs variant="outline" defaultValue="basic-info">
+          <Tabs.List>
+            <Tabs.Tab value="basic-info">Basic information</Tabs.Tab>
+            <Tabs.Tab value="tenants">Tenants</Tabs.Tab>
+            <Tabs.Tab value="equipments">Equipments</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="basic-info">
+            <div>
+              <Text>Area: {data.area} m2</Text>
+              <Text>
+                Price:
+                <NumberFormatter
+                  prefix="₫ "
+                  thousandSeparator
+                  value={data.price}
+                />
+              </Text>
+              <Text>
+                Deposit:
+                <NumberFormatter
+                  prefix="₫ "
+                  thousandSeparator
+                  value={data.deposit}
+                />
+              </Text>
+              <Text>
+                Status:{' '}
+                <Badge
+                  color={data.status === UnitStatus.GOOD ? 'green' : 'red'}
+                >
+                  {data.status === UnitStatus.GOOD ? 'Vacant' : 'Occupied'}
+                </Badge>
+              </Text>
+              <Divider m="md" />
+              <Text>{data.description}</Text>
+            </div>
+          </Tabs.Panel>
+          <Tabs.Panel value="tenants">
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Tenant</Table.Th>
+                  <Table.Th>Email</Table.Th>
+                  <Table.Th>Phone number</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                {data.tenants.map((tenant) => (
+                  <Table.Tr key={tenant.id}>
+                    <Table.Td>
+                      <Group>
+                        <Avatar size={'sm'} src={tenant.imgUrl} />
+                        {tenant.name}
+                      </Group>
+                    </Table.Td>
+                    <Table.Td>{tenant.email}</Table.Td>
+                    <Table.Td>{tenant.phone}</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Tabs.Panel>
+          <Tabs.Panel value="equipments">
+            <EquipmentTab />
+          </Tabs.Panel>
+        </Tabs>
+      </Fieldset>
       <Fieldset
         legend={
           <Group gap={'xs'} px={'sm'}>

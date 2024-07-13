@@ -32,16 +32,19 @@ import { Route as MembersServiceWorkersImport } from './routes/members/service-w
 import { Route as MembersMeImport } from './routes/members/me'
 import { Route as MembersIdImport } from './routes/members/$id'
 import { Route as InvoicesCreateImport } from './routes/invoices/create'
+import { Route as EquipmentsCreateImport } from './routes/equipments/create'
 import { Route as ContractsCreateImport } from './routes/contracts/create'
 import { Route as ChatIdImport } from './routes/chat/$id'
 import { Route as UnitsIdIndexImport } from './routes/units/$id/index'
 import { Route as PropertiesIdIndexImport } from './routes/properties/$id/index'
 import { Route as InvoicesIdIndexImport } from './routes/invoices/$id/index'
+import { Route as EquipmentsIdIndexImport } from './routes/equipments/$id/index'
 import { Route as ContractsIdIndexImport } from './routes/contracts/$id/index'
 import { Route as UnitsIdUpdateImport } from './routes/units/$id/update'
 import { Route as PropertiesIdUpdateImport } from './routes/properties/$id/update'
 import { Route as PropertiesIdAddUnitImport } from './routes/properties/$id/add-unit'
 import { Route as InvoicesIdMergeImport } from './routes/invoices/$id/merge'
+import { Route as EquipmentsIdUpdateImport } from './routes/equipments/$id/update'
 import { Route as ContractsIdUpdateImport } from './routes/contracts/$id/update'
 
 // Create Virtual Routes
@@ -150,6 +153,11 @@ const InvoicesCreateRoute = InvoicesCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EquipmentsCreateRoute = EquipmentsCreateImport.update({
+  path: '/equipments/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ContractsCreateRoute = ContractsCreateImport.update({
   path: '/contracts/create',
   getParentRoute: () => rootRoute,
@@ -172,6 +180,11 @@ const PropertiesIdIndexRoute = PropertiesIdIndexImport.update({
 
 const InvoicesIdIndexRoute = InvoicesIdIndexImport.update({
   path: '/invoices/$id/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EquipmentsIdIndexRoute = EquipmentsIdIndexImport.update({
+  path: '/equipments/$id/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -200,6 +213,11 @@ const InvoicesIdMergeRoute = InvoicesIdMergeImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EquipmentsIdUpdateRoute = EquipmentsIdUpdateImport.update({
+  path: '/equipments/$id/update',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ContractsIdUpdateRoute = ContractsIdUpdateImport.update({
   path: '/contracts/$id/update',
   getParentRoute: () => rootRoute,
@@ -223,6 +241,10 @@ declare module '@tanstack/react-router' {
     }
     '/contracts/create': {
       preLoaderRoute: typeof ContractsCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/equipments/create': {
+      preLoaderRoute: typeof EquipmentsCreateImport
       parentRoute: typeof rootRoute
     }
     '/invoices/create': {
@@ -301,6 +323,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContractsIdUpdateImport
       parentRoute: typeof rootRoute
     }
+    '/equipments/$id/update': {
+      preLoaderRoute: typeof EquipmentsIdUpdateImport
+      parentRoute: typeof rootRoute
+    }
     '/invoices/$id/merge': {
       preLoaderRoute: typeof InvoicesIdMergeImport
       parentRoute: typeof rootRoute
@@ -319,6 +345,10 @@ declare module '@tanstack/react-router' {
     }
     '/contracts/$id/': {
       preLoaderRoute: typeof ContractsIdIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/equipments/$id/': {
+      preLoaderRoute: typeof EquipmentsIdIndexImport
       parentRoute: typeof rootRoute
     }
     '/invoices/$id/': {
@@ -342,6 +372,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatRoute.addChildren([ChatIdRoute, ChatIndexRoute]),
   ContractsCreateRoute,
+  EquipmentsCreateRoute,
   InvoicesCreateRoute,
   MembersIdRoute,
   MembersMeRoute,
@@ -360,11 +391,13 @@ export const routeTree = rootRoute.addChildren([
   RequestsIndexRoute,
   UnitsIndexRoute,
   ContractsIdUpdateRoute,
+  EquipmentsIdUpdateRoute,
   InvoicesIdMergeRoute,
   PropertiesIdAddUnitRoute,
   PropertiesIdUpdateRoute,
   UnitsIdUpdateRoute,
   ContractsIdIndexRoute,
+  EquipmentsIdIndexRoute,
   InvoicesIdIndexRoute,
   PropertiesIdIndexRoute,
   UnitsIdIndexRoute,

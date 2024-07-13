@@ -23,7 +23,7 @@ import {
   Tabs,
   Tooltip,
 } from '@mantine/core';
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import {
   Building02Icon,
   Invoice01Icon,
