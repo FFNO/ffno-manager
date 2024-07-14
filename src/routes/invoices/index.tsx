@@ -4,6 +4,7 @@ import { InvoiceSearch } from '@/components/invoices';
 import {
   DATE_FORMAT,
   IInvoiceResDto,
+  invoiceCategoryRecord,
   invoiceStatusColorRecord,
   invoiceStatusRecord,
 } from '@/libs';
@@ -119,6 +120,7 @@ function Page() {
               <Table.Th>Tenant</Table.Th>
               <Table.Th>Unit</Table.Th>
               <Table.Th>Property</Table.Th>
+              <Table.Th ta={'center'}>Category</Table.Th>
               <Table.Th ta={'center'}>Description</Table.Th>
               <Table.Th ta={'center'}>Due date</Table.Th>
               <Table.Th ta={'center'}>Total</Table.Th>
@@ -139,6 +141,7 @@ function Page() {
                   </Table.Td>
                   <Table.Td>{invoice.unit.name}</Table.Td>
                   <Table.Td>{invoice.unit.property.name}</Table.Td>
+                  <Table.Td>{invoiceCategoryRecord[invoice.category]}</Table.Td>
                   <Table.Td>{invoice.description}</Table.Td>
                   <Table.Td>
                     {dayjs(invoice.dueDate).format(DATE_FORMAT)}

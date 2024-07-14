@@ -37,13 +37,15 @@ export const ContactCard = (props: Props) => {
           <Contact02Icon />
           <Text>{props.phone}</Text>
         </Group>
-        <Group gap={4}>
-          <Building02Icon />
-          <Text fz={'lg'} fw={'bold'}>
-            Unit &nbsp;
-            {props.unit}
-          </Text>
-        </Group>
+        {props.unit && (
+          <Group gap={4}>
+            <Building02Icon />
+            <Text fz={'lg'} fw={'bold'}>
+              Unit &nbsp;
+              {props.unit}
+            </Text>
+          </Group>
+        )}
       </Stack>
       <Card.Section>
         <Divider mt={'lg'} />

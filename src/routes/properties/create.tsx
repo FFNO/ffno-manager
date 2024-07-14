@@ -200,6 +200,9 @@ function Page() {
                 <Grid.Col span={10}>
                   <Group justify="end">
                     <Button
+                      disabled={
+                        form.getValues().type === PropertyType.SINGLE_UNIT
+                      }
                       variant="subtle"
                       leftSection={<Copy01Icon size={16} />}
                       onClick={() =>
@@ -212,6 +215,9 @@ function Page() {
                       Clone
                     </Button>
                     <Button
+                      disabled={
+                        form.getValues().type === PropertyType.SINGLE_UNIT
+                      }
                       variant="subtle"
                       leftSection={<Cancel01Icon size={16} />}
                       onClick={() => form.removeListItem('units', index)}
@@ -265,6 +271,7 @@ function Page() {
             </Fieldset>
           ))}
           <Button
+            disabled={form.getValues().type === PropertyType.SINGLE_UNIT}
             onClick={() =>
               form.insertListItem('units', {
                 ...createUnitInitialValues,

@@ -54,7 +54,7 @@ const navItems = [
     initiallyOpened: true,
     links: [
       { label: 'Tenants', link: '/members/tenants' },
-      { label: 'Service workers', link: '/members/service-workers' },
+      // { label: 'Service workers', link: '/members/service-workers' },
     ],
   },
   {

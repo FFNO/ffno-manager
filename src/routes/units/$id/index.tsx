@@ -4,7 +4,6 @@ import { DATE_FORMAT, IUnitResDto, UnitStatus } from '@/libs';
 import { Carousel } from '@mantine/carousel';
 import {
   ActionIcon,
-  AspectRatio,
   Avatar,
   Badge,
   Box,

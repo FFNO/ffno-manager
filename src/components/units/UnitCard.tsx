@@ -20,9 +20,13 @@ import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { modals } from '@mantine/modals';
 import { useNavigate } from '@tanstack/react-router';
-import { Delete02Icon, PencilEdit01Icon, ViewIcon } from 'hugeicons-react';
+import {
+  Delete02Icon,
+  PencilEdit01Icon,
+  UserGroupIcon,
+  ViewIcon,
+} from 'hugeicons-react';
 import { useSetAtom } from 'jotai';
-import { useState } from 'react';
 
 interface Props extends IUnitResDto {}
 
@@ -35,10 +39,11 @@ export function UnitCard({
   status,
   imgUrls,
   tenants,
+  curSlot,
+  maxSlot,
 }: Props) {
   const setSearch = useSetAtom(unitSearchAtom);
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(isListing);
   const form = useForm();
 
   const openMutation = useUpdate({
@@ -47,7 +52,8 @@ export function UnitCard({
       showSuccessNotification({
         message: `Successfully allowed to receive lease requests for unit ${name}`,
       });
-      setIsOpen(true);
+      modals.closeAll();
+      setSearch((prev) => ({ ...prev, reload: !prev.reload }));
     },
   });
 
@@ -57,7 +63,8 @@ export function UnitCard({
       showSuccessNotification({
         message: `Successfully stopped receiving lease requests for unit ${name}`,
       });
-      setIsOpen(false);
+      modals.closeAll();
+      setSearch((prev) => ({ ...prev, reload: !prev.reload }));
     },
   });
 
@@ -77,20 +84,25 @@ export function UnitCard({
       title: 'Listing unit',
       children: (
         <>
-          <form>
+          <form
+            onSubmit={form.onSubmit((values) => {
+              openMutation.mutate({
+                unitIds: [id],
+                startListingAt: values.startListingAt,
+                endListingAt: values.endListingAt,
+              });
+            })}
+          >
             <DateInput
               label="Start listing at"
+              minDate={new Date()}
               {...form.getInputProps('startListingAt')}
             />
             <DateInput
               label="Stop listing at"
               {...form.getInputProps('endListingAt')}
             />
-            <Button
-              fullWidth
-              onClick={() => openMutation.mutate({ unitIds: [id] })}
-              mt="md"
-            >
+            <Button type="submit" fullWidth mt="md">
               Schedule
             </Button>
           </form>
@@ -137,6 +149,13 @@ export function UnitCard({
             ) : (
               <Badge color={'yellow'}>Vacant</Badge>
             )}
+            <span className="flex-1" />
+            <span className="inline-flex items-center gap-2">
+              <UserGroupIcon />
+              <span>
+                {curSlot}/{maxSlot}
+              </span>
+            </span>
           </Group>
           <Group>
             <Text fz={'lg'}>{area} m²</Text>
@@ -145,12 +164,16 @@ export function UnitCard({
             </Badge>
           </Group>
           <Group>
-            {isOpen ? (
+            {isListing ? (
               <Button color={'red'} onClick={() => handleCloseUnit()}>
                 Stop allow rental requests
               </Button>
             ) : (
-              <Button color={'green'} onClick={() => handleOpenUnit()}>
+              <Button
+                disabled={curSlot === maxSlot}
+                color={'green'}
+                onClick={() => handleOpenUnit()}
+              >
                 Allow rental requests
               </Button>
             )}
