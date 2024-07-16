@@ -75,6 +75,7 @@ function Page() {
                 <Table.Th>Sender</Table.Th>
                 <Table.Th>Unit</Table.Th>
                 <Table.Th>Property</Table.Th>
+                <Table.Th>Equipment</Table.Th>
                 <Table.Th>Contract</Table.Th>
                 <Table.Th ta={'center'}>Status</Table.Th>
                 <Table.Th ta={'center'}>Actions</Table.Th>
@@ -95,6 +96,19 @@ function Page() {
                     </Table.Td>
                     <Table.Td>{request.unit?.name ?? '-'}</Table.Td>
                     <Table.Td>{request.unit?.property?.name ?? '-'}</Table.Td>
+                    <Table.Td>
+                      {request.equipment ? (
+                        <Link
+                          to="/equipments/$id"
+                          params={{ id: request.equipment.id }}
+                          className="text-primary hover:underline"
+                        >
+                          {request.equipment.name}
+                        </Link>
+                      ) : (
+                        '-'
+                      )}
+                    </Table.Td>
                     <Table.Td>
                       {request.contract ? (
                         <Link

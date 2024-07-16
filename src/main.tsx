@@ -14,6 +14,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import OneSignal from 'react-onesignal';
@@ -22,6 +23,7 @@ import { queryClient } from './api';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(localizedFormat);
 
 OneSignal.init({
   appId: '3726fbcb-b3ab-465c-92a8-ab724a24f027',

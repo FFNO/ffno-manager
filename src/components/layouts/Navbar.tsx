@@ -1,17 +1,19 @@
 import { axiosInstance } from '@/api/utils';
 import { currentMemberAtom } from '@/app';
-import { IMemberResDto, memberRoleRecord } from '@/libs';
+import { IMemberResDto, INotificationResDto, memberRoleRecord } from '@/libs';
 import {
   Avatar,
+  Badge,
   Divider,
   Group,
+  Modal,
   ScrollArea,
   Stack,
   Text,
   useMantineTheme,
 } from '@mantine/core';
 import { Button } from '@nextui-org/react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Building02Icon,
   Contact02Icon,
@@ -20,12 +22,14 @@ import {
   Invoice04Icon,
   Logout05Icon,
   Mailbox01Icon,
+  Message01Icon,
 } from 'hugeicons-react';
 import { useAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import OneSignal from 'react-onesignal';
 import { LinksGroup } from './LinksGroup';
 import classes from './MainLayout.module.css';
+import { useList } from '@/api';
 
 const navItems = [
   { label: 'Overview', icon: DashboardSpeed02Icon, link: '/' },
@@ -59,6 +63,11 @@ const navItems = [
     icon: Invoice04Icon,
     link: '/requests',
   },
+  {
+    label: 'Chat',
+    icon: Message01Icon,
+    link: '/chat',
+  },
 ];
 
 export function AppNavbar() {
@@ -66,27 +75,74 @@ export function AppNavbar() {
 
   const [member, setMember] = useAtom(currentMemberAtom);
 
+  const { data: notifications, refetch } = useList<INotificationResDto>({
+    resource: 'notifications',
+  });
+
+  const unreadNotifications = useMemo(() => {
+    return notifications?.data.filter((noti) => !noti.isRead).length;
+  }, [notifications]);
+
+  const [readLater, setReadLater] = useState(false);
+
+  const navigate = useNavigate();
+
   const links = useMemo(
     () =>
       [
         ...navItems,
         {
-          label: 'Chat & Notifications',
+          label: (
+            <span>
+              Notifications
+              {!!unreadNotifications && (
+                <Badge color="red" className="ml-2">
+                  {unreadNotifications}
+                </Badge>
+              )}
+            </span>
+          ),
           icon: Mailbox01Icon,
-          links: [
-            { label: 'Chat', link: '/chat' },
-            {
-              label: 'Notifications',
-              link: '/notifications',
-            },
-          ],
+          link: '/notifications',
         },
       ].map((item) => <LinksGroup {...item} key={item.label} />),
-    [],
+    [unreadNotifications],
   );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <nav className={classes.navbar}>
+      <Modal
+        onClose={() => setReadLater(true)}
+        opened={!!(!readLater && unreadNotifications)}
+        title="Notifications"
+        centered
+      >
+        <div className="flex flex-col items-center gap-4">
+          <p>You have {unreadNotifications} unread notifications</p>
+          <Button
+            fullWidth
+            color="primary"
+            onPress={() => {
+              setReadLater(true);
+              navigate({ to: '/notifications' });
+            }}
+          >
+            Go to notifications
+          </Button>
+          <Button fullWidth onPress={() => setReadLater(true)}>
+            Read later
+          </Button>
+        </div>
+        {/* Modal content */}
+      </Modal>
       <Group justify="space-between" mb="md">
         <Text ff={'mono'} fw={900} fz={'lg'} c={theme.primaryColor}>
           {import.meta.env.VITE_APP_NAME}
