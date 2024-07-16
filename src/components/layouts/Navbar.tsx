@@ -52,10 +52,7 @@ const navItems = [
     label: 'Contacts',
     icon: Contact02Icon,
     initiallyOpened: true,
-    links: [
-      { label: 'Tenants', link: '/members/tenants' },
-      // { label: 'Service workers', link: '/members/service-workers' },
-    ],
+    links: [{ label: 'Tenants', link: '/members/tenants' }],
   },
   {
     label: 'Requests',
