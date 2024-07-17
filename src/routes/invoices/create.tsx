@@ -1,5 +1,11 @@
 import { useCreate, useList, useSimpleList } from '@/api';
-import { DATE_FORMAT, IUnitResDto, invoiceCategories } from '@/libs';
+import {
+  DATE_FORMAT,
+  IUnitResDto,
+  InvoiceCategory,
+  UnitPriceCategory,
+  invoiceCategories,
+} from '@/libs';
 import {
   CreateInvoiceSchema,
   createInvoiceInitialValues,
@@ -51,10 +57,33 @@ function InvoiceCreate() {
 
   const form = useForm<NullableObject<CreateInvoiceSchema>>({
     initialValues: createInvoiceInitialValues,
-    validate: zodResolver(createInvoiceSchema),
+    // validate: zodResolver(createInvoiceSchema),
   });
 
-  const handleSubmit = form.onSubmit((values) => mutate.mutate(values));
+  const handleSubmit = form.onSubmit((values) => {
+    const { unitPriceCategory, ...data } = values;
+    console.log({
+      ...data,
+      items: [
+        {
+          price: 4_000,
+          amount: data.amount,
+          description: `Hóa đơn ${unitPriceCategory}`,
+        },
+      ],
+    });
+
+    mutate.mutate({
+      ...data,
+      items: [
+        {
+          price: 4_000,
+          amount: data.amount,
+          description: `Hóa đơn ${unitPriceCategory}`,
+        },
+      ],
+    });
+  });
 
   useEffect(() => {
     form.setValues({
@@ -86,6 +115,7 @@ function InvoiceCreate() {
               {...form.getInputProps(`category`)}
             />
           </Grid.Col>
+
           <Grid.Col span={4}>
             <DatePickerInput
               label="Due date"
@@ -93,19 +123,6 @@ function InvoiceCreate() {
               valueFormat={DATE_FORMAT}
               minDate={new Date()}
               {...form.getInputProps(`dueDate`)}
-            />
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <NumberInput
-              label="Amount"
-              placeholder="Input amount"
-              suffix={' ₫'}
-              thousandSeparator=","
-              step={1000}
-              allowDecimal
-              decimalScale={2}
-              allowNegative={false}
-              {...form.getInputProps(`amount`)}
             />
           </Grid.Col>
 
@@ -134,6 +151,39 @@ function InvoiceCreate() {
                 })) ?? []
               }
               {...form.getInputProps('unitId')}
+            />
+          </Grid.Col>
+
+          {form.getValues().category === InvoiceCategory.UNIT_PRICE_LOG && (
+            <>
+              <Grid.Col span={4}>
+                <Select
+                  searchable
+                  label="Unit price category"
+                  data={[
+                    { value: UnitPriceCategory.WATER, label: 'Water' },
+                    {
+                      value: UnitPriceCategory.ELECTRICITY,
+                      label: 'Electricity',
+                    },
+                  ]}
+                  placeholder="Select unit price category"
+                  {...form.getInputProps(`unitPriceCategory`)}
+                />
+              </Grid.Col>
+            </>
+          )}
+
+          <Grid.Col span={4}>
+            <NumberInput
+              label="Amount"
+              placeholder="Input amount"
+              thousandSeparator=","
+              step={1000}
+              allowDecimal
+              decimalScale={2}
+              allowNegative={false}
+              {...form.getInputProps(`amount`)}
             />
           </Grid.Col>
 
